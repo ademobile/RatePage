@@ -1,0 +1,10 @@
+{
+    "@metadata": {
+      "authors": [
+          "Ostrzyciel",
+          "Polskacafe"
+      ]
+    },
+    "ratePage": "The name of the extension",
+    "ratePage-desc": "{{desc|name=RatePage|url=}}"
+}

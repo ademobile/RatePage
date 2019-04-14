@@ -1,0 +1,10 @@
+{
+    "@metadata": {
+        "authors": [
+            "Ostrzyciel",
+            "Polskacafe"
+        ]
+    },
+    "ratePage": "RatePage",
+    "ratePage-desc": "Enables users to rate pages on a wiki and collects basic page views statistics."
+}
