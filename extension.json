@@ -1,0 +1,39 @@
+{
+    "name": "RatePage",
+    "author": [
+        "Ostrzyciel",
+        "Polskacafe"
+    ],
+    "license-name": "MIT",
+    "version": "0.0.0",
+    "namemsg": "ratePage",
+    "descriptionmsg": "ratePage-desc",
+    "manifest_version": 1,
+    "MessagesDirs": {
+        "RatePage": [ "i18n" ]
+    },
+    "AutoloadClasses": [],
+    "ResourceFileModulePaths": {
+        "localBasePath": "modules",
+        "remoteExtPath": "RatePage/modules"
+    },
+    "ResourceModules": {
+        "ext.ratePage": {
+            "scripts": [
+                "ext.ratePage.js"
+            ],
+            "styles": [
+                "ext.ratePage.css"
+            ],
+            "messages": [
+                "ratePage",
+                "ratePage-desc"
+            ],
+            "dependencies": []
+        }
+    },
+    "Hooks": {
+        "ResourceLoaderTestModules": [ "RatePageHooks::onResourceLoaderTestModules" ]
+    },
+    "type": "other"
+}
