@@ -74,5 +74,22 @@ class RatePage {
 
         $dbw->endAtomic( __METHOD__ );
 		return $page_views + 1;
-	}
+    }
+    
+    public static function getPageRating( Title $title ) {
+        $dbr = wfGetDB( DB_REPLICA );
+		$pageRating = $dbr->select( 'ratepage_vote',
+			[ 'rv_answer', 'count(rv_page_id)' ],
+			[
+				'rv_page_id' => $title->getArticleID()
+			],
+            __METHOD__,
+            [ 'GROUP BY' => 'rv_answer' ]
+		);
+
+		if ($page_views == false)
+			return 0;
+		
+		return (int) $page_views;
+    }
 }
