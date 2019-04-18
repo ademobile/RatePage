@@ -7,5 +7,8 @@
     },
     "ratePage": "RatePage",
     "ratePage-desc": "Enables users to rate pages on a wiki and collects basic page views statistics.",
-    "ratePage-view-count-label": "Page views"
+    "ratePage-view-count-label": "Page views",
+    "apihelp-pagerating-summary": "Gets the rating for a page. Requires specyfying one of two parameters: pageid or pagetitle.",
+    "apihelp-pagerating-param-pageid": "Page ID",
+    "apihelp-pagerating-param-pagetitle": "Page title"
 }

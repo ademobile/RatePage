@@ -14,7 +14,8 @@
     },
     "AutoloadClasses": {
         "RatePage": "includes/RatePage.php",
-        "RatePageHooks": "includes/RatePageHooks.php"
+        "RatePageHooks": "includes/RatePageHooks.php",
+        "ApiPageRating": "includes/ApiPageRating.php"
     },
     "ResourceFileModulePaths": {
         "localBasePath": "modules",
@@ -31,7 +32,10 @@
             "messages": [
                 "ratePage",
                 "ratePage-desc",
-                "ratePage-view-count-label"
+                "ratePage-view-count-label",
+                "apihelp-pagerating-summary",
+                "apihelp-pagerating-param-pageid",
+                "apihelp-pagerating-param-pagetitle"
             ],
             "dependencies": [],
             "targets": [
@@ -47,5 +51,8 @@
         "InfoAction": "RatePageHooks::onInfoAction",
         "LoadExtensionSchemaUpdates": "RatePageHooks::onLoadExtensionSchemaUpdates"
     },
+    "APIModules": {
+		"pagerating": "ApiPageRating"
+	},
     "type": "other"
 }

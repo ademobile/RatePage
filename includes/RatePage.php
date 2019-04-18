@@ -78,18 +78,22 @@ class RatePage {
     
     public static function getPageRating( Title $title ) {
         $dbr = wfGetDB( DB_REPLICA );
-		$pageRating = $dbr->select( 'ratepage_vote',
-			[ 'rv_answer', 'count(rv_page_id)' ],
+		$res = $dbr->select( 'ratepage_vote',
+			[ 'rv_answer as answer', "count(rv_page_id) as 'count'" ],
 			[
 				'rv_page_id' => $title->getArticleID()
 			],
             __METHOD__,
-            [ 'GROUP BY' => 'rv_answer' ]
-		);
-
-		if ($page_views == false)
-			return 0;
+            [ 
+                'GROUP BY' => 'rv_answer',
+                'ORDER BT' => 'rv_answer'
+            ]
+        );
+        
+        $pageRating = [];
+        foreach ($res as $row)
+            array_push($pageRating, $row);
 		
-		return (int) $page_views;
+		return $pageRating;
     }
 }
