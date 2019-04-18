@@ -6,5 +6,6 @@
       ]
     },
     "ratePage": "The name of the extension",
-    "ratePage-desc": "{{desc|name=RatePage|url=}}"
+    "ratePage-desc": "{{desc|name=RatePage|url=}}",
+    "ratePage-view-count-label": "Label for the page views field in info=action page."
 }

@@ -6,5 +6,6 @@
         ]
     },
     "ratePage": "Ocenianie stron",
-    "ratePage-desc": "Pozwala oceniać strony i zbiera podstawowe statystyki wyświetleń stron."
+    "ratePage-desc": "Pozwala oceniać strony i zbiera podstawowe statystyki wyświetleń stron.",
+    "ratePage-view-count-label": "Wyświetlenia strony"
 }

@@ -7,6 +7,8 @@
  * @license MIT
  */
 class RatePageHooks {
+	const PROP_NAME = 'page_views';
+
 	/**
 	 * Conditionally register the unit testing module for the ext.ratePage module
 	 * only if that module is loaded
@@ -27,5 +29,24 @@ class RatePageHooks {
 			'remoteExtPath' => 'RatePage',
 		];
 		return true;
+	}
+
+	public static function onPageViewUpdates( WikiPage $wikipage, User $user ) {
+		RatePage::updatePageViews($wikipage->getTitle());
+	}
+
+	public static function onBeforePageDisplay( OutputPage $out, Skin $skin ) {
+		$out->addJsConfigVars([
+			'egRatePageViewCount' => RatePage::getPageViews($out->getTitle())
+		]);
+	}
+
+	public static function onInfoAction( IContextSource $context, &$pageInfo ) {
+		$pageViews = RatePage::getPageViews($context->getTitle());
+		
+		$pageInfo['header-basic'][] = [
+			$context->msg( 'ratePage-view-count-label' ),
+			strval($pageViews)
+		];
 	}
 }
