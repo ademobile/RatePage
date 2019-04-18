@@ -12,16 +12,24 @@ class ApiPageRating extends ApiBase {
 		$params = $this->extractRequestParams();
 		$this->requireOnlyOneParameter( $params, 'pageid', 'pagetitle' );
 
-
         if (isset($params['pageid']))
             $title = Title::newFromID($params['pageid']);
-        else $title = Title::newFromText($params['pagetitle']);
+		else $title = Title::newFromText($params['pagetitle']);
+		
+		$user = RequestContext::getMain()->getUser();
+		if ( $user->getName() == '' ) {
+			$userName = RequestContext::getMain()->getRequest()->getIP();
+		} else {
+			$userName = $user->getName();
+		}
 
 		$pageViews = RatePage::getPageViews($title);
 		$pageRating = RatePage::getPageRating($title);
+		$userVoted = RatePage::hasUserVoted($title, $userName);
 
 		$this->getResult()->addValue( null, "pageViews", [ "viewCount" => $pageViews ] );
 		$this->getResult()->addValue( null, "pageRating", $pageRating );
+		$this->getResult()->addValue( null, "userVoted", ($userVoted) ? "true" : "false" );
 	}
 
 	/**

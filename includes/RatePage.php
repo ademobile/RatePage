@@ -96,4 +96,19 @@ class RatePage {
 		
 		return $pageRating;
     }
+
+    public static function hasUserVoted( Title $title, string $user ) {
+        $dbr = wfGetDB( DB_REPLICA );
+        $res = $dbr->selectField( 'ratepage_vote',
+            'count(rv_user)',
+            [
+                'rv_page_id' => $title->getArticleID(),
+                'rv_user' => $user
+            ],
+            __METHOD__
+        );
+
+        if ($res == 0) return false;
+        return true;
+    }
 }
