@@ -34,8 +34,21 @@ class RatePage {
      * If there is no page views record for the specified page in the DB, a new one is created.
      */
 	public static function updatePageViews( Title $title ) {
-		$dbw = wfGetDB( DB_MASTER );
-		$page_views = self::getPageViews($title);
+        $dbw = wfGetDB( DB_MASTER );
+        $dbw->startAtomic( __METHOD__ );
+
+        $pv = $dbw->selectField( 'page_props',
+            'pp_value',
+            [
+                'pp_page' => $title->getArticleID(),
+                'pp_propname' => self::PROP_NAME
+            ],
+            __METHOD__
+        );
+
+        if ($pv == false) $page_views = 0;
+        else $page_views = (int) $pv;
+
 		if ($page_views == 0)
 		{
 			$dbw->insert( 'page_props',
@@ -59,6 +72,7 @@ class RatePage {
 			);
 		}
 
+        $dbw->endAtomic( __METHOD__ );
 		return $page_views + 1;
 	}
 }
