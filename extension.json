@@ -12,7 +12,10 @@
     "MessagesDirs": {
         "RatePage": [ "i18n" ]
     },
-    "AutoloadClasses": [],
+    "AutoloadClasses": {
+        "RatePage": "includes/RatePage.php",
+        "RatePageHooks": "includes/RatePageHooks.php"
+    },
     "ResourceFileModulePaths": {
         "localBasePath": "modules",
         "remoteExtPath": "RatePage/modules"
@@ -33,7 +36,8 @@
         }
     },
     "Hooks": {
-        "ResourceLoaderTestModules": [ "RatePageHooks::onResourceLoaderTestModules" ]
+        "ResourceLoaderTestModules": [ "RatePageHooks::onResourceLoaderTestModules" ],
+        "PageViewUpdates" : [ "RatePageHooks::onPageViewUpdates" ]
     },
     "type": "other"
 }
