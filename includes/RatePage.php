@@ -37,7 +37,7 @@ class RatePage {
         $dbw = wfGetDB( DB_MASTER );
         $dbw->startAtomic( __METHOD__ );
 
-        $pv = $dbr->selectField( 'page_props',
+        $pv = $dbw->selectField( 'page_props',
             'pp_value',
             [
                 'pp_page' => $title->getArticleID(),
