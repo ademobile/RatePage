@@ -37,7 +37,16 @@ class RatePageHooks {
 
 	public static function onBeforePageDisplay( OutputPage $out, Skin $skin ) {
 		$out->addJsConfigVars([
-			'egRatePageViewCount' => RatePage::getPageViews(Title::newFromText($out->getPageTitle()))
+			'egRatePageViewCount' => RatePage::getPageViews($out->getTitle())
 		]);
+	}
+
+	public static function onInfoAction( IContextSource $context, &$pageInfo ) {
+		$pageViews = RatePage::getPageViews($context->getTitle());
+		
+		$pageInfo['header-basic'][] = [
+			$context->msg( 'ratePage-view-count-label' ),
+			strval($pageViews)
+		];
 	}
 }
