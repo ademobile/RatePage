@@ -34,4 +34,10 @@ class RatePageHooks {
 	public static function onPageViewUpdates( WikiPage $wikipage, User $user ) {
 		RatePage::updatePageViews($wikipage->getTitle());
 	}
+
+	public static function onBeforePageDisplay( OutputPage $out, Skin $skin ) {
+		$out->addJsConfigVars([
+			'egRatePageViewCount' => RatePage::getPageViews(Title::newFromText($out->getPageTitle()))
+		]);
+	}
 }
