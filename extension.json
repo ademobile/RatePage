@@ -30,16 +30,22 @@
             ],
             "messages": [
                 "ratePage",
-                "ratePage-desc"
+                "ratePage-desc",
+                "ratePage-view-count-label"
             ],
-            "dependencies": []
+            "dependencies": [],
+            "targets": [
+                "desktop",
+                "mobile"
+            ]
         }
     },
     "Hooks": {
         "ResourceLoaderTestModules": "RatePageHooks::onResourceLoaderTestModules",
         "PageViewUpdates" : "RatePageHooks::onPageViewUpdates",
         "BeforePageDisplay": "RatePageHooks::onBeforePageDisplay",
-        "InfoAction": "RatePageHooks::onInfoAction"
+        "InfoAction": "RatePageHooks::onInfoAction",
+        "LoadExtensionSchemaUpdates": "RatePageHooks::onLoadExtensionSchemaUpdates"
     },
     "type": "other"
 }
