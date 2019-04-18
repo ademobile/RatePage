@@ -37,7 +37,8 @@
     },
     "Hooks": {
         "ResourceLoaderTestModules": [ "RatePageHooks::onResourceLoaderTestModules" ],
-        "PageViewUpdates" : [ "RatePageHooks::onPageViewUpdates" ]
+        "PageViewUpdates" : [ "RatePageHooks::onPageViewUpdates" ],
+        "BeforePageDisplay": [ "RatePageHooks::onBeforePageDisplay" ]
     },
     "type": "other"
 }
