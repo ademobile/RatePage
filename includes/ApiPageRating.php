@@ -9,6 +9,8 @@
  */
 class ApiPageRating extends ApiBase {
 	public function execute() {
+		global $wgRPRatingAllowedNamespaces, $wgRPViewTrackingAllowedNamespaces;
+		
 		$params = $this->extractRequestParams();
 		$this->requireOnlyOneParameter( $params, 'pageid', 'pagetitle' );
 
@@ -19,6 +21,19 @@ class ApiPageRating extends ApiBase {
 		if (is_null($title) || $title->getArticleID() < 0)
             $this->dieWithError( 'Specified page does not exist' );
 		
+		$this->getResult()->addValue( null, "pageId", $title->getArticleID() );
+
+		if (is_null($wgRPViewTrackingAllowedNamespaces) || 
+			in_array($title->getNamespace(), $wgRPViewTrackingAllowedNamespaces))
+		{
+			$pageViews = RatePage::getPageViews($title);
+			$this->getResult()->addValue( null, "viewCount", $pageViews );
+		}
+			
+		if (!is_null($wgRPRatingAllowedNamespaces) && 
+			!in_array($title->getNamespace(), $wgRPRatingAllowedNamespaces))
+			return;
+
 		$user = RequestContext::getMain()->getUser();
 		$ip = RequestContext::getMain()->getRequest()->getIP();
 		if ( $user->getName() == '' ) {
@@ -27,8 +42,6 @@ class ApiPageRating extends ApiBase {
 			$userName = $user->getName();
 		}
 
-		$this->getResult()->addValue( null, "pageId", $title->getArticleID() );
-
 		if (isset($params['answer'])) {
 			$answer = $params['answer'];
 			if ( $answer < RatePage::MIN_RATING || $answer > RatePage::MAX_RATING )
@@ -36,12 +49,10 @@ class ApiPageRating extends ApiBase {
 			$result = RatePage::voteOnPage($title, $userName, $ip, $answer);
 			$this->getResult()->addValue( null, "voteSuccessful", ($result) ? "true" : "false" );
 		}
+
 		$userVote = RatePage::getUserVote($title, $userName, $ip);
-
-		$pageViews = RatePage::getPageViews($title);
 		$pageRating = RatePage::getPageRating($title);
-
-		$this->getResult()->addValue( null, "viewCount", $pageViews );
+		
 		$this->getResult()->addValue( null, "pageRating", $pageRating );
 		$this->getResult()->addValue( null, "userVote", $userVote );
 	}

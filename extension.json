@@ -12,6 +12,10 @@
     "MessagesDirs": {
         "RatePage": [ "i18n" ]
     },
+    "config": {
+        "RPRatingAllowedNamespaces": [ 0 ],
+        "RPViewTrackingAllowedNamespaces": null
+	},
     "AutoloadClasses": {
         "RatePage": "includes/RatePage.php",
         "RatePageHooks": "includes/RatePageHooks.php",

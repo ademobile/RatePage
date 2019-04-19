@@ -32,16 +32,30 @@ class RatePageHooks {
 	}
 
 	public static function onPageViewUpdates( WikiPage $wikipage, User $user ) {
+		global $wgRPViewTrackingAllowedNamespaces;
+
+		if (!isnull($wgRPViewTrackingAllowedNamespaces) && 
+			!in_array($wikipage->getTitle()->getNamespace(), $wgRPViewTrackingAllowedNamespaces))
+			return;
+			
 		RatePage::updatePageViews($wikipage->getTitle());
 	}
 
 	public static function onBeforePageDisplay( OutputPage $out, Skin $skin ) {
+		global $wgRPRatingAllowedNamespaces, $wgRPViewTrackingAllowedNamespaces;
 		$out->addJsConfigVars([
-			'egRatePageViewCount' => RatePage::getPageViews($out->getTitle())
+			'wgRPRatingAllowedNamespaces' => $wgRPRatingAllowedNamespaces,
+			'wgRPViewTrackingAllowedNamespaces' => $wgRPViewTrackingAllowedNamespaces
 		]);
 	}
 
 	public static function onInfoAction( IContextSource $context, &$pageInfo ) {
+		global $wgRPViewTrackingAllowedNamespaces;
+
+		if (!isnull($wgRPViewTrackingAllowedNamespaces) && 
+			!in_array($context->getTitle()->getNamespace(), $wgRPViewTrackingAllowedNamespaces))
+			return;
+
 		$pageViews = RatePage::getPageViews($context->getTitle());
 		
 		$pageInfo['header-basic'][] = [
