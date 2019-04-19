@@ -11,8 +11,5 @@
     "apihelp-pagerating-summary": "",
     "apihelp-pagerating-param-pageid": "",
     "apihelp-pagerating-param-pagetitle": "",
-    "apihelp-voteonpage-summary": "",
-    "apihelp-voteonpage-param-pageid": "",
-    "apihelp-voteonpage-param-pagetitle": "",
-    "apihelp-voteonpage-param-answer": ""
+    "apihelp-pagerating-param-answer": ""
 }

@@ -8,6 +8,8 @@
  */
 class RatePage {
 	const PROP_NAME = 'page_views';
+    const MIN_RATING = 1;
+    const MAX_RATING = 5;
 
     /**
      * Gets the current number of page views from the database (integer).
@@ -101,39 +103,49 @@ class RatePage {
         
         $pageRating = [];
         foreach ($res as $row)
-            array_push($pageRating, $row);
+            $pageRating[$row->answer] = (int) $row->count;
+
+        for ($i=self::MIN_RATING; $i<=self::MAX_RATING; $i++)
+            if (!isset($pageRating[$i]))
+                $pageRating[$i] = 0;
 		
 		return $pageRating;
     }
 
-    public static function hasUserVoted( Title $title, string $user, string $ip ) {
+    public static function getUserVote( Title $title, string $user, string $ip ) {
         if ($title->getArticleID() < 0) 
             return false;   //no such page
 
         $dbr = wfGetDB( DB_REPLICA );
         $res = $dbr->selectField( 'ratepage_vote',
-            'count(rv_user)',
+            'rv_answer',
             [
                 'rv_page_id' => $title->getArticleID(),
                 'rv_user' => $user
             ],
             __METHOD__
         );
-        if ($res > 0) return true;
+        if ($res != false && !is_null($res)) return $res;
 
-        $res = $dbr->selectField( 'ratepage_vote',
-            'count(rv_ip)',
-            [
-                'rv_page_id' => $title->getArticleID(),
-                'rv_ip' => $ip
-            ],
-            __METHOD__
-        );
-        if ($res > 0) return true;
+        if ($ip != $user)
+        {
+            $res = $dbr->selectField( 'ratepage_vote',
+                'rv_answer',
+                [
+                    'rv_page_id' => $title->getArticleID(),
+                    'rv_ip' => $ip
+                ],
+                __METHOD__
+            );
+            if ($res != false && !is_null($res)) return $res;
+        }
 
-        return false;
+        return -1;
     }
 
+    /**
+     * Vote on a page. Returns whether the vote was successful.
+     */
     public static function voteOnPage( Title $title, string $user, string $ip, int $answer ) {
         if ($title->getArticleID() < 0) 
             return false;   //no such page
@@ -150,23 +162,38 @@ class RatePage {
             __METHOD__
         );
         if ($res > 0) {
-            //the user has already voted
+            //the user has already voted, change the vote
+            $dbw->update(
+                'ratepage_vote',
+                [
+                    'rv_answer' => $answer
+                ],
+                [
+                    'rv_page_id' => $title->getArticleID(),
+                    'rv_user' => $user
+                ],
+                __METHOD__
+            );
+
             $dbw->endAtomic( __METHOD__ );
-            return false;
+            return true;
         }
 
-        $res = $dbw->selectField( 'ratepage_vote',
-            'count(rv_ip)',
-            [
-                'rv_page_id' => $title->getArticleID(),
-                'rv_ip' => $ip
-            ],
-            __METHOD__
-        );
-        if ($res > 0) {
-            //the IP has already voted
-            $dbw->endAtomic( __METHOD__ );
-            return false;
+        if ($ip != $user)
+        {
+            $res = $dbw->selectField( 'ratepage_vote',
+                'count(rv_ip)',
+                [
+                    'rv_page_id' => $title->getArticleID(),
+                    'rv_ip' => $ip
+                ],
+                __METHOD__
+            );
+            if ($res > 0) {
+                //the IP has already voted, but the user is now logged in, reject
+                $dbw->endAtomic( __METHOD__ );
+                return false;
+            }
         }
 
         //insert the vote

@@ -15,8 +15,7 @@
     "AutoloadClasses": {
         "RatePage": "includes/RatePage.php",
         "RatePageHooks": "includes/RatePageHooks.php",
-        "ApiPageRating": "includes/ApiPageRating.php",
-        "ApiVoteOnPage": "includes/ApiVoteOnPage.php"
+        "ApiPageRating": "includes/ApiPageRating.php"
     },
     "ResourceFileModulePaths": {
         "localBasePath": "modules",
@@ -37,10 +36,7 @@
                 "apihelp-pagerating-summary",
                 "apihelp-pagerating-param-pageid",
                 "apihelp-pagerating-param-pagetitle",
-                "apihelp-voteonpage-summary",
-                "apihelp-voteonpage-param-pageid",
-                "apihelp-voteonpage-param-pagetitle",
-                "apihelp-voteonpage-param-answer"
+                "apihelp-pagerating-param-answer"
             ],
             "dependencies": [],
             "targets": [
@@ -57,8 +53,7 @@
         "LoadExtensionSchemaUpdates": "RatePageHooks::onLoadExtensionSchemaUpdates"
     },
     "APIModules": {
-        "pagerating": "ApiPageRating",
-        "voteonpage": "ApiVoteOnPage"
+        "pagerating": "ApiPageRating"
 	},
     "type": "other"
 }
