@@ -10,5 +10,9 @@
     "ratePage-view-count-label": "Page views",
     "apihelp-pagerating-summary": "Gets the rating for a page. Requires specyfying one of two parameters: pageid or pagetitle.",
     "apihelp-pagerating-param-pageid": "Page ID",
-    "apihelp-pagerating-param-pagetitle": "Page title"
+    "apihelp-pagerating-param-pagetitle": "Page title",
+    "apihelp-voteonpage-summary": "Allows a user to vote on a page and gets the rating for a page. Requires specyfying one of two parameters: pageid or pagetitle.",
+    "apihelp-voteonpage-param-pageid": "Page ID",
+    "apihelp-voteonpage-param-pagetitle": "Page title",
+    "apihelp-voteonpage-param-answer": "User's page rating (0 or 1)"
 }

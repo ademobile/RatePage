@@ -10,5 +10,9 @@
     "ratePage-view-count-label": "Label for the page views field in info=action page.",
     "apihelp-pagerating-summary": "",
     "apihelp-pagerating-param-pageid": "",
-    "apihelp-pagerating-param-pagetitle": ""
+    "apihelp-pagerating-param-pagetitle": "",
+    "apihelp-voteonpage-summary": "",
+    "apihelp-voteonpage-param-pageid": "",
+    "apihelp-voteonpage-param-pagetitle": "",
+    "apihelp-voteonpage-param-answer": ""
 }
