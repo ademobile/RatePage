@@ -13,7 +13,7 @@
         "RatePage": [ "i18n" ]
     },
     "config": {
-        "RPRatingAllowedNamespaces": [ 0 ],
+        "RPRatingAllowedNamespaces": null,
         "RPViewTrackingAllowedNamespaces": null,
         "RPRatingPageBlacklist": []
 	},
