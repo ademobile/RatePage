@@ -32,31 +32,28 @@ class RatePageHooks {
 	}
 
 	public static function onPageViewUpdates( WikiPage $wikipage, User $user ) {
-		global $wgRPViewTrackingAllowedNamespaces;
-
-		if (!is_null($wgRPViewTrackingAllowedNamespaces) && 
-			!in_array($wikipage->getTitle()->getNamespace(), $wgRPViewTrackingAllowedNamespaces))
+		if ( !RatePageViews::canPageBeTracked($wikipage->getTitle()) )
 			return;
 			
-		RatePage::updatePageViews($wikipage->getTitle());
+		RatePageViews::updatePageViews($wikipage->getTitle());
 	}
 
 	public static function onBeforePageDisplay( OutputPage $out, Skin $skin ) {
 		global $wgRPRatingAllowedNamespaces, $wgRPViewTrackingAllowedNamespaces;
+		global $wgRPRatingPageBlacklist;
+
 		$out->addJsConfigVars([
 			'wgRPRatingAllowedNamespaces' => $wgRPRatingAllowedNamespaces,
-			'wgRPViewTrackingAllowedNamespaces' => $wgRPViewTrackingAllowedNamespaces
-		]);
+			'wgRPViewTrackingAllowedNamespaces' => $wgRPViewTrackingAllowedNamespaces,
+			'wgRPRatingPageBlacklist' => $wgRPRatingPageBlacklist
+		]);		
 	}
 
 	public static function onInfoAction( IContextSource $context, &$pageInfo ) {
-		global $wgRPViewTrackingAllowedNamespaces;
-
-		if (!is_null($wgRPViewTrackingAllowedNamespaces) && 
-			!in_array($context->getTitle()->getNamespace(), $wgRPViewTrackingAllowedNamespaces))
+		if ( !RatePageViews::canPageBeTracked($context->getTitle()) )
 			return;
 
-		$pageViews = RatePage::getPageViews($context->getTitle());
+		$pageViews = RatePageViews::getPageViews($context->getTitle());
 		
 		$pageInfo['header-basic'][] = [
 			$context->msg( 'ratePage-view-count-label' ),

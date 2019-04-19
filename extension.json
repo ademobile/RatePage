@@ -14,10 +14,12 @@
     },
     "config": {
         "RPRatingAllowedNamespaces": [ 0 ],
-        "RPViewTrackingAllowedNamespaces": null
+        "RPViewTrackingAllowedNamespaces": null,
+        "RPRatingPageBlacklist": []
 	},
     "AutoloadClasses": {
-        "RatePage": "includes/RatePage.php",
+        "RatePageRating": "includes/RatePageRating.php",
+        "RatePageViews": "includes/RatePageViews.php",
         "RatePageHooks": "includes/RatePageHooks.php",
         "ApiPageRating": "includes/ApiPageRating.php"
     },

@@ -8,9 +8,7 @@
  * @license MIT
  */
 class ApiPageRating extends ApiBase {
-	public function execute() {
-		global $wgRPRatingAllowedNamespaces, $wgRPViewTrackingAllowedNamespaces;
-		
+	public function execute() {		
 		$params = $this->extractRequestParams();
 		$this->requireOnlyOneParameter( $params, 'pageid', 'pagetitle' );
 
@@ -23,15 +21,13 @@ class ApiPageRating extends ApiBase {
 		
 		$this->getResult()->addValue( null, "pageId", $title->getArticleID() );
 
-		if (is_null($wgRPViewTrackingAllowedNamespaces) || 
-			in_array($title->getNamespace(), $wgRPViewTrackingAllowedNamespaces))
+		if ( RatePageViews::canPageBeTracked($title) )
 		{
-			$pageViews = RatePage::getPageViews($title);
+			$pageViews = RatePageViews::getPageViews($title);
 			$this->getResult()->addValue( null, "viewCount", $pageViews );
 		}
 			
-		if (!is_null($wgRPRatingAllowedNamespaces) && 
-			!in_array($title->getNamespace(), $wgRPRatingAllowedNamespaces))
+		if ( !RatePageRating::canPageBeRated($title) )
 			return;
 
 		$user = RequestContext::getMain()->getUser();
@@ -44,14 +40,14 @@ class ApiPageRating extends ApiBase {
 
 		if (isset($params['answer'])) {
 			$answer = $params['answer'];
-			if ( $answer < RatePage::MIN_RATING || $answer > RatePage::MAX_RATING )
+			if ( $answer < RatePageRating::MIN_RATING || $answer > RatePageRating::MAX_RATING )
             	$this->dieWithError( 'Incorrect answer specified' );
-			$result = RatePage::voteOnPage($title, $userName, $ip, $answer);
+			$result = RatePageRating::voteOnPage($title, $userName, $ip, $answer);
 			$this->getResult()->addValue( null, "voteSuccessful", ($result) ? "true" : "false" );
 		}
 
-		$userVote = RatePage::getUserVote($title, $userName, $ip);
-		$pageRating = RatePage::getPageRating($title);
+		$userVote = RatePageRating::getUserVote($title, $userName, $ip);
+		$pageRating = RatePageRating::getPageRating($title);
 		
 		$this->getResult()->addValue( null, "pageRating", $pageRating );
 		$this->getResult()->addValue( null, "userVote", $userVote );
