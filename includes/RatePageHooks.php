@@ -34,7 +34,7 @@ class RatePageHooks {
 	public static function onPageViewUpdates( WikiPage $wikipage, User $user ) {
 		global $wgRPViewTrackingAllowedNamespaces;
 
-		if (!isnull($wgRPViewTrackingAllowedNamespaces) && 
+		if (!is_null($wgRPViewTrackingAllowedNamespaces) && 
 			!in_array($wikipage->getTitle()->getNamespace(), $wgRPViewTrackingAllowedNamespaces))
 			return;
 			
@@ -52,7 +52,7 @@ class RatePageHooks {
 	public static function onInfoAction( IContextSource $context, &$pageInfo ) {
 		global $wgRPViewTrackingAllowedNamespaces;
 
-		if (!isnull($wgRPViewTrackingAllowedNamespaces) && 
+		if (!is_null($wgRPViewTrackingAllowedNamespaces) && 
 			!in_array($context->getTitle()->getNamespace(), $wgRPViewTrackingAllowedNamespaces))
 			return;
 
