@@ -16,6 +16,9 @@ class RatePageRating {
         if ($title->getArticleID() < 0) 
             return false;   //no such page
 
+        if ($title->isRedirect())
+            return false;
+
         if (!is_null($wgRPRatingAllowedNamespaces) && 
 			!in_array($title->getNamespace(), $wgRPRatingAllowedNamespaces))
             return false;
