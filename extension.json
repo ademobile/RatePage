@@ -5,7 +5,7 @@
         "Polskacafe"
     ],
     "license-name": "MIT",
-    "version": "0.0.0",
+    "version": "0.1.0",
     "namemsg": "ratePage",
     "descriptionmsg": "ratePage-desc",
     "manifest_version": 1,
@@ -14,7 +14,9 @@
     },
     "AutoloadClasses": {
         "RatePage": "includes/RatePage.php",
-        "RatePageHooks": "includes/RatePageHooks.php"
+        "RatePageHooks": "includes/RatePageHooks.php",
+        "ApiPageRating": "includes/ApiPageRating.php",
+        "ApiVoteOnPage": "includes/ApiVoteOnPage.php"
     },
     "ResourceFileModulePaths": {
         "localBasePath": "modules",
@@ -31,7 +33,14 @@
             "messages": [
                 "ratePage",
                 "ratePage-desc",
-                "ratePage-view-count-label"
+                "ratePage-view-count-label",
+                "apihelp-pagerating-summary",
+                "apihelp-pagerating-param-pageid",
+                "apihelp-pagerating-param-pagetitle",
+                "apihelp-voteonpage-summary",
+                "apihelp-voteonpage-param-pageid",
+                "apihelp-voteonpage-param-pagetitle",
+                "apihelp-voteonpage-param-answer"
             ],
             "dependencies": [],
             "targets": [
@@ -47,5 +56,9 @@
         "InfoAction": "RatePageHooks::onInfoAction",
         "LoadExtensionSchemaUpdates": "RatePageHooks::onLoadExtensionSchemaUpdates"
     },
+    "APIModules": {
+        "pagerating": "ApiPageRating",
+        "voteonpage": "ApiVoteOnPage"
+	},
     "type": "other"
 }
