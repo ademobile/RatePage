@@ -1,87 +1,30 @@
 <?php
 /**
- * RatePage core code
+ * RatePage page rating code
  *
  * @file
  * @ingroup Extensions
  * @license MIT
  */
-class RatePage {
-	const PROP_NAME = 'page_views';
+class RatePageRating {
     const MIN_RATING = 1;
     const MAX_RATING = 5;
 
-    /**
-     * Gets the current number of page views from the database (integer).
-     */
-	public static function getPageViews( Title $title ) {
+    public static function canPageBeRated( Title $title ) {
+        global $wgRPRatingAllowedNamespaces, $wgRPRatingPageBlacklist;
+
         if ($title->getArticleID() < 0) 
-            return 0;   //no such page
+            return false;   //no such page
 
-		$dbr = wfGetDB( DB_REPLICA );
-		$page_views = $dbr->selectField( 'page_props',
-			'pp_value',
-			[
-				'pp_page' => $title->getArticleID(),
-				'pp_propname' => self::PROP_NAME
-			],
-			__METHOD__
-		);
+        if (!is_null($wgRPRatingAllowedNamespaces) && 
+			!in_array($title->getNamespace(), $wgRPRatingAllowedNamespaces))
+            return false;
+            
+        if (!is_null($wgRPRatingPageBlacklist) && 
+            in_array($title->getFullText(), $wgRPRatingPageBlacklist))
+            return false;
 
-		if ($page_views == false)
-			return 0;
-		
-		return (int) $page_views;
-	}
-
-    /**
-     * Increments the page views counter in the database by one.
-     * If there is no page views record for the specified page in the DB, a new one is created.
-     */
-	public static function updatePageViews( Title $title ) {
-        if ($title->getArticleID() < 0) 
-            return 0;   //no such page
-
-        $dbw = wfGetDB( DB_MASTER );
-        $dbw->startAtomic( __METHOD__ );
-
-        $pv = $dbw->selectField( 'page_props',
-            'pp_value',
-            [
-                'pp_page' => $title->getArticleID(),
-                'pp_propname' => self::PROP_NAME
-            ],
-            __METHOD__
-        );
-
-        if ($pv == false) $page_views = 0;
-        else $page_views = (int) $pv;
-
-		if ($page_views == 0)
-		{
-			$dbw->insert( 'page_props',
-				[
-					'pp_page' => $title->getArticleID(),
-					'pp_propname' => self::PROP_NAME,
-					'pp_value' => '1'
-				],
-				__METHOD__
-			);
-		}
-		else
-		{
-			$dbw->update( 'page_props',
-				[ 'pp_value' => strval($page_views + 1) ],
-				[
-					'pp_page' => $title->getArticleID(),
-					'pp_propname' => self::PROP_NAME
-				],
-				__METHOD__
-			);
-		}
-
-        $dbw->endAtomic( __METHOD__ );
-		return $page_views + 1;
+        return true;
     }
     
     public static function getPageRating( Title $title ) {
