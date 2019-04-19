@@ -8,11 +8,8 @@
     "ratePage": "Ocenianie stron",
     "ratePage-desc": "Pozwala oceniać strony i zbiera podstawowe statystyki wyświetleń stron.",
     "ratePage-view-count-label": "Wyświetlenia strony",
-    "apihelp-pagerating-summary": "Pobiera oceny użytkowników dla danej strony. Należy podać jeden z dwóch argumentów: pageid lub pagetitle.",
+    "apihelp-pagerating-summary": "Pozwala ocenić stronę i pobiera oceny użytkowników dla danej strony. Należy podać jeden z dwóch argumentów: pageid lub pagetitle.",
     "apihelp-pagerating-param-pageid": "ID strony",
     "apihelp-pagerating-param-pagetitle": "Tytuł strony",
-    "apihelp-voteonpage-summary": "Pozwala ocenić stronę i pobiera oceny użytkowników dla danej strony. Należy podać jeden z dwóch argumentów: pageid lub pagetitle.",
-    "apihelp-voteonpage-param-pageid": "ID strony",
-    "apihelp-voteonpage-param-pagetitle": "Tytuł strony",
-    "apihelp-voteonpage-param-answer": "Ocena strony (0 lub 1)"
+    "apihelp-pagerating-param-answer": "Ocena strony (od 1 do 5 włącznie)"
 }
