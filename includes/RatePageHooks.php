@@ -46,7 +46,7 @@ class RatePageHooks {
 		
 		$pageInfo['header-basic'][] = [
 			$context->msg( 'ratePage-view-count-label' ),
-			strval($pageViews)
+			number_format( $pageViews, 0, '', ' ' )
 		];
 	}
 
