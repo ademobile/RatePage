@@ -102,12 +102,11 @@ class RatePage {
         );
         
         $pageRating = [];
+        for ($i=self::MIN_RATING; $i<=self::MAX_RATING; $i++)
+            $pageRating[$i] = 0;
+
         foreach ($res as $row)
             $pageRating[$row->answer] = (int) $row->count;
-
-        for ($i=self::MIN_RATING; $i<=self::MAX_RATING; $i++)
-            if (!isset($pageRating[$i]))
-                $pageRating[$i] = 0;
 		
 		return $pageRating;
     }
