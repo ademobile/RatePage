@@ -7,32 +7,33 @@
  * @ingroup Extensions
  * @license MIT
  */
-class ApiPageRating extends ApiBase {
-	public function execute() {		
+class ApiPageRating extends ApiBase
+{
+	public function execute()
+	{
 		$params = $this->extractRequestParams();
-		$this->requireOnlyOneParameter( $params, 'pageid', 'pagetitle' );
+		$this->requireOnlyOneParameter($params, 'pageid', 'pagetitle');
 
-        if (isset($params['pageid']))
-            $title = Title::newFromID($params['pageid']);
+		if (isset($params['pageid']))
+			$title = Title::newFromID($params['pageid']);
 		else $title = Title::newFromText($params['pagetitle']);
 
 		if (is_null($title) || $title->getArticleID() < 0)
-            $this->dieWithError( 'Specified page does not exist' );
-		
-		$this->getResult()->addValue( null, "pageId", $title->getArticleID() );
+			$this->dieWithError('Specified page does not exist');
 
-		if ( RatePageViews::canPageBeTracked($title) )
-		{
-			$pageViews = RatePageViews::getPageViews($title);
-			$this->getResult()->addValue( null, "viewCount", $pageViews );
-		}
-			
-		if ( !RatePageRating::canPageBeRated($title) )
+		$this->getResult()->addValue(null, "pageId", $title->getArticleID());
+
+		if (RatePageViews::canPageBeTracked($title)) {
+				$pageViews = RatePageViews::getPageViews($title);
+				$this->getResult()->addValue(null, "viewCount", $pageViews);
+			}
+
+		if (!RatePageRating::canPageBeRated($title))
 			return;
 
 		$user = RequestContext::getMain()->getUser();
 		$ip = RequestContext::getMain()->getRequest()->getIP();
-		if ( $user->getName() == '' ) {
+		if ($user->getName() == '') {
 			$userName = $ip;
 		} else {
 			$userName = $user->getName();
@@ -40,17 +41,17 @@ class ApiPageRating extends ApiBase {
 
 		if (isset($params['answer'])) {
 			$answer = $params['answer'];
-			if ( $answer < RatePageRating::MIN_RATING || $answer > RatePageRating::MAX_RATING )
-            	$this->dieWithError( 'Incorrect answer specified' );
+			if ($answer < RatePageRating::MIN_RATING || $answer > RatePageRating::MAX_RATING)
+				$this->dieWithError('Incorrect answer specified');
 			$result = RatePageRating::voteOnPage($title, $userName, $ip, $answer);
-			$this->getResult()->addValue( null, "voteSuccessful", ($result) ? "true" : "false" );
+			$this->getResult()->addValue(null, "voteSuccessful", ($result) ? "true" : "false");
 		}
 
 		$userVote = RatePageRating::getUserVote($title, $userName, $ip);
 		$pageRating = RatePageRating::getPageRating($title);
-		
-		$this->getResult()->addValue( null, "pageRating", $pageRating );
-		$this->getResult()->addValue( null, "userVote", $userVote );
+
+		$this->getResult()->addValue(null, "pageRating", $pageRating);
+		$this->getResult()->addValue(null, "userVote", $userVote);
 	}
 
 	/**
@@ -59,7 +60,8 @@ class ApiPageRating extends ApiBase {
 	 * @param array $params Ignored parameters
 	 * @return string Always returns "private"
 	 */
-	public function getCacheMode( $params ) {
+	public function getCacheMode($params)
+	{
 		return 'private';
 	}
 
@@ -67,26 +69,26 @@ class ApiPageRating extends ApiBase {
 	 * Return an array describing all possible parameters to this module
 	 * @return array
 	 */
-	public function getAllowedParams() {
+	public function getAllowedParams()
+	{
 		return [
 			'pageid' => [
 				ApiBase::PARAM_TYPE => 'integer'
-            ],
-            'pagetitle' => [
-                ApiBase::PARAM_TYPE => 'string'
+			],
+			'pagetitle' => [
+				ApiBase::PARAM_TYPE => 'string'
 			],
 			'answer' => [
-                ApiBase::PARAM_TYPE => 'integer'
-            ]
+				ApiBase::PARAM_TYPE => 'integer'
+			]
 		];
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	protected function getExamplesMessages() {
-		return [
-			
-		];
+	protected function getExamplesMessages()
+	{
+		return [];
 	}
 }
