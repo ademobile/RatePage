@@ -6,7 +6,8 @@
  * @ingroup Extensions
  * @license MIT
  */
-class RatePageHooks {
+class RatePageHooks
+{
 	const PROP_NAME = 'page_views';
 
 	/**
@@ -17,7 +18,8 @@ class RatePageHooks {
 	 * @param ResourceLoader $resourceLoader The reference to the resource loader
 	 * @return true
 	 */
-	public static function onResourceLoaderTestModules( array &$testModules, ResourceLoader &$resourceLoader ) {
+	public static function onResourceLoaderTestModules(array &$testModules, ResourceLoader &$resourceLoader)
+	{
 		$testModules['qunit']['ext.ratePage.tests'] = [
 			'scripts' => [
 				'tests/RatePage.test.js'
@@ -31,14 +33,16 @@ class RatePageHooks {
 		return true;
 	}
 
-	public static function onPageViewUpdates( WikiPage $wikipage, User $user ) {
-		if ( !RatePageViews::canPageBeTracked($wikipage->getTitle()) )
+	public static function onPageViewUpdates(WikiPage $wikipage, User $user)
+	{
+		if (!RatePageViews::canPageBeTracked($wikipage->getTitle()))
 			return;
-			
+
 		RatePageViews::updatePageViews($wikipage->getTitle());
 	}
 
-	public static function onBeforePageDisplay( OutputPage $out, Skin $skin ) {
+	public static function onBeforePageDisplay(OutputPage $out, Skin $skin)
+	{
 		global $wgRPRatingAllowedNamespaces, $wgRPViewTrackingAllowedNamespaces;
 		global $wgRPRatingPageBlacklist;
 
@@ -46,18 +50,19 @@ class RatePageHooks {
 			'wgRPRatingAllowedNamespaces' => $wgRPRatingAllowedNamespaces,
 			'wgRPViewTrackingAllowedNamespaces' => $wgRPViewTrackingAllowedNamespaces,
 			'wgRPRatingPageBlacklist' => $wgRPRatingPageBlacklist
-		]);		
+		]);
 	}
 
-	public static function onInfoAction( IContextSource $context, &$pageInfo ) {
-		if ( !RatePageViews::canPageBeTracked($context->getTitle()) )
+	public static function onInfoAction(IContextSource $context, &$pageInfo)
+	{
+		if (!RatePageViews::canPageBeTracked($context->getTitle()))
 			return;
 
 		$pageViews = RatePageViews::getPageViews($context->getTitle());
-		
+
 		$pageInfo['header-basic'][] = [
-			$context->msg( 'ratePage-view-count-label' ),
-			number_format( $pageViews, 0, '', ' ' )
+			$context->msg('ratePage-view-count-label'),
+			number_format($pageViews, 0, '', ' ')
 		];
 	}
 
@@ -67,12 +72,18 @@ class RatePageHooks {
 	 *
 	 * @param DatabaseUpdater $updater
 	 */
-	public static function onLoadExtensionSchemaUpdates( $updater ) {
+	public static function onLoadExtensionSchemaUpdates($updater)
+	{
 		$patchPath = __DIR__ . '/../sql/';
 
 		$updater->addExtensionTable(
 			'ratepage_vote',
 			$patchPath . 'create-table--ratepage-vote.sql'
+		);
+
+		$updater->addExtensionTable(
+			'ratepage_stats',
+			$patchPath . 'create-table--ratepage-stats.sql'
 		);
 	}
 }
