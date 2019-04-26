@@ -43,8 +43,7 @@ class ApiPageRating extends ApiBase
 			$answer = $params['answer'];
 			if ($answer < RatePageRating::MIN_RATING || $answer > RatePageRating::MAX_RATING)
 				$this->dieWithError('Incorrect answer specified');
-			$result = RatePageRating::voteOnPage($title, $userName, $ip, $answer);
-			$this->getResult()->addValue(null, "voteSuccessful", ($result) ? "true" : "false");
+			RatePageRating::voteOnPage($title, $userName, $ip, $answer);
 		}
 
 		$userVote = RatePageRating::getUserVote($title, $userName, $ip);
