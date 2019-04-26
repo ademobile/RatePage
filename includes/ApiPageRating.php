@@ -30,7 +30,7 @@ class ApiPageRating extends ApiBase
 
 		if (!RatePageRating::canPageBeRated($title))
 			return;
-
+		
 		$user = RequestContext::getMain()->getUser();
 		$ip = RequestContext::getMain()->getRequest()->getIP();
 		if ($user->getName() == '') {
@@ -40,6 +40,9 @@ class ApiPageRating extends ApiBase
 		}
 
 		if (isset($params['answer'])) {
+			if ($user->pingLimiter('ratepage'))
+				$this->dieWithError('Rate limit for voting exceeded, please try again later');
+
 			$answer = $params['answer'];
 			if ($answer < RatePageRating::MIN_RATING || $answer > RatePageRating::MAX_RATING)
 				$this->dieWithError('Incorrect answer specified');
