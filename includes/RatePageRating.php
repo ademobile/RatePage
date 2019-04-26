@@ -123,7 +123,8 @@ class RatePageRating
             $dbw->update(
                 'ratepage_vote',
                 [
-                    'rv_answer' => $answer
+                    'rv_answer' => $answer,
+                    'rv_date' => date('Y-m-d H:i:s')
                 ],
                 [
                     'rv_page_id' => $title->getArticleID(),
@@ -135,23 +136,6 @@ class RatePageRating
             $dbw->endAtomic(__METHOD__);
             return true;
         }
-
-        if ($ip != $user) {
-                $res = $dbw->selectField(
-                    'ratepage_vote',
-                    'count(rv_ip)',
-                    [
-                        'rv_page_id' => $title->getArticleID(),
-                        'rv_ip' => $ip
-                    ],
-                    __METHOD__
-                );
-                if ($res > 0) {
-                    //the IP has already voted, but the user is now logged in, reject
-                    $dbw->endAtomic(__METHOD__);
-                    return false;
-                }
-            }
 
         //insert the vote
         $dbw->insert(
