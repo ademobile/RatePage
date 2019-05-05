@@ -80,7 +80,7 @@ class RatePageRating
             ],
             __METHOD__
         );
-        if ($res != false && !is_null($res)) return $res;
+        if ($res != false && !is_null($res)) return (int)$res;
 
         return -1;
     }
