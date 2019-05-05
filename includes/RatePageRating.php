@@ -82,19 +82,6 @@ class RatePageRating
         );
         if ($res != false && !is_null($res)) return $res;
 
-        if ($ip != $user) {
-                $res = $dbr->selectField(
-                    'ratepage_vote',
-                    'rv_answer',
-                    [
-                        'rv_page_id' => $title->getArticleID(),
-                        'rv_ip' => $ip
-                    ],
-                    __METHOD__
-                );
-                if ($res != false && !is_null($res)) return $res;
-            }
-
         return -1;
     }
 
