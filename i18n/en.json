@@ -12,4 +12,14 @@
     "apihelp-pagerating-param-pageid": "Page ID",
     "apihelp-pagerating-param-pagetitle": "Page title",
     "apihelp-pagerating-param-answer": "User's page rating (from 1 to 5 inclusive)"
+    "ratePage-vote-error": "The vote was unsuccessful.",
+    "ratePage-vote-title": "Rate article",
+    "ratePage-vote-info": "Your vote: $1.",
+    "ratePage-vote-average-info": "Average: $1 ($2).",
+    "ratePage-caption-1": "Terrible",
+    "ratePage-caption-2": "Poor",
+    "ragePage-caption-3": "OK",
+    "ratePage-caption-4": "Good",
+    "ratePage-caption-5": "Very good"
+
 }

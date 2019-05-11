@@ -12,4 +12,13 @@
     "apihelp-pagerating-param-pageid": "ID strony",
     "apihelp-pagerating-param-pagetitle": "Tytuł strony",
     "apihelp-pagerating-param-answer": "Ocena strony (od 1 do 5 włącznie)"
+    "ratePage-vote-error": "Oddanie głosu nie powiodło się.",
+    "ratePage-vote-title": "Oceń artykuł",
+    "ratePage-vote-info": "Twoja ocena: $1.",
+    "ratePage-vote-average-info": "Średnia: $1 ($2).",
+    "ratePage-caption-1": "Beznadziejne",
+    "ratePage-caption-2": "Kiepskie",
+    "ragePage-caption-3": "Może być",
+    "ratePage-caption-4": "Fajne",
+    "ratePage-caption-5": "Świetne"
 }
