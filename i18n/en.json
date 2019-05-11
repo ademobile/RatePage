@@ -11,7 +11,7 @@
     "apihelp-pagerating-summary": "Allows a user to vote on a page and gets the rating for a page. Requires specyfying one of two parameters: pageid or pagetitle.",
     "apihelp-pagerating-param-pageid": "Page ID",
     "apihelp-pagerating-param-pagetitle": "Page title",
-    "apihelp-pagerating-param-answer": "User's page rating (from 1 to 5 inclusive)"
+    "apihelp-pagerating-param-answer": "User's page rating (from 1 to 5 inclusive)",
     "ratePage-vote-error": "The vote was unsuccessful.",
     "ratePage-vote-title": "Rate article",
     "ratePage-vote-info": "Your vote: $1.",
