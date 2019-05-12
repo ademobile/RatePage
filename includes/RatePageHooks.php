@@ -86,4 +86,9 @@ class RatePageHooks
 			$patchPath . 'create-table--ratepage-stats.sql'
 		);
 	}
+
+    public static function onSkinBuildSidebar( Skin $skin, &$bar )
+    {
+        $bar[ $skin->msg("ratePage-vote-title")->text() ] = "";
+    }
 }

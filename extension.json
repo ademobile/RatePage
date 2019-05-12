@@ -42,7 +42,16 @@
                 "apihelp-pagerating-summary",
                 "apihelp-pagerating-param-pageid",
                 "apihelp-pagerating-param-pagetitle",
-                "apihelp-pagerating-param-answer"
+                "apihelp-pagerating-param-answer",
+                "ratePage-vote-error",
+                "ratePage-vote-title",
+                "ratePage-vote-info",
+                "ratePage-vote-average-info",
+                "ratePage-caption-1",
+                "ratePage-caption-2",
+                "ratePage-caption-3",
+                "ratePage-caption-4",
+                "ratePage-caption-5"
             ],
             "dependencies": [],
             "targets": [
@@ -56,7 +65,8 @@
         "PageViewUpdates" : "RatePageHooks::onPageViewUpdates",
         "BeforePageDisplay": "RatePageHooks::onBeforePageDisplay",
         "InfoAction": "RatePageHooks::onInfoAction",
-        "LoadExtensionSchemaUpdates": "RatePageHooks::onLoadExtensionSchemaUpdates"
+        "LoadExtensionSchemaUpdates": "RatePageHooks::onLoadExtensionSchemaUpdates",
+        "SkinBuildSidebar": "RatePageHooks::onSkinBuildSidebar"
     },
     "APIModules": {
         "pagerating": "ApiPageRating"
