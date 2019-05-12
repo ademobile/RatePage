@@ -15,7 +15,8 @@
     "config": {
         "RPRatingAllowedNamespaces": null,
         "RPViewTrackingAllowedNamespaces": null,
-        "RPRatingPageBlacklist": []
+        "RPRatingPageBlacklist": [],
+        "RPSidebarPosition": 2
 	},
     "AutoloadClasses": {
         "RatePageRating": "includes/RatePageRating.php",

@@ -89,6 +89,11 @@ class RatePageHooks
 
     public static function onSkinBuildSidebar( Skin $skin, &$bar )
     {
-        $bar[ $skin->msg("ratePage-vote-title")->text() ] = "";
+        global $wgRPSidebarPosition;
+        $pos = $wgRPSidebarPosition;
+
+        $bar =  array_slice($bar, 0, $pos, true) +
+            array($skin->msg("ratePage-vote-title")->text()  => "") +
+            array_slice($bar, $pos, count($bar)-$pos, true);
     }
 }
