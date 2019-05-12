@@ -27,9 +27,11 @@ class RatePageRating
         )
             return false;
 
+        //throw(new Exception(strval(in_array($title->getFullText(), $wgRPRatingPageBlacklist))));
         if (
             !is_null($wgRPRatingPageBlacklist) &&
-            in_array($title->getFullText(), $wgRPRatingPageBlacklist)
+            (in_array($title->getFullText(), $wgRPRatingPageBlacklist) ||
+                in_array( str_replace(" ", "_", $title->getFullText()), $wgRPRatingPageBlacklist) )
         )
             return false;
 
