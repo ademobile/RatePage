@@ -86,4 +86,14 @@ class RatePageHooks
 			$patchPath . 'create-table--ratepage-stats.sql'
 		);
 	}
+
+    public static function onSkinBuildSidebar( Skin $skin, &$bar )
+    {
+        global $wgRPSidebarPosition;
+        $pos = $wgRPSidebarPosition;
+
+        $bar =  array_slice($bar, 0, $pos, true) +
+            array($skin->msg("ratePage-vote-title")->text()  => "") +
+            array_slice($bar, $pos, count($bar)-$pos, true);
+    }
 }
