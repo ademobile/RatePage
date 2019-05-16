@@ -27,7 +27,6 @@ class RatePageRating
         )
             return false;
 
-        //throw(new Exception(strval(in_array($title->getFullText(), $wgRPRatingPageBlacklist))));
         if (
             !is_null($wgRPRatingPageBlacklist) &&
             (in_array($title->getFullText(), $wgRPRatingPageBlacklist) ||
