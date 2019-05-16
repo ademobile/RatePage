@@ -23,11 +23,6 @@ class ApiPageRating extends ApiBase
 
 		$this->getResult()->addValue(null, "pageId", $title->getArticleID());
 
-		if (RatePageViews::canPageBeTracked($title)) {
-				$pageViews = RatePageViews::getPageViews($title);
-				$this->getResult()->addValue(null, "viewCount", $pageViews);
-			}
-
 		if (!RatePageRating::canPageBeRated($title))
 			return;
 		

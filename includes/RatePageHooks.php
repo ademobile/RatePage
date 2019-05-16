@@ -33,37 +33,15 @@ class RatePageHooks
 		return true;
 	}
 
-	public static function onPageViewUpdates(WikiPage $wikipage, User $user)
-	{
-		if (!RatePageViews::canPageBeTracked($wikipage->getTitle()))
-			return;
-
-		RatePageViews::updatePageViews($wikipage->getTitle());
-	}
-
 	public static function onBeforePageDisplay(OutputPage $out, Skin $skin)
 	{
-		global $wgRPRatingAllowedNamespaces, $wgRPViewTrackingAllowedNamespaces;
+		global $wgRPRatingAllowedNamespaces;
 		global $wgRPRatingPageBlacklist;
 
 		$out->addJsConfigVars([
 			'wgRPRatingAllowedNamespaces' => $wgRPRatingAllowedNamespaces,
-			'wgRPViewTrackingAllowedNamespaces' => $wgRPViewTrackingAllowedNamespaces,
 			'wgRPRatingPageBlacklist' => $wgRPRatingPageBlacklist
 		]);
-	}
-
-	public static function onInfoAction(IContextSource $context, &$pageInfo)
-	{
-		if (!RatePageViews::canPageBeTracked($context->getTitle()))
-			return;
-
-		$pageViews = RatePageViews::getPageViews($context->getTitle());
-
-		$pageInfo['header-basic'][] = [
-			$context->msg('ratePage-view-count-label'),
-			number_format($pageViews, 0, '', ' ')
-		];
 	}
 
 	/**
@@ -79,11 +57,6 @@ class RatePageHooks
 		$updater->addExtensionTable(
 			'ratepage_vote',
 			$patchPath . 'create-table--ratepage-vote.sql'
-		);
-
-		$updater->addExtensionTable(
-			'ratepage_stats',
-			$patchPath . 'create-table--ratepage-stats.sql'
 		);
 	}
 

@@ -20,7 +20,6 @@
 	},
     "AutoloadClasses": {
         "RatePageRating": "includes/RatePageRating.php",
-        "RatePageViews": "includes/RatePageViews.php",
         "RatePageHooks": "includes/RatePageHooks.php",
         "ApiPageRating": "includes/ApiPageRating.php"
     },
@@ -39,7 +38,6 @@
             "messages": [
                 "ratePage",
                 "ratePage-desc",
-                "ratePage-view-count-label",
                 "apihelp-pagerating-summary",
                 "apihelp-pagerating-param-pageid",
                 "apihelp-pagerating-param-pagetitle",
@@ -63,9 +61,7 @@
     },
     "Hooks": {
         "ResourceLoaderTestModules": "RatePageHooks::onResourceLoaderTestModules",
-        "PageViewUpdates" : "RatePageHooks::onPageViewUpdates",
         "BeforePageDisplay": "RatePageHooks::onBeforePageDisplay",
-        "InfoAction": "RatePageHooks::onInfoAction",
         "LoadExtensionSchemaUpdates": "RatePageHooks::onLoadExtensionSchemaUpdates",
         "SkinBuildSidebar": "RatePageHooks::onSkinBuildSidebar"
     },
