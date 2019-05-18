@@ -42,6 +42,9 @@ class RatePageHooks
 			'wgRPRatingAllowedNamespaces' => $wgRPRatingAllowedNamespaces,
 			'wgRPRatingPageBlacklist' => $wgRPRatingPageBlacklist
 		]);
+
+		if (RatePageRating::canPageBeRated($out->getTitle()))
+			$out->addModules('ext.ratePage');
 	}
 
 	/**
