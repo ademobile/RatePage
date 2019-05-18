@@ -25,7 +25,7 @@
     },
     "ResourceFileModulePaths": {
         "localBasePath": "modules",
-        "remoteExtPath": "RatePage/modules"
+        "remoteExtPath": "RatePage"
     },
     "ResourceModules": {
         "ext.ratePage": {
