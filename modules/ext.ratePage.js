@@ -102,7 +102,7 @@
 	$('.ratingstar-desktop').mouseover(function(){
 		var no = $(this).attr('data-ratingstar-no');
 		for (var i = 1; i<=no; i++) {
-			$(`.ratingstar[data-ratingstar-no="${i.toString()}"]').addClass('ratingstar-mousedown`);
+			$(`.ratingstar[data-ratingstar-no="${i.toString()}"]`).addClass('ratingstar-mousedown');
 		}
 	});
 	
