@@ -69,7 +69,7 @@
 	} else  {
 			// for timeless
 			$('#p-ratePage-vote-title').removeClass("emptyPortlet");
-			$('#p-ratePage-vote-title > div').append("<div id='ratingstars'></div>")
+			$('#p-ratePage-vote-title > div').append("<div id='ratingstars'></div>");
 			for (var i = 1; i <= 5; i++) {
 				$("#ratingstars").append(`<div class="ratingstar ratingstar-desktop ratingstar-plain" title="${mw.message(`ratePage-caption-${i.toString()}`).text()}" data-ratingstar-no="${i.toString()}"></div>`);
 			}
