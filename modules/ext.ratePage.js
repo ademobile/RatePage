@@ -62,8 +62,8 @@
 			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="3"></div>
 			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="4"></div>
 			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="5"></div>
-			<br clear="all" /></center>
-			<span class="ratingsinfo-mobile"><span id="ratingsinfo-yourvote"></span> <span id="ratingsinfo-avg"></span></span></div></div>`;
+			<br clear="all" />
+			<span class="ratingsinfo-mobile"><span id="ratingsinfo-yourvote"></span><span> </span><span id="ratingsinfo-avg"></span></span></center></div></div>`;
     
 		$('.last-modified-bar').after(htmlCode);
 	} else  {
@@ -91,7 +91,7 @@
        		avg = avg/voteCount;
        		$('#ratingsinfo-yourvote').text(mw.message('ratePage-vote-info', data.userVote.toString()).text()); 
        		updateStars(avg, voteCount);
-       	} else $('#ratingsinfo-yourvote').html('<br />');
+       	} else $('#ratingsinfo-yourvote').html('');
 	});
 	
 	$('.ratingstar').click(function() {

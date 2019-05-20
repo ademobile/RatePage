@@ -60,3 +60,8 @@
 	font-size: 80%;
 	margin-top: 1em;
 }
+
+
+#p-ratePage-vote-title > .body {
+	padding-top: 0.3em !important;
+}
