@@ -8,9 +8,6 @@
  */
 class RatePageRating
 {
-    const MIN_RATING = 1;
-    const MAX_RATING = 5;
-
     public static function canPageBeRated(Title $title)
     {
         global $wgRPRatingAllowedNamespaces, $wgRPRatingPageBlacklist;
@@ -39,6 +36,8 @@ class RatePageRating
 
     public static function getPageRating(Title $title)
     {
+    	global $wgRPRatingMin, $wgRPRatingMax;
+
         if ($title->getArticleID() < 0)
             return [];   //no such page
 
@@ -57,7 +56,7 @@ class RatePageRating
         );
 
         $pageRating = [];
-        for ($i = self::MIN_RATING; $i <= self::MAX_RATING; $i++)
+        for ($i = $wgRPRatingMin; $i <= $wgRPRatingMax; $i++)
             $pageRating[$i] = 0;
 
         foreach ($res as $row)
