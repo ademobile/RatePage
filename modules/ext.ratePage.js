@@ -63,7 +63,7 @@
 			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="4"></div>
 			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="5"></div>
 			<br clear="all" />
-			<span class="ratingsinfo-mobile"><span id="ratingsinfo-yourvote"></span> <span id="ratingsinfo-avg"></span></span></center></div></div>`;
+			<span class="ratingsinfo-mobile"><span id="ratingsinfo-yourvote"></span><span> </span><span id="ratingsinfo-avg"></span></span></center></div></div>`;
     
 		$('.last-modified-bar').after(htmlCode);
 	} else  {
