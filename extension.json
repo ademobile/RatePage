@@ -8,6 +8,7 @@
     "version": "0.1.0",
     "namemsg": "ratePage",
     "descriptionmsg": "ratePage-desc",
+    "url": "https://www.mediawiki.org/wiki/Extension:RatePage",
     "manifest_version": 1,
     "MessagesDirs": {
         "RatePage": [ "i18n" ]
@@ -16,7 +17,11 @@
         "RPRatingAllowedNamespaces": null,
         "RPViewTrackingAllowedNamespaces": null,
         "RPRatingPageBlacklist": [],
-        "RPSidebarPosition": 2
+        "RPSidebarPosition": 2,
+        "RPRatingMin": 1,
+        "RPRatingMax": 5,
+        "RPFrontendEnabled": true,
+        "RPAddSidebarSection": true
 	},
     "AutoloadClasses": {
         "RatePageRating": "includes/RatePageRating.php",

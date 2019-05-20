@@ -37,13 +37,14 @@ class RatePageHooks
 	{
 		global $wgRPRatingAllowedNamespaces;
 		global $wgRPRatingPageBlacklist;
+		global $wgRPFrontendEnabled;
 
 		$out->addJsConfigVars([
 			'wgRPRatingAllowedNamespaces' => $wgRPRatingAllowedNamespaces,
 			'wgRPRatingPageBlacklist' => $wgRPRatingPageBlacklist
 		]);
 
-		if (RatePageRating::canPageBeRated($out->getTitle()))
+		if ($wgRPFrontendEnabled && RatePageRating::canPageBeRated($out->getTitle()))
 			$out->addModules('ext.ratePage');
 	}
 
@@ -65,10 +66,11 @@ class RatePageHooks
 
     public static function onSkinBuildSidebar( Skin $skin, &$bar )
     {
-        if (!RatePageRating::canPageBeRated($skin->getTitle()))
+    	global $wgRPAddSidebarSection, $wgRPSidebarPosition;
+
+        if (!$wgRPAddSidebarSection || !RatePageRating::canPageBeRated($skin->getTitle()))
             return;
 
-        global $wgRPSidebarPosition;
         $pos = $wgRPSidebarPosition;
 
         $bar =  array_slice($bar, 0, $pos, true) +

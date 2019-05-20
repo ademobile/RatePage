@@ -11,6 +11,8 @@ class ApiPageRating extends ApiBase
 {
 	public function execute()
 	{
+		global $wgRPRatingMin, $wgRPRatingMax;
+
 		$params = $this->extractRequestParams();
 		$this->requireOnlyOneParameter($params, 'pageid', 'pagetitle');
 
@@ -39,7 +41,7 @@ class ApiPageRating extends ApiBase
 				$this->dieWithError('Rate limit for voting exceeded, please try again later');
 
 			$answer = $params['answer'];
-			if ($answer < RatePageRating::MIN_RATING || $answer > RatePageRating::MAX_RATING)
+			if ($answer < $wgRPRatingMin || $answer > $wgRPRatingMax)
 				$this->dieWithError('Incorrect answer specified');
 			RatePageRating::voteOnPage($title, $userName, $ip, $answer);
 		}
