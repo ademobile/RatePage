@@ -19,15 +19,15 @@
 		if (isNaN(average)) $('#ratingsinfo-avg').text("");
  			else $('#ratingsinfo-avg').text(mw.message('ratePage-vote-average-info', average.toString(), vCount.toString()).text());
 
+
 		var f1 = parseInt(average.toFixed(1).slice(0,-1).replace('.', ''));
 		for (var i = 1; i <= 5; i++) {
 			if (i <= f1) {
-				$(`.ratingstar[data-ratingstar-no="${i.toString()}"]`).removeClass( "ratingstar-plain ratingstar-1-4 ratingstar-2-4 ratingstar-3-4 ratingstar-full" ).addClass( "ratingstar-full" );
+				$('.ratingstar[data-ratingstar-no="'+i.toString()+'"]').removeClass( "ratingstar-plain ratingstar-1-4 ratingstar-2-4 ratingstar-3-4 ratingstar-full" ).addClass( "ratingstar-full" );
 			} else if (i == f1+1) {
-				$(`.ratingstar[data-ratingstar-no="${i.toString()}"]`).removeClass( "ratingstar-plain ratingstar-1-4 ratingstar-2-4 ratingstar-3-4 ratingstar-full" ).addClass( typeForLastStar(average-f1) );
-			}	
-			else {
-				$(`.ratingstar[data-ratingstar-no="${i.toString()}"]`).removeClass( "ratingstar-1-4 ratingstar-2-4 ratingstar-3-4 ratingstar-full" ).addClass( "ratingstar-plain" );
+				$('.ratingstar[data-ratingstar-no="'+i.toString()+'"]').removeClass( "ratingstar-plain ratingstar-1-4 ratingstar-2-4 ratingstar-3-4 ratingstar-full" ).addClass( typeForLastStar(average-f1) );
+			} else {
+				$('.ratingstar[data-ratingstar-no="'+i.toString()+'"]').removeClass( "ratingstar-1-4 ratingstar-2-4 ratingstar-3-4 ratingstar-full" ).addClass( "ratingstar-plain" );
 			}
        	}
 	}
