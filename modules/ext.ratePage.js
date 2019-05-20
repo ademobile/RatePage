@@ -67,7 +67,7 @@
     
 		$('.last-modified-bar').after(htmlCode);
 	} else  {
-			// for timeless
+			/* for timeless */
 			$('#p-ratePage-vote-title').removeClass("emptyPortlet");
 			$('#p-ratePage-vote-title > div').append("<div id='ratingstars'></div>");
 			for (var i = 1; i <= 5; i++) {
