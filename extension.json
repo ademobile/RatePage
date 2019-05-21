@@ -15,7 +15,6 @@
     },
     "config": {
         "RPRatingAllowedNamespaces": null,
-        "RPViewTrackingAllowedNamespaces": null,
         "RPRatingPageBlacklist": [],
         "RPSidebarPosition": 2,
         "RPRatingMin": 1,
