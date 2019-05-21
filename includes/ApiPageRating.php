@@ -7,50 +7,54 @@
  * @ingroup Extensions
  * @license MIT
  */
-class ApiPageRating extends ApiBase
-{
-	public function execute()
-	{
+class ApiPageRating extends ApiBase {
+	public function execute() {
 		global $wgRPRatingMin, $wgRPRatingMax;
 
 		$params = $this->extractRequestParams();
-		$this->requireOnlyOneParameter($params, 'pageid', 'pagetitle');
+		$this->requireOnlyOneParameter( $params, 'pageid', 'pagetitle' );
 
-		if (isset($params['pageid']))
-			$title = Title::newFromID($params['pageid']);
-		else $title = Title::newFromText($params['pagetitle']);
+		if ( isset( $params['pageid'] ) ) {
+			$title = Title::newFromID( $params['pageid'] );
+		} else {
+			$title = Title::newFromText( $params['pagetitle'] );
+		}
 
-		if (is_null($title) || $title->getArticleID() < 0)
-			$this->dieWithError('Specified page does not exist');
+		if ( is_null( $title ) || $title->getArticleID() < 0 ) {
+			$this->dieWithError( 'Specified page does not exist' );
+		}
 
-		$this->getResult()->addValue(null, "pageId", $title->getArticleID());
+		$this->getResult()->addValue( null, "pageId", $title->getArticleID() );
 
-		if (!RatePageRating::canPageBeRated($title))
+		if ( !RatePageRating::canPageBeRated( $title ) ) {
 			return;
-		
+		}
+
 		$user = RequestContext::getMain()->getUser();
 		$ip = RequestContext::getMain()->getRequest()->getIP();
-		if ($user->getName() == '') {
+		if ( $user->getName() == '' ) {
 			$userName = $ip;
 		} else {
 			$userName = $user->getName();
 		}
 
-		if (isset($params['answer'])) {
-			if ($user->pingLimiter('ratepage'))
-				$this->dieWithError('Rate limit for voting exceeded, please try again later');
+		if ( isset( $params['answer'] ) ) {
+			if ( $user->pingLimiter( 'ratepage' ) ) {
+				$this->dieWithError( 'Rate limit for voting exceeded, please try again later' );
+			}
 
 			$answer = $params['answer'];
-			if ($answer < $wgRPRatingMin || $answer > $wgRPRatingMax)
-				$this->dieWithError('Incorrect answer specified');
-			RatePageRating::voteOnPage($title, $userName, $ip, $answer);
+			if ( $answer < $wgRPRatingMin || $answer > $wgRPRatingMax ) {
+				$this->dieWithError( 'Incorrect answer specified' );
+			}
+			RatePageRating::voteOnPage( $title, $userName, $ip, $answer );
 		}
 
-		$userVote = RatePageRating::getUserVote($title, $userName, $ip);
-		$pageRating = RatePageRating::getPageRating($title);
+		$userVote = RatePageRating::getUserVote( $title, $userName, $ip );
+		$pageRating = RatePageRating::getPageRating( $title );
 
-		$this->getResult()->addValue(null, "pageRating", $pageRating);
-		$this->getResult()->addValue(null, "userVote", $userVote);
+		$this->getResult()->addValue( null, "pageRating", $pageRating );
+		$this->getResult()->addValue( null, "userVote", $userVote );
 	}
 
 	/**
@@ -59,8 +63,7 @@ class ApiPageRating extends ApiBase
 	 * @param array $params Ignored parameters
 	 * @return string Always returns "private"
 	 */
-	public function getCacheMode($params)
-	{
+	public function getCacheMode( $params ) {
 		return 'private';
 	}
 
@@ -68,26 +71,14 @@ class ApiPageRating extends ApiBase
 	 * Return an array describing all possible parameters to this module
 	 * @return array
 	 */
-	public function getAllowedParams()
-	{
-		return [
-			'pageid' => [
-				ApiBase::PARAM_TYPE => 'integer'
-			],
-			'pagetitle' => [
-				ApiBase::PARAM_TYPE => 'string'
-			],
-			'answer' => [
-				ApiBase::PARAM_TYPE => 'integer'
-			]
-		];
+	public function getAllowedParams() {
+		return [ 'pageid' => [ ApiBase::PARAM_TYPE => 'integer' ], 'pagetitle' => [ ApiBase::PARAM_TYPE => 'string' ], 'answer' => [ ApiBase::PARAM_TYPE => 'integer' ] ];
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	protected function getExamplesMessages()
-	{
+	protected function getExamplesMessages() {
 		return [];
 	}
 }
