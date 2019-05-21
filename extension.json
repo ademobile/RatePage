@@ -38,8 +38,19 @@
                 "ext.ratePage.js"
             ],
             "styles": [
-                "ext.ratePage.css"
+                "ext.ratePage.less"
             ],
+            "skinStyles": {
+                "timeless": [
+                    "ext.ratePage.timeless.less"
+                ],
+                "monobook": [
+                    "ext.ratePage.monobook.less"
+                ],
+                "minerva": [
+                    "ext.ratePage.minerva.less"
+                ]
+            },
             "messages": [
                 "ratePage",
                 "ratePage-desc",
