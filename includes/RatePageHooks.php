@@ -1,4 +1,5 @@
 <?php
+
 /**
  * RatePage extension hooks
  *
@@ -6,8 +7,7 @@
  * @ingroup Extensions
  * @license MIT
  */
-class RatePageHooks
-{
+class RatePageHooks {
 	const PROP_NAME = 'page_views';
 
 	/**
@@ -18,34 +18,21 @@ class RatePageHooks
 	 * @param ResourceLoader $resourceLoader The reference to the resource loader
 	 * @return true
 	 */
-	public static function onResourceLoaderTestModules(array &$testModules, ResourceLoader &$resourceLoader)
-	{
-		$testModules['qunit']['ext.ratePage.tests'] = [
-			'scripts' => [
-				'tests/RatePage.test.js'
-			],
-			'dependencies' => [
-				'ext.ratePage'
-			],
-			'localBasePath' => __DIR__,
-			'remoteExtPath' => 'RatePage',
-		];
+	public static function onResourceLoaderTestModules( array &$testModules, ResourceLoader &$resourceLoader ) {
+		$testModules['qunit']['ext.ratePage.tests'] = [ 'scripts' => [ 'tests/RatePage.test.js' ], 'dependencies' => [ 'ext.ratePage' ], 'localBasePath' => __DIR__, 'remoteExtPath' => 'RatePage', ];
 		return true;
 	}
 
-	public static function onBeforePageDisplay(OutputPage $out, Skin $skin)
-	{
+	public static function onBeforePageDisplay( OutputPage $out, Skin $skin ) {
 		global $wgRPRatingAllowedNamespaces;
 		global $wgRPRatingPageBlacklist;
 		global $wgRPFrontendEnabled;
 
-		$out->addJsConfigVars([
-			'wgRPRatingAllowedNamespaces' => $wgRPRatingAllowedNamespaces,
-			'wgRPRatingPageBlacklist' => $wgRPRatingPageBlacklist
-		]);
+		$out->addJsConfigVars( [ 'wgRPRatingAllowedNamespaces' => $wgRPRatingAllowedNamespaces, 'wgRPRatingPageBlacklist' => $wgRPRatingPageBlacklist ] );
 
-		if ($wgRPFrontendEnabled && RatePageRating::canPageBeRated($out->getTitle()))
-			$out->addModules('ext.ratePage');
+		if ( $wgRPFrontendEnabled && RatePageRating::canPageBeRated( $out->getTitle() ) ) {
+			$out->addModules( 'ext.ratePage' );
+		}
 	}
 
 	/**
@@ -54,27 +41,21 @@ class RatePageHooks
 	 *
 	 * @param DatabaseUpdater $updater
 	 */
-	public static function onLoadExtensionSchemaUpdates($updater)
-	{
+	public static function onLoadExtensionSchemaUpdates( $updater ) {
 		$patchPath = __DIR__ . '/../sql/';
 
-		$updater->addExtensionTable(
-			'ratepage_vote',
-			$patchPath . 'create-table--ratepage-vote.sql'
-		);
+		$updater->addExtensionTable( 'ratepage_vote', $patchPath . 'create-table--ratepage-vote.sql' );
 	}
 
-    public static function onSkinBuildSidebar( Skin $skin, &$bar )
-    {
-    	global $wgRPAddSidebarSection, $wgRPSidebarPosition;
+	public static function onSkinBuildSidebar( Skin $skin, &$bar ) {
+		global $wgRPAddSidebarSection, $wgRPSidebarPosition;
 
-        if (!$wgRPAddSidebarSection || !RatePageRating::canPageBeRated($skin->getTitle()))
-            return;
+		if ( !$wgRPAddSidebarSection || !RatePageRating::canPageBeRated( $skin->getTitle() ) ) {
+			return;
+		}
 
-        $pos = $wgRPSidebarPosition;
+		$pos = $wgRPSidebarPosition;
 
-        $bar =  array_slice($bar, 0, $pos, true) +
-            array("ratePage-vote-title"  => "") +
-            array_slice($bar, $pos, count($bar)-$pos, true);
-    }
+		$bar = array_slice( $bar, 0, $pos, true ) + array( "ratePage-vote-title" => "" ) + array_slice( $bar, $pos, count( $bar ) - $pos, true );
+	}
 }
