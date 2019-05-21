@@ -30,7 +30,7 @@
     },
     "ResourceFileModulePaths": {
         "localBasePath": "modules",
-        "remoteExtPath": "RatePage"
+        "remoteExtPath": "RatePage/modules"
     },
     "ResourceModules": {
         "ext.ratePage": {
@@ -57,7 +57,9 @@
                 "ratePage-caption-4",
                 "ratePage-caption-5"
             ],
-            "dependencies": [],
+            "dependencies": [
+                "mediawiki.api"
+            ],
             "targets": [
                 "desktop",
                 "mobile"

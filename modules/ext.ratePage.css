@@ -1,8 +1,7 @@
 #ratingstars {
 	height: 25px;
-    display: flex;
-    justify-content: space-between;
-    margin: 0 8px;
+	display: flex;
+	justify-content: center;
 }
 
 .pageRatingStars {
@@ -17,9 +16,10 @@
 }
 
 .ratingstar-desktop {
-	width: 20px !important;
-	height: 20px !important;
-	background-size: 20px !important;
+	width: 24px;
+	height: 20px;
+	background-size: contain;
+	background-position: center;
 }
 
 .ratingstar-mobile {
@@ -36,8 +36,6 @@
 	font-weight: normal;
 	text-transform: uppercase;
 	color: #72777d;
-	text-align: center;
-    width: 100%;
 }
 
 .ratingstar-full {
@@ -67,13 +65,16 @@
 	line-height: 1.3em;
 	font-size: 60%;
 	color: #666666;
+	text-align: center;
 }
 
 .ratingsinfo-mobile {
 	color: #72777d;
 	float: left;
 	font-size: 80%;
-	margin-top: 1em;
+	margin-top: 0.1em;
+	text-align: center;
+	width: 100%;
 }
 
 

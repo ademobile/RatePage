@@ -54,25 +54,28 @@
 	}
 	/* add stars */
 	if (mw.config.get('skin') == "minerva") {
-		var htmlCode = `<div class="post-content footer-element active footer-ratingstars">
-			<h3>${mw.message('ratePage-vote-title').text()}</h3>
-			<div class="pageRatingStars">
-			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="1"></div>
-			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="2"></div>
-			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="3"></div>
-			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="4"></div>
-			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="5"></div>
-			</div><div class="ratingsinfo-mobile"><span id="ratingsinfo-yourvote"></span> <span id="ratingsinfo-avg"></span></div></div>`;
+		var htmlCode = '<div class="post-content footer-element active footer-ratingstars"> \
+			<h3>' + mw.message("ratePage-vote-title").text() + '</h3> \
+			<div class="pageRatingStars"> \
+			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="1"></div> \
+			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="2"></div> \
+			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="3"></div> \
+			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="4"></div> \
+			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="5"></div> \
+			</div><span class="ratingsinfo-mobile"><span id="ratingsinfo-yourvote"></span> <span id="ratingsinfo-avg"></span></span></div>';
     
 		$('.last-modified-bar').after(htmlCode);
 	} else  {
 			/* for timeless */
 			$('#p-ratePage-vote-title').removeClass("emptyPortlet");
-			$('#p-ratePage-vote-title > div').append("<div id='ratingstars'></div>");
+			$('#p-ratePage-vote-title > div').append('<div id="ratingstars" />');
 			for (var i = 1; i <= 5; i++) {
-				$("#ratingstars").append(`<div class="ratingstar ratingstar-desktop ratingstar-plain" title="${mw.message(`ratePage-caption-${i.toString()}`).text()}" data-ratingstar-no="${i.toString()}"></div>`);
+				$("#ratingstars").append('<div class="ratingstar ratingstar-desktop ratingstar-plain" title="' +
+					mw.message('ratePage-caption-' + i.toString()).text() +
+						'" data-ratingstar-no="' + i.toString() + '"></div>'
+				);
 			}
-			$('#ratingstars').after('<br clear="all" /><span class="ratingsinfo-desktop"><div id="ratingsinfo-yourvote"></div><div id="ratingsinfo-avg"></div></span>');
+			$('#ratingstars').after('<div class="ratingsinfo-desktop"><div id="ratingsinfo-yourvote"></div><div id="ratingsinfo-avg"></div></div>');
 	}
 	
 	/* init */
@@ -101,7 +104,7 @@
 	$('.ratingstar-desktop').mouseover(function(){
 		var no = $(this).attr('data-ratingstar-no');
 		for (var i = 1; i<=no; i++) {
-			$(`.ratingstar[data-ratingstar-no="${i.toString()}"]`).addClass('ratingstar-mousedown');
+			$('.ratingstar[data-ratingstar-no="' + i.toString() + '"]').addClass('ratingstar-mousedown');
 		}
 	});
 	
