@@ -56,14 +56,13 @@
 	if (mw.config.get('skin') == "minerva") {
 		var htmlCode = `<div class="post-content footer-element active footer-ratingstars">
 			<h3>${mw.message('ratePage-vote-title').text()}</h3>
-			<div class="pageRatingStars"><center>
+			<div class="pageRatingStars">
 			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="1"></div>
 			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="2"></div>
 			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="3"></div>
 			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="4"></div>
 			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="5"></div>
-			<br clear="all" />
-			<span class="ratingsinfo-mobile"><span id="ratingsinfo-yourvote"></span> <span id="ratingsinfo-avg"></span></span></center></div></div>`;
+			</div><div class="ratingsinfo-mobile"><span id="ratingsinfo-yourvote"></span> <span id="ratingsinfo-avg"></span></div></div>`;
     
 		$('.last-modified-bar').after(htmlCode);
 	} else  {
