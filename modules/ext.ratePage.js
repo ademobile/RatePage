@@ -97,7 +97,7 @@
 				avg = avg / voteCount;
 				$( '#ratingsinfo-yourvote' ).text( mw.message( 'ratePage-vote-info', data.userVote.toString() ).text() );
 				updateStars( avg, voteCount );
-			} else $( '#ratingsinfo-yourvote' ).html( '' );
+			} else $( '#ratingsinfo-yourvote' ).html( mw.message( 'ratePage-prompt' ).text() );
 		} );
 
 	$( '.ratingstar' ).click( function () {
