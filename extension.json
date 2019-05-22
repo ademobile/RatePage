@@ -5,7 +5,7 @@
         "Polskacafe"
     ],
     "license-name": "MIT",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "namemsg": "ratePage",
     "descriptionmsg": "ratePage-desc",
     "url": "https://www.mediawiki.org/wiki/Extension:RatePage",
@@ -57,6 +57,8 @@
                 "apihelp-pagerating-param-pageid",
                 "apihelp-pagerating-param-pagetitle",
                 "apihelp-pagerating-param-answer",
+                "apihelp-ratepage-example-1",
+                "apihelp-ratepage-example-2",
                 "ratePage-vote-error",
                 "ratePage-vote-title",
                 "ratePage-vote-info",

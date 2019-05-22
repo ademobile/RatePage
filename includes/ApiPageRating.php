@@ -20,7 +20,7 @@ class ApiPageRating extends ApiBase {
 			$title = Title::newFromText( $params['pagetitle'] );
 		}
 
-		if ( is_null( $title ) || $title->getArticleID() < 0 ) {
+		if ( is_null( $title ) || $title->getArticleID() < 1 ) {
 			$this->dieWithError( 'Specified page does not exist' );
 		}
 
@@ -72,13 +72,24 @@ class ApiPageRating extends ApiBase {
 	 * @return array
 	 */
 	public function getAllowedParams() {
-		return [ 'pageid' => [ ApiBase::PARAM_TYPE => 'integer' ], 'pagetitle' => [ ApiBase::PARAM_TYPE => 'string' ], 'answer' => [ ApiBase::PARAM_TYPE => 'integer' ] ];
+		return [
+			'pageid' => [ ApiBase::PARAM_TYPE => 'integer' ],
+			'pagetitle' => [ ApiBase::PARAM_TYPE => 'string' ],
+			'answer' => [ ApiBase::PARAM_TYPE => 'integer' ]
+		];
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	protected function getExamplesMessages() {
-		return [];
+		return [
+			'action=pagerating&pagetitle=Example' => 'apihelp-ratepage-example-1',
+			'action=pagerating&pagetitle=Example&answer=2' => 'apihelp-ratepage-example-2'
+		];
+	}
+
+	public function isWriteMode() {
+		return true;
 	}
 }
