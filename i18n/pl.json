@@ -11,6 +11,8 @@
     "apihelp-pagerating-param-pageid": "ID strony",
     "apihelp-pagerating-param-pagetitle": "Tytuł strony",
     "apihelp-pagerating-param-answer": "Ocena strony (od 1 do 5 włącznie)",
+    "apihelp-ratepage-example-1": "Pobierz aktualne oceny strony Example,",
+    "apihelp-ratepage-example-2": "Oceń stronę Example na 2.",
     "ratePage-vote-error": "Oddanie głosu nie powiodło się.",
     "ratePage-vote-title": "Oceń artykuł",
     "ratePage-vote-info": "Twoja ocena: $1.",
