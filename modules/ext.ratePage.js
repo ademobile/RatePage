@@ -19,7 +19,7 @@
 		}
 
 		if ( isNaN( average ) ) $( '#ratingsinfo-avg' ).text( "" );
-		else $( '#ratingsinfo-avg' ).text( mw.message( 'ratePage-vote-average-info', average.toString(), vCount.toString() ).text() );
+		else $( '#ratingsinfo-avg' ).text( mw.message( 'ratePage-vote-average-info', average.toFixed(2), vCount.toString() ).text() );
 
 
 		var f1 = parseInt( average.toFixed( 1 ).slice( 0, -1 ).replace( '.', '' ) );
