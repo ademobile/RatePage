@@ -3,7 +3,7 @@
  * tested on minerva, timeless, vector and monobook
  **/
 ( function ( $, mw ) {
-	if ( (mw.config.get('wgRPRatingAllowedNamespaces') === null || mw.config.get( 'wgRPRatingAllowedNamespaces' ).indexOf( mw.config.get( 'wgNamespaceNumber' ) ) === -1) || mw.config.get( 'wgRPRatingPageBlacklist' ).indexOf( mw.config.get( 'wgPageName' ) ) !== -1 || mw.config.get( 'wgRevisionId' ) === 0 ) return;
+	if ( (mw.config.get('wgRPRatingAllowedNamespaces') !== null && mw.config.get( 'wgRPRatingAllowedNamespaces' ).indexOf( mw.config.get( 'wgNamespaceNumber' ) ) === -1) || mw.config.get( 'wgRPRatingPageBlacklist' ).indexOf( mw.config.get( 'wgPageName' ) ) !== -1 || mw.config.get( 'wgRevisionId' ) === 0 ) return;
 
 	function updateStars( average, vCount ) {
 		function typeForLastStar( f2 ) {
