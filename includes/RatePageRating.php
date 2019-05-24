@@ -11,7 +11,7 @@ class RatePageRating {
 	public static function canPageBeRated( Title $title ) {
 		global $wgRPRatingAllowedNamespaces, $wgRPRatingPageBlacklist;
 
-		if ( $title->getArticleID() < 0 ) {
+		if ( $title->getArticleID() < 1 ) {
 			return false;
 		}   //no such page
 

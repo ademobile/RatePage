@@ -50,9 +50,12 @@ class RatePageHooks {
 	public static function onSkinBuildSidebar( Skin $skin, &$bar ) {
 		global $wgRPAddSidebarSection, $wgRPSidebarPosition;
 
-		if ( !$wgRPAddSidebarSection || !RatePageRating::canPageBeRated( $skin->getTitle() ) ) {
+		if ( !$wgRPAddSidebarSection || !RatePageRating::canPageBeRated( $skin->getTitle() ) )
 			return;
-		}
+
+		$query = $skin->getRequest()->getQueryValues();
+		if ( array_key_exists('action', $query ) && $query['action'] != 'view' )
+			return;     //this not a view, probably a history or edit or something
 
 		$pos = $wgRPSidebarPosition;
 
