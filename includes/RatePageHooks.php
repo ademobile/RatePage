@@ -61,4 +61,47 @@ class RatePageHooks {
 
 		$bar = array_slice( $bar, 0, $pos, true ) + array( "ratePage-vote-title" => "" ) + array_slice( $bar, $pos, count( $bar ) - $pos, true );
 	}
+
+	/**
+	 * @param Parser $parser
+	 * @throws MWException
+	 */
+	public static function onParserFirstCallInit( Parser $parser ) {
+		$parser->setHook( 'ratepage', [ self::class, 'renderTagRatePage' ] );
+	}
+
+	/**
+	 * Renders the <ratepage> parser tag
+	 *
+	 * @param $input
+	 * @param array $args
+	 * @param Parser $parser
+	 * @param PPFrame $frame
+	 * @return string
+	 */
+	public static function renderTagRatePage( $input, array $args, Parser $parser, PPFrame $frame ) {
+
+		if ( !isset( $args['page'] ) ) {
+			return self::renderError( wfMessage( 'ratePage-missing-argument-page' )->escaped(), $parser );
+		}
+
+		$title = Title::newFromText( $args['page'] );
+		if ( $title->getArticleID() < 1 ) {
+			return self::renderError( wfMessage( 'ratePage-page-does-not-exist' )->escaped(), $parser );
+		}
+
+		$contest = '';
+		if ( isset( $args['contest'] ) ) {
+			$contest = $args['contest'];
+		}
+
+		return '<div class="ratepage-embed" page-id="' . $title->getArticleID() .
+			'" contest="' . $contest .
+			'"></div>';
+	}
+
+	private static function renderError( string $text, Parser &$parser ) {
+		$parser->addTrackingCategory( 'ratePage-error-category' );
+		return '<strong class="error">' . $text . '</strong>';
+	}
 }

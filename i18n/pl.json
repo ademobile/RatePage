@@ -23,5 +23,8 @@
     "ratePage-caption-3": "Może być",
     "ratePage-caption-4": "Fajne",
     "ratePage-caption-5": "Świetne",
-    "ratePage-prompt": "Zagłosuj, by zobaczyć średnią ocen"
+    "ratePage-prompt": "Zagłosuj, by zobaczyć średnią ocen",
+    "ratePage-error-category": "Strony z błędami rozszerzenia RatePage",
+    "ratePage-missing-argument-page": "Błąd: nie podano obowiązkowego argumentu page.",
+    "ratePage-page-does-not-exist": "Błąd: podana strona nie istnieje."
 }

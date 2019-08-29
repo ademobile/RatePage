@@ -23,5 +23,8 @@
     "ratePage-caption-3": "",
     "ratePage-caption-4": "",
     "ratePage-caption-5": "",
-    "ratePage-prompt": ""
+    "ratePage-prompt": "",
+    "ratePage-error-category": "",
+    "ratePage-missing-argument-page": "",
+    "ratePage-page-does-not-exist": ""
 }
