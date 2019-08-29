@@ -38,6 +38,11 @@ class ApiPageRating extends ApiBase {
 			$userName = $user->getName();
 		}
 
+		$contest = '';
+		if ( isset( $params['contest'] ) ) {
+			$contest = $params['contest'];
+		}
+
 		if ( isset( $params['answer'] ) ) {
 			if ( $user->pingLimiter( 'ratepage' ) ) {
 				$this->dieWithError( 'Rate limit for voting exceeded, please try again later' );
@@ -47,11 +52,11 @@ class ApiPageRating extends ApiBase {
 			if ( $answer < $wgRPRatingMin || $answer > $wgRPRatingMax ) {
 				$this->dieWithError( 'Incorrect answer specified' );
 			}
-			RatePageRating::voteOnPage( $title, $userName, $ip, $answer );
+			RatePageRating::voteOnPage( $title, $userName, $ip, $answer, $contest );
 		}
 
-		$userVote = RatePageRating::getUserVote( $title, $userName, $ip );
-		$pageRating = RatePageRating::getPageRating( $title );
+		$userVote = RatePageRating::getUserVote( $title, $userName, $contest );
+		$pageRating = RatePageRating::getPageRating( $title, $contest );
 
 		$this->getResult()->addValue( null, "pageRating", $pageRating );
 		$this->getResult()->addValue( null, "userVote", $userVote );
@@ -75,7 +80,8 @@ class ApiPageRating extends ApiBase {
 		return [
 			'pageid' => [ ApiBase::PARAM_TYPE => 'integer' ],
 			'pagetitle' => [ ApiBase::PARAM_TYPE => 'string' ],
-			'answer' => [ ApiBase::PARAM_TYPE => 'integer' ]
+			'answer' => [ ApiBase::PARAM_TYPE => 'integer' ],
+			'contest' => [ ApiBase::PARAM_TYPE => 'string' ]
 		];
 	}
 
