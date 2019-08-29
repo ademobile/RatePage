@@ -4,5 +4,6 @@ CREATE TABLE IF NOT EXISTS /*_*/ratepage_vote (
   `rv_ip` varchar(255) default NULL,
   `rv_answer` int(3) NOT NULL,
   `rv_date` datetime NOT NULL,
-  PRIMARY KEY  (`rv_page_id`,`rv_user`)
+  `rv_contest` varchar(255) NOT NULL DEFAULT VALUE ''
+  PRIMARY KEY  (`rv_page_id`, `rv_contest`, `rv_user`)
 ) /*$wgDBTableOptions*/;
