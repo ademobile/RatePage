@@ -77,7 +77,8 @@
         "ResourceLoaderTestModules": "RatePageHooks::onResourceLoaderTestModules",
         "BeforePageDisplay": "RatePageHooks::onBeforePageDisplay",
         "LoadExtensionSchemaUpdates": "RatePageHooks::onLoadExtensionSchemaUpdates",
-        "SkinBuildSidebar": "RatePageHooks::onSkinBuildSidebar"
+        "SkinBuildSidebar": "RatePageHooks::onSkinBuildSidebar",
+        "ParserFirstCallInit": "RatePageHooks::onParserFirstCallInit"
     },
     "APIModules": {
         "pagerating": "ApiPageRating"
