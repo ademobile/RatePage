@@ -58,33 +58,32 @@
 			}
 		}
 
-		var prefix = '';
+		var parent = null;
 		if ( !articleName ) {
-			if ( mw.config.get( 'skin' ) == "minerva" ) {
-				prefix = '.pageRatingStars ';
+			if ( mw.config.get( 'skin' ) === "minerva" ) {
+				parent = $( '.pageRatingStars' );
 			} else {
-				prefix = '#p-ratePage-vote-title ';
+				parent = $( '#p-ratePage-vote-title' );
 			}
 		} else {
-			//to be implemented
+			parent = $( "div[page='" + articleName + "'][contest='" + contest + "']" );
 		}
 
-		if ( isNaN( average ) ) $( prefix + '#ratingsinfo-avg' ).text( "" );
-		else $( prefix + '#ratingsinfo-avg' ).text( mw.message( 'ratePage-vote-average-info', average.toFixed(2), vCount.toString() ).text() );
-
+		if ( isNaN( average ) ) parent.find( '#ratingsinfo-avg' ).text( "" );
+		else parent.find( '#ratingsinfo-avg' ).text( mw.message( 'ratePage-vote-average-info', average.toFixed(2), vCount.toString() ).text() );
 
 		var f1 = parseInt( average.toFixed( 1 ).slice( 0, -1 ).replace( '.', '' ) );
 		for ( var i = 1; i <= 5; i++ ) {
 			if ( i <= f1 ) {
-				$( prefix + '.ratingstar[data-ratingstar-no="' + i.toString() + '"]' )
+				parent.find( '.ratingstar[data-ratingstar-no="' + i.toString() + '"]' )
 					.removeClass( "ratingstar-plain ratingstar-1-4 ratingstar-2-4 ratingstar-3-4 ratingstar-full" )
 					.addClass( "ratingstar-full" );
-			} else if ( i == f1 + 1 ) {
-				$( prefix + '.ratingstar[data-ratingstar-no="' + i.toString() + '"]' )
+			} else if ( i === f1 + 1 ) {
+				parent.find( '.ratingstar[data-ratingstar-no="' + i.toString() + '"]' )
 					.removeClass( "ratingstar-plain ratingstar-1-4 ratingstar-2-4 ratingstar-3-4 ratingstar-full" )
 					.addClass( typeForLastStar( average - f1 ) );
 			} else {
-				$( prefix + '.ratingstar[data-ratingstar-no="' + i.toString() + '"]' )
+				parent.find( '.ratingstar[data-ratingstar-no="' + i.toString() + '"]' )
 					.removeClass( "ratingstar-1-4 ratingstar-2-4 ratingstar-3-4 ratingstar-full" )
 					.addClass( "ratingstar-plain" );
 			}
@@ -93,7 +92,14 @@
 
 	/* now process all <ratepage> tags */
 	$( 'div.ratepage-embed' ).each( function () {
-		 console.log( $( this ).attr( 'contest' ) );
+		var stars = $( this );
+		for ( var i = 1; i <= 5; i++ ) {
+			stars.append( '<div class="ratingstar ratingstar-desktop ratingstar-plain" title="' +
+				mw.message( 'ratePage-caption-' + i.toString() ).text() +
+				'" data-ratingstar-no="' + i.toString() + '"></div>'
+			);
+		}
+		stars.append( '<div class="ratingsinfo-desktop"><div id="ratingsinfo-yourvote"></div><div id="ratingsinfo-avg"></div></div>' );
 	} );
 
 	/* and now the main rating widget in the sidebar or footer */
@@ -106,7 +112,7 @@
 		mw.config.get( 'wgRevisionId' ) !== 0 ) {
 
 		/* add main rating stars (in sidebar or footer) */
-		if ( mw.config.get( 'skin' ) == "minerva" ) {
+		if ( mw.config.get( 'skin' ) === "minerva" ) {
 			var htmlCode = '<div class="post-content footer-element active footer-ratingstars"> \
 			<h3>' + mw.message( "ratePage-vote-title" ).text() + '</h3> \
 			<div class="pageRatingStars"> \
@@ -122,13 +128,15 @@
 			/* for timeless */
 			$( '#p-ratePage-vote-title' ).removeClass( "emptyPortlet" );
 			$( '#p-ratePage-vote-title > div' ).append( '<div id="ratingstars" />' );
+
+			var stars = $( "#ratingstars" );
 			for ( var i = 1; i <= 5; i++ ) {
-				$( "#ratingstars" ).append( '<div class="ratingstar ratingstar-desktop ratingstar-plain" title="' +
+				stars.append( '<div class="ratingstar ratingstar-desktop ratingstar-plain" title="' +
 					mw.message( 'ratePage-caption-' + i.toString() ).text() +
 					'" data-ratingstar-no="' + i.toString() + '"></div>'
 				);
 			}
-			$( '#ratingstars' ).after( '<div class="ratingsinfo-desktop"><div id="ratingsinfo-yourvote"></div><div id="ratingsinfo-avg"></div></div>' );
+			stars.after( '<div class="ratingsinfo-desktop"><div id="ratingsinfo-yourvote"></div><div id="ratingsinfo-avg"></div></div>' );
 		}
 
 		/* initialize the stars */
