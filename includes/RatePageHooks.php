@@ -95,7 +95,7 @@ class RatePageHooks {
 			$contest = $args['contest'];
 		}
 
-		$width = '200px';
+		$width = '300px';
 		if ( isset( $args['width'] ) ) {
 			$width = $args['width'];
 		}
