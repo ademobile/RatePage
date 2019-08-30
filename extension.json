@@ -27,6 +27,9 @@
         "RatePageHooks": "includes/RatePageHooks.php",
         "ApiPageRating": "includes/ApiPageRating.php"
     },
+    "ExtensionMessagesFiles": {
+        "RatePageMagic": "RatePage.i18n.magic.php"
+    },
     "ResourceFileModulePaths": {
         "localBasePath": "modules",
         "remoteExtPath": "RatePage/modules"

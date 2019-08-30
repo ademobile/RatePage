@@ -67,41 +67,30 @@ class RatePageHooks {
 	 * @throws MWException
 	 */
 	public static function onParserFirstCallInit( Parser $parser ) {
-		$parser->setHook( 'ratepage', [ self::class, 'renderTagRatePage' ] );
+		$parser->setFunctionHook( 'ratepage', [ self::class, 'renderTagRatePage' ] );
 	}
 
 	/**
-	 * Renders the <ratepage> parser tag
+	 * Renders the ratepage parser function
 	 *
-	 * @param $input
-	 * @param array $args
 	 * @param Parser $parser
-	 * @param PPFrame $frame
+	 * @param mixed $page
+	 * @param mixed $contest
+	 * @param string $width
 	 * @return string
 	 */
-	public static function renderTagRatePage( $input, array $args, Parser $parser, PPFrame $frame ) {
+	public static function renderTagRatePage( Parser $parser, $page = false, $contest = '', $width = '300px' ) {
 
-		if ( !isset( $args['page'] ) ) {
+		if ( !$page ) {
 			return self::renderError( wfMessage( 'ratePage-missing-argument-page' )->escaped(), $parser );
 		}
 
-		$title = Title::newFromText( $args['page'] );
+		$title = Title::newFromText( $page );
 		if ( !$title || $title->getArticleID() < 1 ) {
 			return self::renderError( wfMessage( 'ratePage-page-does-not-exist' )->escaped(), $parser );
 		}
 
-		$contest = '';
-		if ( isset( $args['contest'] ) ) {
-			$contest = $args['contest'];
-		}
-
-		$width = '300px';
-		if ( isset( $args['width'] ) ) {
-			$width = $args['width'];
-		}
-
-		return '<div class="ratepage-embed" page-id="' . $title->getArticleID() .
-			'" contest="' . $contest .
+		return '<div class="ratepage-embed" id="' . $title->getArticleID() . 'c' . $contest .
 			'" style="width: ' . $width .
 			';"></div>';
 	}

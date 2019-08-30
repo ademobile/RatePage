@@ -66,7 +66,7 @@
 				parent = $( '#p-ratePage-vote-title' );
 			}
 		} else {
-			parent = $( "div[page-id='" + pageId + "'][contest='" + contest + "']" );
+			parent = $( "div.ratepage-embed#" + pageId + "c" + contest );
 		}
 
 		if ( userVote !== -1 ) {
@@ -99,8 +99,9 @@
 	/* now process all <ratepage> tags */
 	$( 'div.ratepage-embed' ).each( function () {
 		var stars = $( this );
-		var pageId = stars.attr( 'page-id' );
-		var contest = stars.attr( 'contest' );
+		var id = stars.attr( 'id' );
+		var pageId = id.slice( 0, id.indexOf( 'c' ) );
+		var contest = id.slice( id.indexOf( 'c' ) + 1 );
 		for ( var i = 1; i <= 5; i++ ) {
 			stars.append( '<div class="ratingstar ratingstar-embed ratingstar-plain" title="' +
 				mw.message( 'ratePage-caption-' + i.toString() ).text() +
