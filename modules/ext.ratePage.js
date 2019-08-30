@@ -34,11 +34,12 @@
 		}
 	}
 
-	function ratePage( articleName, answer ) {
+	function ratePage( articleName, contest, answer, callback ) {
 		( new mw.Api() ).post( {
 			action: 'pagerating',
 			format: 'json',
 			pagetitle: articleName,
+			contest: contest,
 			answer: answer
 		} )
 			.done( function ( data ) {
@@ -51,8 +52,26 @@
 				var avg = 0;
 				for ( i = 1; i <= 5; i++ ) avg += ( data.pageRating[i] * i );
 				avg = avg / voteCount;
-				$( '#ratingsinfo-yourvote' ).text( mw.message( 'ratePage-vote-info', data.userVote.toString() ).text() );
-				updateStars( avg, voteCount );
+
+				callback( data.userVote, avg, voteCount );
+			} );
+	}
+
+	function getRating( articleName, contest, callback ) {
+		( new mw.Api() ).post( {
+			action: 'pagerating',
+			format: 'json',
+			pagetitle: articleName,
+			contest: contest,
+		} )
+			.done( function ( data ) {
+				var voteCount = 0;
+				for ( var i = 1; i <= 5; i++ ) voteCount += ( data.pageRating[i] );
+				var avg = 0;
+				for ( i = 1; i <= 5; i++ ) avg += ( data.pageRating[i] * i );
+				avg = avg / voteCount;
+
+				callback( data.userVote, avg, voteCount );
 			} );
 	}
 
@@ -82,27 +101,22 @@
 		$( '#ratingstars' ).after( '<div class="ratingsinfo-desktop"><div id="ratingsinfo-yourvote"></div><div id="ratingsinfo-avg"></div></div>' );
 	}
 
-	/* init */
-	( new mw.Api() ).post( {
-		action: 'pagerating',
-		format: 'json',
-		pagetitle: mw.config.get( 'wgPageName' ),
-	} )
-		.done( function ( data ) {
-			if ( data.userVote !== -1 ) {
-				var voteCount = 0;
-				for ( var i = 1; i <= 5; i++ ) voteCount += ( data.pageRating[i] );
-				var avg = 0;
-				for ( i = 1; i <= 5; i++ ) avg += ( data.pageRating[i] * i );
-				avg = avg / voteCount;
-				$( '#ratingsinfo-yourvote' ).text( mw.message( 'ratePage-vote-info', data.userVote.toString() ).text() );
+	getRating( mw.config.get( 'wgPageName' ), '',
+		function ( userVote, avg, voteCount ) {
+			if ( userVote !== -1 ) {
+				$( '#ratingsinfo-yourvote' ).text( mw.message( 'ratePage-vote-info', userVote.toString() ).text() );
 				updateStars( avg, voteCount );
-			} else $( '#ratingsinfo-yourvote' ).html( mw.message( 'ratePage-prompt' ).text() );
+			} else
+				$( '#ratingsinfo-yourvote' ).html( mw.message( 'ratePage-prompt' ).text() );
 		} );
 
 	$( '.ratingstar' ).click( function () {
 		var answer = $( this ).attr( 'data-ratingstar-no' );
-		ratePage( mw.config.get( 'wgPageName' ), answer );
+		ratePage( mw.config.get( 'wgPageName' ), '', answer,
+			function ( userVote, avg, voteCount ) {
+				$( '#ratingsinfo-yourvote' ).text( mw.message( 'ratePage-vote-info', userVote.toString() ).text() );
+				updateStars( avg, voteCount );
+			} );
 	} );
 
 	$( '.ratingstar-desktop' ).mouseover( function () {
