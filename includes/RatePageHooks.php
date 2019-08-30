@@ -30,7 +30,7 @@ class RatePageHooks {
 
 		$out->addJsConfigVars( [ 'wgRPRatingAllowedNamespaces' => $wgRPRatingAllowedNamespaces, 'wgRPRatingPageBlacklist' => $wgRPRatingPageBlacklist ] );
 
-		if ( $wgRPFrontendEnabled && RatePageRating::canPageBeRated( $out->getTitle() ) ) {
+		if ( $wgRPFrontendEnabled ) {
 			$out->addModules( 'ext.ratePage' );
 		}
 	}
