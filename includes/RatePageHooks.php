@@ -86,7 +86,7 @@ class RatePageHooks {
 		}
 
 		$title = Title::newFromText( $args['page'] );
-		if ( $title->getArticleID() < 1 ) {
+		if ( !$title || $title->getArticleID() < 1 ) {
 			return self::renderError( wfMessage( 'ratePage-page-does-not-exist' )->escaped(), $parser );
 		}
 
