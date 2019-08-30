@@ -95,9 +95,15 @@ class RatePageHooks {
 			$contest = $args['contest'];
 		}
 
+		$width = '200px';
+		if ( isset( $args['width'] ) ) {
+			$width = $args['width'];
+		}
+
 		return '<div class="ratepage-embed" page-id="' . $title->getArticleID() .
 			'" contest="' . $contest .
-			'"></div>';
+			'" style="width: ' . $width .
+			';"></div>';
 	}
 
 	private static function renderError( string $text, Parser &$parser ) {
