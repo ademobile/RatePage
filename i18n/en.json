@@ -26,5 +26,7 @@
     "ratePage-prompt": "Vote to see the average rating",
     "ratePage-error-category": "Pages with RatePage errors",
     "ratePage-missing-argument-page": "Error: required parameter page was not specified.",
-    "ratePage-page-does-not-exist": "Error: specified page does not exist."
+    "ratePage-page-does-not-exist": "Error: specified page does not exist.",
+    "ratePage-contest-id-too-long": "Error: specified contest ID length exceeds the limit (255 characters).",
+    "ratePage-contest-id-invalid": "Error: contest ID must contain only alphanumeric characters."
 }

@@ -90,6 +90,13 @@ class RatePageHooks {
 			return self::renderError( wfMessage( 'ratePage-page-does-not-exist' )->escaped(), $parser );
 		}
 
+		if ( strlen( $contest ) > 255 ) {
+			return self::renderError( wfMessage( 'ratePage-contest-id-too-long' )->escaped(), $parser );
+		}
+		if ( strlen( $contest ) > 0 && !ctype_alnum( $contest ) ) {
+			return self::renderError( wfMessage( 'ratePage-contest-id-invalid' )->escaped(), $parser );
+		}
+
 		return '<div class="ratepage-embed" id="' . $title->getArticleID() . 'c' . $contest .
 			'" style="width: ' . $width .
 			';"></div>';

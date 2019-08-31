@@ -41,6 +41,12 @@ class ApiPageRating extends ApiBase {
 		$contest = '';
 		if ( isset( $params['contest'] ) ) {
 			$contest = $params['contest'];
+			if ( strlen( $contest ) > 255 ) {
+				$this->dieWithError( 'Contest ID length exceeds the limit (255 characters)' );
+			}
+			if ( strlen( $contest ) > 0 && !ctype_alnum( $contest ) ) {
+				$this->dieWithError( 'Contest ID must be alphanumeric, no other characters are allowed' );
+			}
 		}
 
 		if ( isset( $params['answer'] ) ) {
