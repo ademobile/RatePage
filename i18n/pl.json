@@ -26,5 +26,7 @@
     "ratePage-prompt": "Zagłosuj, by zobaczyć średnią ocen",
     "ratePage-error-category": "Strony z błędami rozszerzenia RatePage",
     "ratePage-missing-argument-page": "Błąd: nie podano obowiązkowego argumentu page.",
-    "ratePage-page-does-not-exist": "Błąd: podana strona nie istnieje."
+    "ratePage-page-does-not-exist": "Błąd: podana strona nie istnieje.",
+    "ratePage-contest-id-too-long": "Błąd: podany identyfikator konkursu jest za długi, maksymalna długość identyfikatora to 255 znaków.",
+    "ratePage-contest-id-invalid": "Błąd: identyfikator konkursu może zawierać tylko małe i wielkie litery oraz cyfry."
 }

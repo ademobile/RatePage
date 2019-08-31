@@ -26,5 +26,7 @@
     "ratePage-prompt": "",
     "ratePage-error-category": "",
     "ratePage-missing-argument-page": "",
-    "ratePage-page-does-not-exist": ""
+    "ratePage-page-does-not-exist": "",
+    "ratePage-contest-id-too-long": "",
+    "ratePage-contest-id-invalid": ""
 }
