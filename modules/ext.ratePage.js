@@ -2,7 +2,7 @@
  * ratePage stars
  * tested on minerva, timeless, vector and monobook
  **/
-( function ( $, mw ) {
+$( function() {
 	/* first, some helper functions */
 	function ratePage( pageId, contest, answer, callback ) {
 		( new mw.Api() ).post( {
@@ -197,4 +197,4 @@
 			$( this ).siblings( '.ratingstar' ).addBack().removeClass( 'ratingstar-mousedown' );
 		} );
 	}
-}( jQuery, mw ) );
+} );
