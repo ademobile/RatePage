@@ -130,7 +130,7 @@ $( function() {
 
 		/* add main rating stars (in sidebar or footer) */
 		if ( mw.config.get( 'skin' ) === "minerva" ) {
-			var htmlCode = '<div class="post-content footer-element active footer-ratingstars"> \
+			var htmlCode = '<div class="post-content footer-element active footer-ratingstars" style="margin-top: 22px"> \
 			<h3>' + mw.message( "ratePage-vote-title" ).text() + '</h3> \
 			<div class="pageRatingStars"> \
 			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="1"></div> \
