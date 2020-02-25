@@ -69,6 +69,10 @@ class RatePageHooks {
 			'ratepage_contest',
 			$patchPath . 'create-table--ratepage-contest.sql'
 		);
+
+		$updater->addPostDatabaseUpdateMaintenance(
+			AddMissingContests::class
+		);
 	}
 
 	public static function onSkinBuildSidebar( Skin $skin, &$bar ) {
