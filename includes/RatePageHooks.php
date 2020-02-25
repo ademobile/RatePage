@@ -44,7 +44,31 @@ class RatePageHooks {
 	public static function onLoadExtensionSchemaUpdates( $updater ) {
 		$patchPath = __DIR__ . '/../sql/';
 
-		$updater->addExtensionTable( 'ratepage_vote', $patchPath . 'create-table--ratepage-vote.sql' );
+		$db = $updater->getDB();
+
+		if ( $db->tableExists( 'ratepage_vote' ) ) {
+			$updater->addExtensionField(
+				'ratepage_vote',
+				'rv_contest',
+				$patchPath . 'upgrade-from-0.2-to-0.3.sql'
+			);
+
+			$updater->modifyTable(
+				'ratepage_vote',
+				$patchPath . 'upgrade-from-0.3-to-1.0.sql',
+				true
+			);
+		} else {
+			$updater->addExtensionTable(
+				'ratepage_vote',
+				$patchPath . 'create-table--ratepage-vote.sql'
+			);
+		}
+
+		$updater->addExtensionTable(
+			'ratepage_contest',
+			$patchPath . 'create-table--ratepage-contest.sql'
+		);
 	}
 
 	public static function onSkinBuildSidebar( Skin $skin, &$bar ) {
