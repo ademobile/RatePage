@@ -22,6 +22,18 @@
         "RPFrontendEnabled": true,
         "RPAddSidebarSection": true
 	},
+    "GroupPermissions": {
+        "*": {
+            "ratepage-contests-view-list": true
+        },
+        "sysop": {
+            "ratepage-contests-view-details": true,
+            "ratepage-contests-edit": true
+        },
+        "bureaucrat": {
+            "ratepage-contests-clear": true
+        }
+    },
     "AutoloadClasses": {
         "RatePageRating": "includes/RatePageRating.php",
         "RatePageHooks": "includes/RatePageHooks.php",

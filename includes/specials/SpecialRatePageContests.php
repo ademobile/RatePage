@@ -1,11 +1,22 @@
 <?php
 
+use MediaWiki\MediaWikiServices;
+
 class SpecialRatePageContests extends SpecialPage {
 	public $mContest;
+	private $mPermManager;
 
 	public function __construct() {
-		//TODO: add view restriction in constructor
-		parent::__construct( 'RatePageContests' );
+		parent::__construct( 'RatePageContests', 'ratepage-contests-view-list' );
+
+		$this->mPermManager = MediaWikiServices::getInstance()->getPermissionManager();
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function doesWrites() {
+		return true;
 	}
 
 	function execute( $subpage ) {
@@ -43,11 +54,18 @@ class SpecialRatePageContests extends SpecialPage {
 	protected function showListView() {
 		$out = $this->getOutput();
 		$out->setPageTitle( $this->msg( 'ratePage-contest-list-title' ) );
+
+
 	}
 
 	protected function showEditView() {
+		$this->checkUserCanViewDetails();
+
 		$out = $this->getOutput();
 		$out->setPageTitle( $this->msg( 'ratePage-contest-edit-title' ) );
+
+
+
 	}
 
 	protected function addSubtitle() {
@@ -72,5 +90,19 @@ class SpecialRatePageContests extends SpecialPage {
 
 		$linkStr = $this->getLanguage()->pipeList( $elems );
 		$out->getOutput()->setSubtitle( $linkStr );
+	}
+
+	private function checkUserCanViewDetails() {
+		if ( !$this->mPermManager->userHasRight( $this->getUser(), 'ratepage-contests-view-details' ) ) {
+			throw new PermissionsError( 'ratepage-contests-view-details' );
+		}
+	}
+
+	private function userCanEdit() {
+		return $this->mPermManager->userHasRight( $this->getUser(), 'ratepage-contests-edit' );
+	}
+
+	private function userCanClearResults() {
+		return $this->mPermManager->userHasRight( $this->getUser(), 'ratepage-contests-clear' );
 	}
 }

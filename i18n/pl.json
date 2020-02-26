@@ -28,5 +28,13 @@
     "ratePage-missing-argument-page": "Błąd: nie podano obowiązkowego argumentu page.",
     "ratePage-page-does-not-exist": "Błąd: podana strona nie istnieje.",
     "ratePage-contest-id-too-long": "Błąd: podany identyfikator konkursu jest za długi, maksymalna długość identyfikatora to 255 znaków.",
-    "ratePage-contest-id-invalid": "Błąd: identyfikator konkursu może zawierać tylko małe i wielkie litery oraz cyfry."
+    "ratePage-contest-id-invalid": "Błąd: identyfikator konkursu może zawierać tylko małe i wielkie litery oraz cyfry.",
+    "action-ratepage-contests-view-list": "przeglądanie listy konkursów",
+    "action-ratepage-contests-view-details": "przeglądanie szczegółów konkursów",
+    "action-ratepage-contests-edit": "edytowanie konkursów",
+    "action-ratepage-contests-clear": "czyszczenie wyników konkursów",
+    "right-ratepage-contests-view-list": "Przeglądanie listy konkursów",
+    "right-ratepage-contests-view-details": "Przeglądanie szczegółów konkursów",
+    "right-ratepage-contests-edit": "Edytowanie konkursów",
+    "right-ratepage-contests-clear": "Czyszczenie wyników konkursów"
 }

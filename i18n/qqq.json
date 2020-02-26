@@ -28,5 +28,13 @@
     "ratePage-missing-argument-page": "",
     "ratePage-page-does-not-exist": "",
     "ratePage-contest-id-too-long": "",
-    "ratePage-contest-id-invalid": ""
+    "ratePage-contest-id-invalid": "",
+    "action-ratepage-contests-view-list": "",
+    "action-ratepage-contests-view-details": "",
+    "action-ratepage-contests-edit": "",
+    "action-ratepage-contests-clear": "",
+    "right-ratepage-contests-view-list": "",
+    "right-ratepage-contests-view-details": "",
+    "right-ratepage-contests-edit": "",
+    "right-ratepage-contests-clear": ""
 }

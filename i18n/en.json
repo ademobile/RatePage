@@ -28,5 +28,13 @@
     "ratePage-missing-argument-page": "Error: required parameter page was not specified.",
     "ratePage-page-does-not-exist": "Error: specified page does not exist.",
     "ratePage-contest-id-too-long": "Error: specified contest ID length exceeds the limit (255 characters).",
-    "ratePage-contest-id-invalid": "Error: contest ID must contain only alphanumeric characters."
+    "ratePage-contest-id-invalid": "Error: contest ID must contain only alphanumeric characters.",
+    "action-ratepage-contests-view-list": "view contests list",
+    "action-ratepage-contests-view-details": "view details of a contest",
+    "action-ratepage-contests-edit": "edit a contest",
+    "action-ratepage-contests-clear": "clear a contest's results",
+    "right-ratepage-contests-view-list": "View contests list",
+    "right-ratepage-contests-view-details": "View details of a contest",
+    "right-ratepage-contests-edit": "Edit a contest",
+    "right-ratepage-contests-clear": "Clear a contest's results"
 }
