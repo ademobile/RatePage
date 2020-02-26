@@ -50,7 +50,8 @@ class AddMissingContests extends LoggedUpdateMaintenance {
 				'rpc_id' => $row->rv_contest,
 				'rpc_description' => '',
 				'rpc_enabled' => 0,
-				'rpc_allowed_to_vote' => "*"
+				'rpc_allowed_to_vote' => '*',
+				'rpc_allowed_to_see' => '*'
 			];
 		}
 

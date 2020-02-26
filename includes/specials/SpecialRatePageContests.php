@@ -1,8 +1,12 @@
 <?php
 
 use MediaWiki\MediaWikiServices;
+use OOUI\FieldLayout;
+use OOUI\TextInputWidget;
 
 class SpecialRatePageContests extends SpecialPage {
+	public static $mLoadedRow = null;
+
 	public $mContest;
 	private $mPermManager;
 
@@ -25,6 +29,7 @@ class SpecialRatePageContests extends SpecialPage {
 
 		$this->setHeaders();
 		$this->addHelpLink( 'Extension:RatePage' );
+		$out->enableOOUI();
 
 		$this->checkPermissions();
 
@@ -53,13 +58,12 @@ class SpecialRatePageContests extends SpecialPage {
 	protected function showListView() {
 		$out = $this->getOutput();
 		$out->setPageTitle( $this->msg( 'ratePage-contest-list-title' ) );
-		$out->enableOOUI();
 
 		// New contest button
 		if ( $this->userCanEdit() ) {
 			$link = new OOUI\ButtonWidget( [
 				'label' => $this->msg( 'ratePage-contests-new' )->text(),
-				'href' => $this->getPageTitle( 'new' )->getFullURL(),
+				'href' => $this->getPageTitle( '!new' )->getFullURL(),
 			] );
 			$out->addHTML( $link );
 		}
@@ -75,15 +79,240 @@ class SpecialRatePageContests extends SpecialPage {
 	}
 
 	protected function showEditView() {
+		$ratingMin = $this->getConfig()->get( 'RPRatingMin' );
+		$ratingMax = $this->getConfig()->get( 'RPRatingMax' );
+
+		// check permissions
 		if ( !$this->userCanViewDetails() ) {
 			throw new PermissionsError( 'ratepage-contests-view-details' );
 		}
 
+		$new = $this->mContest == "!new";
+
+		if ( $new && !$this->userCanEdit() ) {
+			throw new PermissionsError( 'ratepage-contests-edit' );
+		}
+
+		// show details
 		$out = $this->getOutput();
+		$request = $this->getRequest();
 		$out->setPageTitle( $this->msg( 'ratePage-contest-edit-title' ) );
 
+		$contest = $this->mContest;
+		$votes = [];
+		$newRow = new stdClass();
 
+		if ( !$new ) {
+			$votes = RatePageContestDB::loadVotes( $contest );
+			$newRow = $this->loadRequest( $contest );
+		}
 
+		$editToken = $this->getRequest()->getVal( 'wpEditToken' );
+		$tokenMatches = $this->getUser()->matchEditToken(
+			$editToken, [ 'ratepagecontest', $this->mContest ], $this->getRequest() );
+
+		if ( $tokenMatches && $this->userCanEdit() ) {
+			$status = $this->saveContest( $newRow, $request );
+
+			if ( !$status->isGood() ) {
+				$err = $status->getErrors();
+				$msg = $err[0]['message'];
+				$params = $err[0]['params'];
+				if ( $status->isOK() ) {
+					$out->addHTML( $this->buildEditor( $newRow ) );
+				} else {
+					$out->addWikiMsg( $msg );
+				}
+			} else {
+				if ( $status->getValue() === false ) {
+					// No change
+					$out->redirect( $this->getTitle()->getLocalURL() );
+				} else {
+					list( $new_id, $history_id ) = $status->getValue();
+					$out->redirect(
+						$this->getTitle()->getLocalURL(
+							[
+								'result' => 'success',
+								'changedfilter' => $new_id,
+								'changeid' => $history_id,
+							]
+						)
+					);
+				}
+			}
+		} else {
+			if ( $tokenMatches ) {
+				// Lost rights meanwhile
+				$out->addHTML(
+					Xml::tags(
+						'p',
+						null,
+						Html::errorBox( $this->msg( 'ratePage-edit-notallowed' )->parse() )
+					)
+				);
+			} elseif ( $request->wasPosted() ) {
+				// Warn the user to re-attempt save
+				$out->addHTML(
+					Html::warningBox( $this->msg( 'ratePage-edit-token-not-match' )->escaped() )
+				);
+			}
+
+			$out->addHTML( $this->buildEditor( $newRow ) );
+		}
+	}
+
+	protected function buildEditor( $row ) {
+		$new = $this->mContest == "!new";
+
+		// Read-only attribute
+		$readOnlyAttrib = [];
+
+		if ( !$this->userCanEdit() ) {
+			$readOnlyAttrib['disabled'] = 'disabled';
+		}
+
+		$form = '';
+
+		$fieldset = new OOUI\FieldsetLayout( [
+			'label' => 'ratePage-contest-edit-main'
+		] );
+
+		$fieldset->addItems( [
+			new FieldLayout(
+				new OOUI\TextInputWidget( [
+						'name' => 'wpContestId',
+						'value' => $new ? '' : $row->rpc_id,
+						'disabled' => !$new
+					]
+				),
+				[
+					'label' => $this->msg( 'ratepage-edit-id' )->escaped(),
+					'align' => 'top'
+				]
+			),
+			new FieldLayout(
+				new OOUI\TextInputWidget( [
+						'name' => 'wpContestDescription',
+						'value' => isset( $row->rpc_description ) ? $row->rpc_description : ''
+					] + $readOnlyAttrib
+				),
+				[
+					'label' => $this->msg( 'ratepage-edit-description' )->escaped(),
+					'align' => 'top'
+				]
+			),
+			new FieldLayout(
+				new OOUI\CheckboxInputWidget( [
+						'name' => 'wpContestEnabled',
+						'selected' => isset( $row->rpc_enabled ) ? $row->rpc_enabled : 1
+					] + $readOnlyAttrib
+				),
+				[
+					'label' => $this->msg( 'ratepage-edit-enabled' )->escaped(),
+					'align' => 'inline'
+				]
+			),
+			//TODO: Change this from manual comma-separated input to a multiselect thingy
+			new FieldLayout(
+				new OOUI\TextInputWidget( [
+						'name' => 'wpContestAllowedToVote',
+						//TODO: load defaults from config
+						'value' => isset( $row->rpc_allowed_to_vote ) ? $row->rpc_allowed_to_vote : '*'
+					] + $readOnlyAttrib
+				),
+				[
+					'label' => $this->msg( 'ratepage-edit-allowed-to-vote' )->escaped(),
+					'align' => 'top'
+				]
+			),
+			new FieldLayout(
+				new OOUI\TextInputWidget( [
+						'name' => 'wpContestAllowedToSee',
+						//TODO: load defaults from config
+						'value' => isset( $row->rpc_allowed_to_see ) ? $row->rpc_allowed_to_see : ''
+					] + $readOnlyAttrib
+				),
+				[
+					'label' => $this->msg( 'ratepage-edit-allowed-to-see' )->escaped(),
+					'align' => 'top'
+				]
+			),
+		] );
+
+		$form .= $fieldset;
+
+		//TODO: Add buttons!
+
+		$form = Xml::tags( 'form',
+			[
+				'action' => $this->getPageTitle( $this->mContest )->getFullURL(),
+				'method' => 'post'
+			],
+			$form
+		);
+
+		return $form;
+	}
+
+	/**
+	 * @param $row
+	 * @param WebRequest $request
+	 * @return Status
+	 */
+	protected function saveContest( $row, WebRequest $request ) {
+		$validationStatus = Status::newGood();
+
+		$id = $request->getVal( 'wpContestId' );
+		if ( !$id ) {
+			$validationStatus->error( 'ratePage-contest-missing-id' );
+			return $validationStatus;
+		}
+
+		$errorKey = RatePageContestDB::validateId( $id );
+		if ( $errorKey ) {
+			$validationStatus->error( $errorKey );
+			return $validationStatus;
+		}
+
+		if ( !$this->userCanEdit() ) {
+			$validationStatus->error( 'ratePage-edit-notallowed' );
+			return $validationStatus;
+		}
+
+		RatePageContestDB::saveContest( $row, $this->getContext() );
+	}
+
+	protected function loadRequest( $contest ) {
+		$row = self::$mLoadedRow;
+		$request = $this->getRequest();
+
+		if ( !is_null( $row ) ) {
+			return $row;
+		} elseif ( $request->wasPosted() ) {
+			// Nothing, we do it all later
+		} else {
+			return RatePageContestDB::loadContest( $contest );
+		}
+
+		$textLoads = [
+			'rpc_id' => 'wpContestId',
+			'rpc_description' => 'wpContestDescription',
+			'rpc_enabled' => 'wpContestEnabled',
+			'rpc_allowed_to_vote' => 'wpContestAllowedToVote',
+			'rpc_allowed_to_see' => 'wpContestAllowedToSee'
+		];
+
+		foreach ( $textLoads as $col => $field ) {
+			if ( $col == 'rpc_id' && isset( $row->rpc_id ) ) {
+				// Disallow overwriting contest ID
+				continue;
+			}
+
+			$row->$col = trim( $request->getVal( $field ) );
+		}
+
+		self::$mLoadedRow = $row;
+		return $row;
 	}
 
 	protected function addSubtitle() {
@@ -92,7 +321,7 @@ class SpecialRatePageContests extends SpecialPage {
 		$out = $this->getOutput();
 
 		if ( isset( $this->mContest ) ) {
-			if ( $this->mContest == "new" ) {
+			if ( $this->mContest == "!new" ) {
 				$elems[] = $this->msg( 'ratePage-new-contest-sub' )->parse();
 			} else {
 				$elems[] = $this->msg( 'ratePage-edit-contest-sub', $this->mContest )->parse();

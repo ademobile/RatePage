@@ -1,18 +1,7 @@
 <?php
 
-use MediaWiki\Linker\LinkRenderer;
+class ContestResultsPager extends TablePager {
 
-class ContestsPager extends TablePager {
-
-	protected $linkRenderer;
-
-	public $mPage;
-
-	public function __construct( SpecialRatePageContests $page, LinkRenderer $linkRenderer ) {
-		$this->mPage = $page;
-		$this->linkRenderer = $linkRenderer;
-		parent::__construct( $this->mPage->getContext() );
-	}
 	/**
 	 * Provides all parameters needed for the main paged query. It returns
 	 * an associative array with the following elements:
@@ -25,16 +14,7 @@ class ContestsPager extends TablePager {
 	 * @return array
 	 */
 	function getQueryInfo() {
-		$query = [
-			'tables' => [ 'ratepage_contest' ],
-			'fields' => [
-				'rpc_id',
-				'rpc_description',
-				'rpc_enabled'
-			]
-		];
-
-		return $query;
+		// TODO: Implement getQueryInfo() method.
 	}
 
 	/**
@@ -42,10 +22,9 @@ class ContestsPager extends TablePager {
 	 * otherwise
 	 *
 	 * @param string $field
-	 * @return bool
 	 */
 	function isFieldSortable( $field ) {
-		return true;
+		// TODO: Implement isFieldSortable() method.
 	}
 
 	/**
@@ -59,32 +38,9 @@ class ContestsPager extends TablePager {
 	 *
 	 * @param string $name The database field name
 	 * @param string $value The value retrieved from the database
-	 * @return string
-	 * @throws MWException
 	 */
 	function formatValue( $name, $value ) {
-		$row = $this->mCurrentRow;
-
-		switch ( $name ) {
-			case 'rpc_id':
-				return $this->linkRenderer->makeLink(
-					SpecialPage::getTitleFor( 'RatePageContests', $value ),
-					$value
-				);
-			case 'rpc_description':
-				return $this->linkRenderer->makeLink(
-					SpecialPage::getTitleFor( 'RatePageContests', $row->rpc_id ),
-					$value
-				);
-			case 'rpc_enabled':
-				if ( $value ) {
-					return $this->msg( 'ratePage-contest-enabled' )->parse();
-				} else {
-					return $this->msg( 'ratePage-contest-disabled' )->parse();
-				}
-			default:
-				throw new MWException( "Unknown row type $name!" );
-		}
+		// TODO: Implement formatValue() method.
 	}
 
 	/**
@@ -99,7 +55,7 @@ class ContestsPager extends TablePager {
 	 * @return string
 	 */
 	function getDefaultSort() {
-		return 'rpc_id';
+		// TODO: Implement getDefaultSort() method.
 	}
 
 	/**
@@ -110,22 +66,6 @@ class ContestsPager extends TablePager {
 	 * @return array
 	 */
 	function getFieldNames() {
-		static $headers = null;
-
-		if ( !empty( $headers ) ) {
-			return $headers;
-		}
-
-		$headers = [
-			'rpc_id' => 'ratePage-contests-list-id',
-			'rpc_description' => 'ratePage-contests-list-description',
-			'rpc_enabled' => 'ratePage-contests-list-enabled',
-		];
-
-		foreach ( $headers as &$msg ) {
-			$msg = $this->msg( $msg )->text();
-		}
-
-		return $headers;
+		// TODO: Implement getFieldNames() method.
 	}
 }

@@ -40,7 +40,8 @@
         "ApiPageRating": "includes/ApiPageRating.php",
         "AddMissingContests": "maintenance/addMissingContests.php",
         "SpecialRatePageContests": "includes/specials/SpecialRatePageContests.php",
-        "ContestsPager": "includes/pagers/ContestsPager.php"
+        "ContestsPager": "includes/pagers/ContestsPager.php",
+        "RatePageContestDB": "includes/RatePageContestDB.php"
     },
     "ExtensionMessagesFiles": {
         "RatePageMagic": "RatePage.magic.php",
