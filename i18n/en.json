@@ -36,5 +36,16 @@
     "right-ratepage-contests-view-list": "View contests list",
     "right-ratepage-contests-view-details": "View details of a contest",
     "right-ratepage-contests-edit": "Edit a contest",
-    "right-ratepage-contests-clear": "Clear a contest's results"
+    "right-ratepage-contests-clear": "Clear a contest's results",
+    "ratePage-contest-disabled": "disabled",
+    "ratePage-contest-enabled": "'''enabled'''",
+    "ratePage-contests-list-enabled": "Status",
+    "ratePage-contests-list-id": "Contest ID",
+    "ratePage-contests-list-description": "Description",
+    "ratePage-contest-list-title": "RatePage contests",
+    "ratePage-contest-edit-title": "Editing contest",
+    "ratePage-edit-contest-sub": "Contest ID: $1",
+    "ratePage-new-contest-sub": "Creating a new contest",
+    "ratePage-contest-home": "Home",
+    "ratePage-contests-new": "Create a new contest"
 }

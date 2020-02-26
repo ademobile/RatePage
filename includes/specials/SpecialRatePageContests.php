@@ -39,10 +39,9 @@ class SpecialRatePageContests extends SpecialPage {
 			);
 		}
 
-		if ( is_numeric( $subpage ) || $subpage == 'new' ) {
+		if ( strlen( $subpage ) ) {
 			$this->mContest = $subpage;
 			$this->showEditView();
-
 		} else {
 			$this->showListView();
 		}
@@ -54,12 +53,31 @@ class SpecialRatePageContests extends SpecialPage {
 	protected function showListView() {
 		$out = $this->getOutput();
 		$out->setPageTitle( $this->msg( 'ratePage-contest-list-title' ) );
+		$out->enableOOUI();
 
+		// New contest button
+		if ( $this->userCanEdit() ) {
+			$link = new OOUI\ButtonWidget( [
+				'label' => $this->msg( 'ratePage-contests-new' )->text(),
+				'href' => $this->getPageTitle( 'new' )->getFullURL(),
+			] );
+			$out->addHTML( $link );
+		}
 
+		$pager = new ContestsPager( $this, $this->getLinkRenderer() );
+
+		//TODO: add some filtering crap
+
+		$this->getOutput()->addHTML(
+			'<br><br>' .
+			$pager->getFullOutput()->getText()
+		);
 	}
 
 	protected function showEditView() {
-		$this->checkUserCanViewDetails();
+		if ( !$this->userCanViewDetails() ) {
+			throw new PermissionsError( 'ratepage-contests-view-details' );
+		}
 
 		$out = $this->getOutput();
 		$out->setPageTitle( $this->msg( 'ratePage-contest-edit-title' ) );
@@ -92,17 +110,15 @@ class SpecialRatePageContests extends SpecialPage {
 		$out->getOutput()->setSubtitle( $linkStr );
 	}
 
-	private function checkUserCanViewDetails() {
-		if ( !$this->mPermManager->userHasRight( $this->getUser(), 'ratepage-contests-view-details' ) ) {
-			throw new PermissionsError( 'ratepage-contests-view-details' );
-		}
+	public function userCanViewDetails() {
+		return $this->mPermManager->userHasRight( $this->getUser(), 'ratepage-contests-view-details' );
 	}
 
-	private function userCanEdit() {
+	public function userCanEdit() {
 		return $this->mPermManager->userHasRight( $this->getUser(), 'ratepage-contests-edit' );
 	}
 
-	private function userCanClearResults() {
+	public function userCanClearResults() {
 		return $this->mPermManager->userHasRight( $this->getUser(), 'ratepage-contests-clear' );
 	}
 }

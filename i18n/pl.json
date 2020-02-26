@@ -36,5 +36,16 @@
     "right-ratepage-contests-view-list": "Przeglądanie listy konkursów",
     "right-ratepage-contests-view-details": "Przeglądanie szczegółów konkursów",
     "right-ratepage-contests-edit": "Edytowanie konkursów",
-    "right-ratepage-contests-clear": "Czyszczenie wyników konkursów"
+    "right-ratepage-contests-clear": "Czyszczenie wyników konkursów",
+    "ratePage-contest-disabled": "wyłączony",
+    "ratePage-contest-enabled": "'''włączony'''",
+    "ratePage-contests-list-enabled": "Status",
+    "ratePage-contests-list-id": "Identyfikator konkursu",
+    "ratePage-contests-list-description": "Opis",
+    "ratePage-contest-list-title": "Konkursy RatePage",
+    "ratePage-contest-edit-title": "Edytujesz konkurs",
+    "ratePage-edit-contest-sub": "ID konkursu: $1",
+    "ratePage-new-contest-sub": "Tworzysz nowy konkurs",
+    "ratePage-contest-home": "Główna",
+    "ratePage-contests-new": "Utwórz nowy konkurs"
 }

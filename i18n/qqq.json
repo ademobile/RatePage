@@ -36,5 +36,16 @@
     "right-ratepage-contests-view-list": "",
     "right-ratepage-contests-view-details": "",
     "right-ratepage-contests-edit": "",
-    "right-ratepage-contests-clear": ""
+    "right-ratepage-contests-clear": "",
+    "ratePage-contest-disabled": "",
+    "ratePage-contest-enabled": "",
+    "ratePage-contests-list-enabled": "",
+    "ratePage-contests-list-id": "",
+    "ratePage-contests-list-description": "",
+    "ratePage-contest-list-title": "",
+    "ratePage-contest-edit-title": "",
+    "ratePage-edit-contest-sub": "",
+    "ratePage-new-contest-sub": "",
+    "ratePage-contest-home": "",
+    "ratePage-contests-new": ""
 }
