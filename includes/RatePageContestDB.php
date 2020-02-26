@@ -7,7 +7,6 @@ class RatePageContestDB {
 		$contest = $dbr->selectRow(
 			[
 				'ratepage_contest',
-				'ratepage_vote'
 			],
 			'*',
 			[
@@ -51,7 +50,43 @@ class RatePageContestDB {
 	}
 
 	public static function saveContest( $newRow, IContextSource $context ) {
-		//TODO: do some upsert magic
+		$dbw = wfGetDB( DB_MASTER );
+
+		$data = [
+			'rpc_description' => $newRow->rpc_description,
+			'rpc_enabled' => $newRow->rpc_enabled,
+			'rpc_allowed_to_vote' => $newRow->rpc_allowed_to_vote,
+			'rpc_allowed_to_see' => $newRow->rpc_allowed_to_see,
+		];
+
+		$id = $newRow->rpc_id;
+		$dbw->startAtomic( __METHOD__ );
+
+		$res = $dbw->selectField(
+			'ratepage_contest',
+			'rpc_id',
+			[ 'rpc_id' => $id ],
+			__METHOD__
+		);
+
+		if ( !$res ) {
+			$dbw->insert(
+				'ratepage_contest',
+				$data + [ 'rpc_id' => $id ],
+				__METHOD__
+			);
+			//TODO: insert logs
+		} else {
+			$dbw->update(
+				'ratepage_contest',
+				$data,
+				[ 'rpc_id' => $id ],
+				__METHOD__
+			);
+			//TODO: insert logs
+		}
+
+		$dbw->endAtomic( __METHOD__ );
 	}
 
 	public static function validateId( $id ) {

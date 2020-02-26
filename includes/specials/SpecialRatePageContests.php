@@ -84,13 +84,13 @@ class SpecialRatePageContests extends SpecialPage {
 
 		// check permissions
 		if ( !$this->userCanViewDetails() ) {
-			throw new PermissionsError( 'ratepage-contests-view-details' );
+			throw new PermissionsError( 'ratePage-contests-view-details' );
 		}
 
 		$new = $this->mContest == "!new";
 
 		if ( $new && !$this->userCanEdit() ) {
-			throw new PermissionsError( 'ratepage-contests-edit' );
+			throw new PermissionsError( 'ratePage-contests-edit' );
 		}
 
 		// show details
@@ -117,7 +117,6 @@ class SpecialRatePageContests extends SpecialPage {
 			if ( !$status->isGood() ) {
 				$err = $status->getErrors();
 				$msg = $err[0]['message'];
-				$params = $err[0]['params'];
 				if ( $status->isOK() ) {
 					$out->addHTML( $this->buildEditor( $newRow ) );
 				} else {
@@ -126,15 +125,14 @@ class SpecialRatePageContests extends SpecialPage {
 			} else {
 				if ( $status->getValue() === false ) {
 					// No change
-					$out->redirect( $this->getTitle()->getLocalURL() );
+					$out->redirect( $this->getPageTitle()->getLocalURL() );
 				} else {
-					list( $new_id, $history_id ) = $status->getValue();
+					$new_id = $status->getValue();
 					$out->redirect(
-						$this->getTitle()->getLocalURL(
+						$this->getPageTitle( $new_id )->getLocalURL(
 							[
 								'result' => 'success',
-								'changedfilter' => $new_id,
-								'changeid' => $history_id,
+								'changedcontest' => $new_id,
 							]
 						)
 					);
@@ -180,13 +178,13 @@ class SpecialRatePageContests extends SpecialPage {
 		$fieldset->addItems( [
 			new FieldLayout(
 				new OOUI\TextInputWidget( [
-						'name' => 'wpContestId',
 						'value' => $new ? '' : $row->rpc_id,
 						'disabled' => !$new
-					]
+					] +
+					( $new ? [ 'name' => 'wpContestId' ] : [] )
 				),
 				[
-					'label' => $this->msg( 'ratepage-edit-id' )->escaped(),
+					'label' => $this->msg( 'ratePage-edit-id' )->escaped(),
 					'align' => 'top'
 				]
 			),
@@ -197,18 +195,19 @@ class SpecialRatePageContests extends SpecialPage {
 					] + $readOnlyAttrib
 				),
 				[
-					'label' => $this->msg( 'ratepage-edit-description' )->escaped(),
+					'label' => $this->msg( 'ratePage-edit-description' )->escaped(),
 					'align' => 'top'
 				]
 			),
 			new FieldLayout(
 				new OOUI\CheckboxInputWidget( [
 						'name' => 'wpContestEnabled',
+						'id' => 'wpContestEnabled',
 						'selected' => isset( $row->rpc_enabled ) ? $row->rpc_enabled : 1
 					] + $readOnlyAttrib
 				),
 				[
-					'label' => $this->msg( 'ratepage-edit-enabled' )->escaped(),
+					'label' => $this->msg( 'ratePage-edit-enabled' )->escaped(),
 					'align' => 'inline'
 				]
 			),
@@ -221,7 +220,7 @@ class SpecialRatePageContests extends SpecialPage {
 					] + $readOnlyAttrib
 				),
 				[
-					'label' => $this->msg( 'ratepage-edit-allowed-to-vote' )->escaped(),
+					'label' => $this->msg( 'ratePage-edit-allowed-to-vote' )->escaped(),
 					'align' => 'top'
 				]
 			),
@@ -233,7 +232,7 @@ class SpecialRatePageContests extends SpecialPage {
 					] + $readOnlyAttrib
 				),
 				[
-					'label' => $this->msg( 'ratepage-edit-allowed-to-see' )->escaped(),
+					'label' => $this->msg( 'ratePage-edit-allowed-to-see' )->escaped(),
 					'align' => 'top'
 				]
 			),
@@ -241,7 +240,29 @@ class SpecialRatePageContests extends SpecialPage {
 
 		$form .= $fieldset;
 
-		//TODO: Add buttons!
+		if ( !$new ) {
+			$form .= Html::hidden(
+				'wpContestId',
+				$this->mContest
+			);
+		}
+
+		if ( $this->userCanEdit() ) {
+			$form .=
+				new OOUI\FieldLayout(
+					new OOUI\ButtonInputWidget( [
+						'type' => 'submit',
+						'label' => $this->msg( 'ratePage-edit-save' )->text(),
+						'useInputTag' => true,
+						'accesskey' => 's',
+						'flags' => [ 'progressive', 'primary' ]
+					] )
+				);
+			$form .= Html::hidden(
+				'wpEditToken',
+				$this->getUser()->getEditToken( [ 'ratepagecontest', $this->mContest ] )
+			);
+		}
 
 		$form = Xml::tags( 'form',
 			[
@@ -250,6 +271,8 @@ class SpecialRatePageContests extends SpecialPage {
 			],
 			$form
 		);
+
+		//TODO: Add contest results
 
 		return $form;
 	}
@@ -279,7 +302,15 @@ class SpecialRatePageContests extends SpecialPage {
 			return $validationStatus;
 		}
 
-		RatePageContestDB::saveContest( $row, $this->getContext() );
+		try {
+			RatePageContestDB::saveContest( $row, $this->getContext() );
+		} catch ( \Wikimedia\Rdbms\DBError $dbe ) {
+			$validationStatus->error( 'ratePage-duplicate-id' );
+			return $validationStatus;
+		}
+
+		$validationStatus->value = $id;
+		return $validationStatus;
 	}
 
 	protected function loadRequest( $contest ) {
@@ -297,7 +328,6 @@ class SpecialRatePageContests extends SpecialPage {
 		$textLoads = [
 			'rpc_id' => 'wpContestId',
 			'rpc_description' => 'wpContestDescription',
-			'rpc_enabled' => 'wpContestEnabled',
 			'rpc_allowed_to_vote' => 'wpContestAllowedToVote',
 			'rpc_allowed_to_see' => 'wpContestAllowedToSee'
 		];
@@ -310,6 +340,8 @@ class SpecialRatePageContests extends SpecialPage {
 
 			$row->$col = trim( $request->getVal( $field ) );
 		}
+
+		$row->rpc_enabled = $request->getCheck( 'wpContestEnabled' );
 
 		self::$mLoadedRow = $row;
 		return $row;
