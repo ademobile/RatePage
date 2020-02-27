@@ -62,5 +62,10 @@
     "ratePage-results-list-avg": "",
     "ratePage-results-list-count": "",
     "ratePage-results-list-ans": "",
-    "ratePage-edit-done": ""
+    "ratePage-edit-done": "",
+    "ratePage-contest-log": "",
+    "ratePage-contest-log-header": "",
+    "logentry-ratepage-contest-create": "",
+    "logentry-ratepage-contest-change": "",
+    "ratePage-log-contest-formatter": ""
 }

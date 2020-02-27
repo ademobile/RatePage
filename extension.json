@@ -43,7 +43,8 @@
         "ContestsPager": "includes/pagers/ContestsPager.php",
         "ContestResultsPager": "includes/pagers/ContestResultsPager.php",
         "RatePageContestDB": "includes/RatePageContestDB.php",
-        "RatePageRights": "includes/RatePageRights.php"
+        "RatePageRights": "includes/RatePageRights.php",
+        "RatePageContestLogFormatter": "includes/RatePageContestLogFormatter.php"
     },
     "ExtensionMessagesFiles": {
         "RatePageMagic": "RatePage.magic.php",
@@ -108,5 +109,15 @@
     "APIModules": {
         "pagerating": "ApiPageRating"
 	},
+    "LogTypes": [ "ratepage-contest" ],
+    "LogNames": {
+        "ratepage-contest": "ratePage-contest-log"
+    },
+    "LogHeaders": {
+        "ratepage-contest": "ratePage-contest-log-header"
+    },
+    "LogActionsHandlers": {
+        "ratepage-contest/*": "RatePageContestLogFormatter"
+    },
     "type": "other"
 }

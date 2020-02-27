@@ -53,40 +53,60 @@ class RatePageContestDB {
 		$dbw = wfGetDB( DB_MASTER );
 
 		$data = [
-			'rpc_description' => $newRow->rpc_description,
-			'rpc_enabled' => $newRow->rpc_enabled,
-			'rpc_allowed_to_vote' => $newRow->rpc_allowed_to_vote,
-			'rpc_allowed_to_see' => $newRow->rpc_allowed_to_see,
+			'rpc_description' => $newRow->rpc_description ?? '',
+			'rpc_enabled' => $newRow->rpc_enabled ?? 0,
+			'rpc_allowed_to_vote' => $newRow->rpc_allowed_to_vote ?? '',
+			'rpc_allowed_to_see' => $newRow->rpc_allowed_to_see ?? '',
 		];
 
 		$id = $newRow->rpc_id;
 		$dbw->startAtomic( __METHOD__ );
 
-		$res = $dbw->selectField(
-			'ratepage_contest',
-			'rpc_id',
-			[ 'rpc_id' => $id ],
-			__METHOD__
-		);
-
-		if ( !$res ) {
-			$dbw->insert(
+		try {
+			$res = $dbw->selectField(
 				'ratepage_contest',
-				$data + [ 'rpc_id' => $id ],
-				__METHOD__
-			);
-			//TODO: insert logs
-		} else {
-			$dbw->update(
-				'ratepage_contest',
-				$data,
+				'rpc_id',
 				[ 'rpc_id' => $id ],
 				__METHOD__
 			);
-			//TODO: insert logs
+
+			if ( !$res ) {
+				$dbw->insert(
+					'ratepage_contest',
+					$data + [ 'rpc_id' => $id ],
+					__METHOD__
+				);
+
+				$subtype = 'create';
+			} else {
+				$dbw->update(
+					'ratepage_contest',
+					$data,
+					[ 'rpc_id' => $id ],
+					__METHOD__
+				);
+
+				$subtype = 'change';
+			}
+
+			$dbw->endAtomic( __METHOD__ );
+		} catch ( Exception $exception ) {
+			$dbw->endAtomic( __METHOD__ );
+			throw $exception;
 		}
 
-		$dbw->endAtomic( __METHOD__ );
+		$logEntry = new ManualLogEntry( 'ratepage-contest', $subtype );
+		$logEntry->setPerformer( $context->getUser() );
+		$logEntry->setTarget( Title::newFromText( "Special:RatePageContests/$id" ) );
+		$logEntry->setParameters( [
+			'id' => $id,
+			'description' => $data['rpc_description'],
+			'enabled' => $data['rpc_enabled'],
+			'allowed_to_vote' => $data['rpc_allowed_to_vote'],
+			'allowed_to_see' => $data['rpc_allowed_to_see'],
+		] );
+		$logid = $logEntry->insert();
+		$logEntry->publish( $logid );
 	}
 
 	public static function validateId( $id ) {

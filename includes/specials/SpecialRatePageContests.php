@@ -96,13 +96,7 @@ class SpecialRatePageContests extends SpecialPage {
 		$out->setPageTitle( $this->msg( 'ratePage-contest-edit-title' ) );
 
 		$contest = $this->mContest;
-		$votes = [];
-		$newRow = new stdClass();
-
-		if ( !$new ) {
-			$votes = RatePageContestDB::loadVotes( $contest );
-			$newRow = $this->loadRequest( $contest );
-		}
+		$newRow = $this->loadRequest( $contest );
 
 		$editToken = $this->getRequest()->getVal( 'wpEditToken' );
 		$tokenMatches = $this->getUser()->matchEditToken(
