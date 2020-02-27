@@ -47,5 +47,19 @@
     "ratePage-edit-contest-sub": "Contest ID: $1",
     "ratePage-new-contest-sub": "Creating a new contest",
     "ratePage-contest-home": "Home",
-    "ratePage-contests-new": "Create a new contest"
+    "ratePage-contests-new": "Create a new contest",
+    "ratePage-edit-notallowed": "You are not allowed to edit contests.",
+    "ratePage-edit-token-not-match": "The edit was not saved. Please try again.",
+    "ratePage-contest-edit-main": "Contest options",
+    "ratePage-contest-edit-id": "Contest identifier",
+    "ratePage-contest-edit-description": "Description",
+    "ratePage-contest-edit-enabled": "Enabled",
+    "ratePage-contest-edit-allowed-to-vote": "User groups allowed to vote",
+    "ratePage-contest-edit-allowed-to-see": "User groups allowed to see the results",
+    "ratePage-contest-edit-save": "Save",
+    "ratePage-duplicate-id": "This contest identifier is already in use.",
+    "ratePage-results-list-page": "Page",
+    "ratePage-results-list-avg": "Average rating",
+    "ratePage-results-list-count": "Vote count",
+    "ratePage-results-list-ans": "$1 votes"
 }

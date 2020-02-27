@@ -47,5 +47,19 @@
     "ratePage-edit-contest-sub": "ID konkursu: $1",
     "ratePage-new-contest-sub": "Tworzysz nowy konkurs",
     "ratePage-contest-home": "Główna",
-    "ratePage-contests-new": "Utwórz nowy konkurs"
+    "ratePage-contests-new": "Utwórz nowy konkurs",
+    "ratePage-edit-notallowed": "Nie masz uprawnienień do edytowania konkursów.",
+    "ratePage-edit-token-not-match": "Edycja nie została zapisana. Spróbuj ponownie.",
+    "ratePage-contest-edit-main": "Opcje konkursu",
+    "ratePage-contest-edit-id": "Identyfikator konkursu",
+    "ratePage-contest-edit-description": "Opis",
+    "ratePage-contest-edit-enabled": "Włączony",
+    "ratePage-contest-edit-allowed-to-vote": "Grupy użytkowników uprawnione do głosowania",
+    "ratePage-contest-edit-allowed-to-see": "Grupy użytkowników uprawnione do przeglądania wyników",
+    "ratePage-contest-edit-save": "Zapisz",
+    "ratePage-duplicate-id": "Ten identyfikator konkursu jest już wykorzystywany.",
+    "ratePage-results-list-page": "Strona",
+    "ratePage-results-list-avg": "Średnia ocen",
+    "ratePage-results-list-count": "Liczba ocen",
+    "ratePage-results-list-ans": "Oceny $1"
 }

@@ -81,13 +81,13 @@ class SpecialRatePageContests extends SpecialPage {
 	protected function showEditView() {
 		// check permissions
 		if ( !$this->userCanViewDetails() ) {
-			throw new PermissionsError( 'ratePage-contests-view-details' );
+			throw new PermissionsError( 'ratepage-contests-view-details' );
 		}
 
 		$new = $this->mContest == "!new";
 
 		if ( $new && !$this->userCanEdit() ) {
-			throw new PermissionsError( 'ratePage-contests-edit' );
+			throw new PermissionsError( 'ratepage-contests-edit' );
 		}
 
 		// show details
@@ -174,6 +174,8 @@ class SpecialRatePageContests extends SpecialPage {
 
 		$fieldset->addItems( [
 			new FieldLayout(
+				//TODO: add some info for end user on allowed characters
+				//TODO: add edit filter
 				new OOUI\TextInputWidget( [
 						'value' => $new ? '' : $row->rpc_id,
 						'disabled' => !$new
