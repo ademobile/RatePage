@@ -90,11 +90,22 @@ class SpecialRatePageContests extends SpecialPage {
 			throw new PermissionsError( 'ratepage-contests-edit' );
 		}
 
-		// show details
 		$out = $this->getOutput();
 		$request = $this->getRequest();
 		$out->setPageTitle( $this->msg( 'ratePage-contest-edit-title' ) );
 
+		if ( !$new && !RatePageContestDB::checkContestExists( $this->mContest ) ) {
+			$out->addHTML(
+				Xml::tags(
+					'p',
+					null,
+					Html::errorBox( $this->msg( 'ratePage-no-such-contest', $this->mContest )->parse() )
+				)
+			);
+			return;
+		}
+
+		// show details
 		$contest = $this->mContest;
 		$newRow = $this->loadRequest( $contest );
 

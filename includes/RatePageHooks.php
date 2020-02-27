@@ -118,9 +118,8 @@ class RatePageHooks {
 			return self::renderError( wfMessage( 'ratePage-page-does-not-exist' )->escaped(), $parser );
 		}
 
-		$errorKey = RatePageContestDB::validateId( $contest );
-		if ( $errorKey ) {
-			return self::renderError( wfMessage( $errorKey )->escaped(), $parser );
+		if ( $contest  && !RatePageContestDB::checkContestExists( $contest ) ) {
+			return self::renderError( wfMessage( 'ratePage-no-such-contest', $contest )->escaped(), $parser );
 		}
 
 		return '<div class="ratepage-embed" id="' . $title->getArticleID() . 'c' . $contest .

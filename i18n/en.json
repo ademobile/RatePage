@@ -67,5 +67,6 @@
     "ratePage-contest-log-header": "This is a log of changes to RatePage contests.",
     "logentry-ratepage-contest-create": "$1 {{GENDER:$2|created}} $4",
     "logentry-ratepage-contest-change": "$1 {{GENDER:$2|modified}} $4",
-    "ratePage-log-contest-formatter": "contest $1"
+    "ratePage-log-contest-formatter": "contest $1",
+    "ratePage-no-such-contest": "Error: contest \"$1\" does not exist."
 }

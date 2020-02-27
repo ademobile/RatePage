@@ -116,5 +116,24 @@ class RatePageContestDB {
 		if ( strlen( $id ) > 0 && !ctype_alnum( $id ) ) {
 			return 'ratePage-contest-id-invalid';
 		}
+
+		return null;
+	}
+
+	public static function checkContestExists( $id ) {
+		if ( !$id ) {
+			return true;
+		}
+
+		$dbr = wfGetDB( DB_REPLICA );
+		$res = $dbr->selectField(
+			'ratepage_contest',
+			'rpc_id',
+			[
+				'rpc_id' => $id
+			]
+		);
+
+		return (bool) $res;
 	}
 }

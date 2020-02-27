@@ -39,17 +39,30 @@ class ApiPageRating extends ApiBase {
 		}
 
 		$contest = '';
+		$permissions = [
+			'vote' => true,
+			'see' => true
+		];
+
 		if ( isset( $params['contest'] ) ) {
-			$contest = $params['contest'];
+			$contest = trim( $params['contest'] );
 			if ( strlen( $contest ) > 255 ) {
 				$this->dieWithError( 'Contest ID length exceeds the limit (255 characters)' );
 			}
-			if ( strlen( $contest ) > 0 && !ctype_alnum( $contest ) ) {
-				$this->dieWithError( 'Contest ID must be alphanumeric, no other characters are allowed' );
+			if ( strlen( $contest ) > 0 ) {
+				if ( !ctype_alnum( $contest ) ) {
+					$this->dieWithError( 'Contest ID must be alphanumeric, no other characters are allowed' );
+				}
+
+				$permissions = RatePageRights::checkUserPermissionsOnContest( $contest, $user );
 			}
 		}
 
 		if ( isset( $params['answer'] ) ) {
+			if ( !$permissions['vote'] ) {
+				$this->dieWithError( 'You do not have permissions to vote in this contest' );
+			}
+
 			if ( $user->pingLimiter( 'ratepage' ) ) {
 				$this->dieWithError( 'Rate limit for voting exceeded, please try again later' );
 			}
@@ -62,10 +75,15 @@ class ApiPageRating extends ApiBase {
 		}
 
 		$userVote = RatePageRating::getUserVote( $title, $userName, $contest );
-		$pageRating = RatePageRating::getPageRating( $title, $contest );
 
-		$this->getResult()->addValue( null, "pageRating", $pageRating );
+		if ( $permissions['see'] ) {
+			$pageRating = RatePageRating::getPageRating( $title, $contest );
+			$this->getResult()->addValue( null, "pageRating", $pageRating );
+		}
+
 		$this->getResult()->addValue( null, "userVote", $userVote );
+		$this->getResult()->addValue( null, 'canVote', (int) $permissions['vote'] );
+		$this->getResult()->addValue( null, 'canSee', (int) $permissions['see'] );
 	}
 
 	/**
