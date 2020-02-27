@@ -51,15 +51,16 @@
     "ratePage-edit-notallowed": "",
     "ratePage-edit-token-not-match": "",
     "ratePage-contest-edit-main": "",
-    "ratePage-contest-edit-id": "",
-    "ratePage-contest-edit-description": "",
-    "ratePage-contest-edit-enabled": "",
-    "ratePage-contest-edit-allowed-to-vote": "",
-    "ratePage-contest-edit-allowed-to-see": "",
-    "ratePage-contest-edit-save": "",
+    "ratePage-edit-id": "",
+    "ratePage-edit-description": "",
+    "ratePage-edit-enabled": "",
+    "ratePage-edit-allowed-to-vote": "",
+    "ratePage-edit-allowed-to-see": "",
+    "ratePage-edit-save": "",
     "ratePage-duplicate-id": "",
     "ratePage-results-list-page": "",
     "ratePage-results-list-avg": "",
     "ratePage-results-list-count": "",
-    "ratePage-results-list-ans": ""
+    "ratePage-results-list-ans": "",
+    "ratePage-edit-done": ""
 }

@@ -34,12 +34,11 @@ class SpecialRatePageContests extends SpecialPage {
 		$this->checkPermissions();
 
 		if ( $request->getVal( 'result' ) == 'success' ) {
-			$changedFilter = intval( $request->getVal( 'changedcontest' ) );
+			$changedFilter = $request->getVal( 'changedcontest' );
 			$out->wrapWikiMsg( '<p class="success">$1</p>',
 				[
 					'ratePage-edit-done',
-					$changedFilter,
-					$this->getLanguage()->formatNum( $changedFilter )
+					$changedFilter
 				]
 			);
 		}
@@ -169,7 +168,7 @@ class SpecialRatePageContests extends SpecialPage {
 		$form = '';
 
 		$fieldset = new OOUI\FieldsetLayout( [
-			'label' => 'ratePage-contest-edit-main'
+			'label' => $this->msg( 'ratePage-contest-edit-main' )->escaped()
 		] );
 
 		$fieldset->addItems( [
@@ -246,6 +245,7 @@ class SpecialRatePageContests extends SpecialPage {
 			);
 		}
 
+		//TODO: add a button for clearing results
 		if ( $this->userCanEdit() ) {
 			$form .=
 				new OOUI\FieldLayout(
@@ -271,7 +271,14 @@ class SpecialRatePageContests extends SpecialPage {
 			$form
 		);
 
-		//TODO: Add contest results
+		if ( !$new ) {
+			$pager = new ContestResultsPager(
+				$row->rpc_id,
+				$this->getContext(),
+				$this->getLinkRenderer()
+			);
+			$form .= '<br><br>' . $pager->getFullOutput()->getText();
+		}
 
 		return $form;
 	}

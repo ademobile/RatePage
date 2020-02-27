@@ -41,6 +41,7 @@
         "AddMissingContests": "maintenance/addMissingContests.php",
         "SpecialRatePageContests": "includes/specials/SpecialRatePageContests.php",
         "ContestsPager": "includes/pagers/ContestsPager.php",
+        "ContestResultsPager": "includes/pagers/ContestResultsPager.php",
         "RatePageContestDB": "includes/RatePageContestDB.php"
     },
     "ExtensionMessagesFiles": {

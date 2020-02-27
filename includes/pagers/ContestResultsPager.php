@@ -5,14 +5,16 @@ use MediaWiki\Linker\LinkRenderer;
 class ContestResultsPager extends TablePager {
 
 	public $mContest;
-	private $ratingMin, $ratingMax;
+	private $ratingMin, $ratingMax, $linkRenderer;
 
 	public function __construct( $contestId, IContextSource $context, LinkRenderer $linkRenderer ) {
-		parent::__construct( $context, $linkRenderer );
 		$this->mContest = $contestId;
+		$this->linkRenderer = $linkRenderer;
 
 		$this->ratingMin = $this->getConfig()->get( 'RPRatingMin' );
 		$this->ratingMax = $this->getConfig()->get( 'RPRatingMax' );
+
+		parent::__construct( $context, $linkRenderer );
 	}
 
 	/**
@@ -49,6 +51,8 @@ class ContestResultsPager extends TablePager {
 				"sum(case when rv_answer = $i then 1 else 0 end)";
 		}
 
+		wfDebugLog("klap1", json_encode($res));
+
 		return $res;
 	}
 
@@ -74,9 +78,25 @@ class ContestResultsPager extends TablePager {
 	 *
 	 * @param string $name The database field name
 	 * @param string $value The value retrieved from the database
+	 * @return Message|string
+	 * @throws MWException
 	 */
 	function formatValue( $name, $value ) {
-		// TODO: Implement formatValue() method.
+		if ( strpos( $name, 'ans_' ) === 0 ) {
+			return $this->getLanguage()->formatNum( $value );
+		}
+
+		if ( $name == 'rv_page_id' ) {
+			$title = Title::newFromID( $value );
+
+			if ( $title ) {
+				return $this->linkRenderer->makeLink( $title );
+			} else {
+				return $this->msg( 'ratePage-deleted-page', $value );
+			}
+		}
+
+		throw new MWException( "Unknown row type $name!" );
 	}
 
 	/**
@@ -119,9 +139,12 @@ class ContestResultsPager extends TablePager {
 		}
 
 		for ( $i = $this->ratingMin; $i <= $this->ratingMax; $i++ ) {
+			wfDebugLog("klap2", $i);
 			$headers["ans_$i"] =
-				$this->msg( 'ratePage-results-list-ans', $i );
+				$this->msg( 'ratePage-results-list-ans', $i )->text();
 		}
+
+		wfDebugLog("klap1", json_encode($headers));
 
 		return $headers;
 	}

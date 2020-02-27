@@ -51,15 +51,16 @@
     "ratePage-edit-notallowed": "Nie masz uprawnienień do edytowania konkursów.",
     "ratePage-edit-token-not-match": "Edycja nie została zapisana. Spróbuj ponownie.",
     "ratePage-contest-edit-main": "Opcje konkursu",
-    "ratePage-contest-edit-id": "Identyfikator konkursu",
-    "ratePage-contest-edit-description": "Opis",
-    "ratePage-contest-edit-enabled": "Włączony",
-    "ratePage-contest-edit-allowed-to-vote": "Grupy użytkowników uprawnione do głosowania",
-    "ratePage-contest-edit-allowed-to-see": "Grupy użytkowników uprawnione do przeglądania wyników",
-    "ratePage-contest-edit-save": "Zapisz",
+    "ratePage-edit-id": "Identyfikator konkursu",
+    "ratePage-edit-description": "Opis",
+    "ratePage-edit-enabled": "Włączony",
+    "ratePage-edit-allowed-to-vote": "Grupy użytkowników uprawnione do głosowania",
+    "ratePage-edit-allowed-to-see": "Grupy użytkowników uprawnione do przeglądania wyników",
+    "ratePage-edit-save": "Zapisz",
     "ratePage-duplicate-id": "Ten identyfikator konkursu jest już wykorzystywany.",
     "ratePage-results-list-page": "Strona",
     "ratePage-results-list-avg": "Średnia ocen",
     "ratePage-results-list-count": "Liczba ocen",
-    "ratePage-results-list-ans": "Oceny $1"
+    "ratePage-results-list-ans": "Ocena $1",
+    "ratePage-edit-done": "Pomyślnie zmodyfikowano konkurs $1."
 }
