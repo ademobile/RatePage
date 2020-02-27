@@ -51,8 +51,6 @@ class ContestResultsPager extends TablePager {
 				"sum(case when rv_answer = $i then 1 else 0 end)";
 		}
 
-		wfDebugLog("klap1", json_encode($res));
-
 		return $res;
 	}
 
@@ -139,12 +137,9 @@ class ContestResultsPager extends TablePager {
 		}
 
 		for ( $i = $this->ratingMin; $i <= $this->ratingMax; $i++ ) {
-			wfDebugLog("klap2", $i);
 			$headers["ans_$i"] =
 				$this->msg( 'ratePage-results-list-ans', $i )->text();
 		}
-
-		wfDebugLog("klap1", json_encode($headers));
 
 		return $headers;
 	}

@@ -42,7 +42,8 @@
         "SpecialRatePageContests": "includes/specials/SpecialRatePageContests.php",
         "ContestsPager": "includes/pagers/ContestsPager.php",
         "ContestResultsPager": "includes/pagers/ContestResultsPager.php",
-        "RatePageContestDB": "includes/RatePageContestDB.php"
+        "RatePageContestDB": "includes/RatePageContestDB.php",
+        "RatePageRights": "includes/RatePageRights.php"
     },
     "ExtensionMessagesFiles": {
         "RatePageMagic": "RatePage.magic.php",

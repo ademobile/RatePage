@@ -1,6 +1,7 @@
 <?php
 
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Widget\CheckMatrixWidget;
 use OOUI\FieldLayout;
 use OOUI\TextInputWidget;
 
@@ -158,6 +159,30 @@ class SpecialRatePageContests extends SpecialPage {
 	protected function buildEditor( $row ) {
 		$new = $this->mContest == "!new";
 
+		// Figure out which permissions were selected
+		$selectedPermissions = [];
+		if ( !$new ) {
+			$selectedPermissions = array_merge(
+				$selectedPermissions,
+				array_map(
+					function ( $a ) {
+						return "vote-$a";
+					},
+					explode( ',', $row->rpc_allowed_to_vote )
+				)
+			);
+
+			$selectedPermissions = array_merge(
+				$selectedPermissions,
+				array_map(
+					function ( $a ) {
+						return "see-$a";
+					},
+					explode( ',', $row->rpc_allowed_to_see )
+				)
+			);
+		}
+
 		// Read-only attribute
 		$readOnlyAttrib = [];
 
@@ -209,30 +234,17 @@ class SpecialRatePageContests extends SpecialPage {
 					'align' => 'inline'
 				]
 			),
-			//TODO: Change this from manual comma-separated input to a multiselect thingy
 			new FieldLayout(
-				new OOUI\TextInputWidget( [
-						'name' => 'wpContestAllowedToVote',
-						//TODO: load defaults from config
-						'value' => isset( $row->rpc_allowed_to_vote ) ? $row->rpc_allowed_to_vote : '*'
+				new CheckMatrixWidget( [
+						'name' => 'wpContestPermissions',
+						'columns' => [
+							$this->msg( 'ratePage-edit-allowed-to-vote' )->escaped() => 'vote',
+							$this->msg( 'ratePage-edit-allowed-to-see' )->escaped() => 'see'
+						],
+						'rows' => RatePageRights::getGroupsAsColumns( $this->getContext() ),
+						'values' => $selectedPermissions
 					] + $readOnlyAttrib
-				),
-				[
-					'label' => $this->msg( 'ratePage-edit-allowed-to-vote' )->escaped(),
-					'align' => 'top'
-				]
-			),
-			new FieldLayout(
-				new OOUI\TextInputWidget( [
-						'name' => 'wpContestAllowedToSee',
-						//TODO: load defaults from config
-						'value' => isset( $row->rpc_allowed_to_see ) ? $row->rpc_allowed_to_see : ''
-					] + $readOnlyAttrib
-				),
-				[
-					'label' => $this->msg( 'ratePage-edit-allowed-to-see' )->escaped(),
-					'align' => 'top'
-				]
+				)
 			),
 		] );
 
@@ -333,9 +345,7 @@ class SpecialRatePageContests extends SpecialPage {
 
 		$textLoads = [
 			'rpc_id' => 'wpContestId',
-			'rpc_description' => 'wpContestDescription',
-			'rpc_allowed_to_vote' => 'wpContestAllowedToVote',
-			'rpc_allowed_to_see' => 'wpContestAllowedToSee'
+			'rpc_description' => 'wpContestDescription'
 		];
 
 		foreach ( $textLoads as $col => $field ) {
@@ -348,6 +358,21 @@ class SpecialRatePageContests extends SpecialPage {
 		}
 
 		$row->rpc_enabled = $request->getCheck( 'wpContestEnabled' );
+
+		$perm = $request->getArray('wpContestPermissions');
+		$pVote = [];
+		$pSee = [];
+
+		foreach ( $perm as $p ) {
+			if ( strpos( $p, 'vote-' ) === 0 ) {
+				$pVote[] = substr( $p, 5 );
+			} elseif ( strpos( $p, 'see-' ) === 0 ) {
+				$pSee[] = substr( $p, 4 );
+			}
+		}
+
+		$row->rpc_allowed_to_vote = implode( ',', $pVote );
+		$row->rpc_allowed_to_see = implode( ',', $pSee );
 
 		self::$mLoadedRow = $row;
 		return $row;
