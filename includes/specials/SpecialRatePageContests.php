@@ -79,9 +79,6 @@ class SpecialRatePageContests extends SpecialPage {
 	}
 
 	protected function showEditView() {
-		$ratingMin = $this->getConfig()->get( 'RPRatingMin' );
-		$ratingMax = $this->getConfig()->get( 'RPRatingMax' );
-
 		// check permissions
 		if ( !$this->userCanViewDetails() ) {
 			throw new PermissionsError( 'ratePage-contests-view-details' );

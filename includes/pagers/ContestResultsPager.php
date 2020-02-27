@@ -1,6 +1,19 @@
 <?php
 
+use MediaWiki\Linker\LinkRenderer;
+
 class ContestResultsPager extends TablePager {
+
+	public $mContest;
+	private $ratingMin, $ratingMax;
+
+	public function __construct( $contestId, IContextSource $context, LinkRenderer $linkRenderer ) {
+		parent::__construct( $context, $linkRenderer );
+		$this->mContest = $contestId;
+
+		$this->ratingMin = $this->getConfig()->get( 'RPRatingMin' );
+		$this->ratingMax = $this->getConfig()->get( 'RPRatingMax' );
+	}
 
 	/**
 	 * Provides all parameters needed for the main paged query. It returns
@@ -14,7 +27,29 @@ class ContestResultsPager extends TablePager {
 	 * @return array
 	 */
 	function getQueryInfo() {
-		// TODO: Implement getQueryInfo() method.
+		$res = [
+			'tables' => [
+				'ratepage_vote'
+			],
+			'fields' => [
+				'rv_page_id',
+				'ans_avg' => 'AVG(rv_answer)',
+				'ans_count' => 'COUNT(rv_answer)'
+			],
+			'conds' => [
+				'rv_contest' => $this->mContest
+			],
+			'options' => [
+				'GROUP BY' => 'rv_page_id'
+			]
+		];
+
+		for ( $i = $this->ratingMin; $i <= $this->ratingMax; $i++ ) {
+			$res['fields']["ans_$i"] =
+				"sum(case when rv_answer = $i then 1 else 0 end)";
+		}
+
+		return $res;
 	}
 
 	/**
@@ -22,9 +57,10 @@ class ContestResultsPager extends TablePager {
 	 * otherwise
 	 *
 	 * @param string $field
+	 * @return bool
 	 */
 	function isFieldSortable( $field ) {
-		// TODO: Implement isFieldSortable() method.
+		return true;
 	}
 
 	/**
@@ -55,7 +91,7 @@ class ContestResultsPager extends TablePager {
 	 * @return string
 	 */
 	function getDefaultSort() {
-		// TODO: Implement getDefaultSort() method.
+		return 'rv_page_id';
 	}
 
 	/**
@@ -66,6 +102,27 @@ class ContestResultsPager extends TablePager {
 	 * @return array
 	 */
 	function getFieldNames() {
-		// TODO: Implement getFieldNames() method.
+		static $headers = null;
+
+		if ( !empty( $headers ) ) {
+			return $headers;
+		}
+
+		$headers = [
+			'rv_page_id' => 'ratePage-results-list-page',
+			'ans_avg' => 'ratePage-results-list-avg',
+			'ans_count' => 'ratePage-results-list-count'
+		];
+
+		foreach ( $headers as &$msg ) {
+			$msg = $this->msg( $msg )->text();
+		}
+
+		for ( $i = $this->ratingMin; $i <= $this->ratingMax; $i++ ) {
+			$headers["ans_$i"] =
+				$this->msg( 'ratePage-results-list-ans', $i );
+		}
+
+		return $headers;
 	}
 }
