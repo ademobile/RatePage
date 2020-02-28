@@ -70,5 +70,6 @@
     "ratePage-log-contest-formatter": "konkurs $1",
     "ratePage-no-such-contest": "Błąd: konkurs „$1” nie istnieje.",
     "ratePage-vote-cannot-vote": "Nie możesz głosować w tym konkursie",
-    "ratePage-vote-cannot-see": "Nie możesz sprawdzić wyników tego konkursu"
+    "ratePage-vote-cannot-see": "Nie możesz sprawdzić wyników tego konkursu",
+    "ratepagecontests": "Zarządzanie konkursami RatePage"
 }
