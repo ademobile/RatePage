@@ -44,7 +44,35 @@ class RatePageHooks {
 	public static function onLoadExtensionSchemaUpdates( $updater ) {
 		$patchPath = __DIR__ . '/../sql/';
 
-		$updater->addExtensionTable( 'ratepage_vote', $patchPath . 'create-table--ratepage-vote.sql' );
+		$db = $updater->getDB();
+
+		if ( $db->tableExists( 'ratepage_vote' ) ) {
+			$updater->addExtensionField(
+				'ratepage_vote',
+				'rv_contest',
+				$patchPath . 'upgrade-from-0.2-to-0.3.sql'
+			);
+
+			$updater->modifyTable(
+				'ratepage_vote',
+				$patchPath . 'upgrade-from-0.3-to-1.0.sql',
+				true
+			);
+		} else {
+			$updater->addExtensionTable(
+				'ratepage_vote',
+				$patchPath . 'create-table--ratepage-vote.sql'
+			);
+		}
+
+		$updater->addExtensionTable(
+			'ratepage_contest',
+			$patchPath . 'create-table--ratepage-contest.sql'
+		);
+
+		$updater->addPostDatabaseUpdateMaintenance(
+			AddMissingContests::class
+		);
 	}
 
 	public static function onSkinBuildSidebar( Skin $skin, &$bar ) {
@@ -90,11 +118,8 @@ class RatePageHooks {
 			return self::renderError( wfMessage( 'ratePage-page-does-not-exist' )->escaped(), $parser );
 		}
 
-		if ( strlen( $contest ) > 255 ) {
-			return self::renderError( wfMessage( 'ratePage-contest-id-too-long' )->escaped(), $parser );
-		}
-		if ( strlen( $contest ) > 0 && !ctype_alnum( $contest ) ) {
-			return self::renderError( wfMessage( 'ratePage-contest-id-invalid' )->escaped(), $parser );
+		if ( $contest  && !RatePageContestDB::checkContestExists( $contest ) ) {
+			return self::renderError( wfMessage( 'ratePage-no-such-contest', $contest )->escaped(), $parser );
 		}
 
 		return '<div class="ratepage-embed" id="' . $title->getArticleID() . 'c' . $contest .

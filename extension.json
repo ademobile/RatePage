@@ -5,7 +5,7 @@
         "Polskacafe"
     ],
     "license-name": "MIT",
-    "version": "0.3.0",
+    "version": "1.0.0",
     "namemsg": "ratePage",
     "descriptionmsg": "ratePage-desc",
     "url": "https://www.mediawiki.org/wiki/Extension:RatePage",
@@ -22,13 +22,33 @@
         "RPFrontendEnabled": true,
         "RPAddSidebarSection": true
 	},
+    "GroupPermissions": {
+        "*": {
+            "ratepage-contests-view-list": true
+        },
+        "sysop": {
+            "ratepage-contests-view-details": true,
+            "ratepage-contests-edit": true
+        },
+        "bureaucrat": {
+            "ratepage-contests-clear": true
+        }
+    },
     "AutoloadClasses": {
         "RatePageRating": "includes/RatePageRating.php",
         "RatePageHooks": "includes/RatePageHooks.php",
-        "ApiPageRating": "includes/ApiPageRating.php"
+        "ApiPageRating": "includes/ApiPageRating.php",
+        "AddMissingContests": "maintenance/addMissingContests.php",
+        "SpecialRatePageContests": "includes/specials/SpecialRatePageContests.php",
+        "ContestsPager": "includes/pagers/ContestsPager.php",
+        "ContestResultsPager": "includes/pagers/ContestResultsPager.php",
+        "RatePageContestDB": "includes/RatePageContestDB.php",
+        "RatePageRights": "includes/RatePageRights.php",
+        "RatePageContestLogFormatter": "includes/RatePageContestLogFormatter.php"
     },
     "ExtensionMessagesFiles": {
-        "RatePageMagic": "RatePage.i18n.magic.php"
+        "RatePageMagic": "RatePage.magic.php",
+        "RatePageAlias": "RatePage.alias.php"
     },
     "ResourceFileModulePaths": {
         "localBasePath": "modules",
@@ -65,7 +85,9 @@
                 "ratePage-caption-3",
                 "ratePage-caption-4",
                 "ratePage-caption-5",
-                "ratePage-prompt"
+                "ratePage-prompt",
+                "ratePage-vote-cannot-vote",
+                "ratePage-vote-cannot-see"
             ],
             "dependencies": [
                 "mediawiki.api"
@@ -83,8 +105,21 @@
         "SkinBuildSidebar": "RatePageHooks::onSkinBuildSidebar",
         "ParserFirstCallInit": "RatePageHooks::onParserFirstCallInit"
     },
+    "SpecialPages": {
+        "RatePageContests": "SpecialRatePageContests"
+    },
     "APIModules": {
         "pagerating": "ApiPageRating"
 	},
+    "LogTypes": [ "ratepage-contest" ],
+    "LogNames": {
+        "ratepage-contest": "ratePage-contest-log"
+    },
+    "LogHeaders": {
+        "ratepage-contest": "ratePage-contest-log-header"
+    },
+    "LogActionsHandlers": {
+        "ratepage-contest/*": "RatePageContestLogFormatter"
+    },
     "type": "other"
 }

@@ -9,5 +9,8 @@
 			"phpcs -p -s"
 		],
 		"fix": "phpcbf"
-	}
+	},
+  "require": {
+    "ext-ctype": "*"
+  }
 }
