@@ -1,9 +1,16 @@
 <?php
 
+/**
+ * Some of this code is based on the AbuseFilter extension.
+ * You can find the extension's code and list of authors here:
+ * https://github.com/wikimedia/mediawiki-extensions-AbuseFilter
+ *
+ * AbuseFilter's code is licensed under GPLv2
+ */
+
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Widget\CheckMatrixWidget;
 use OOUI\FieldLayout;
-use OOUI\TextInputWidget;
 
 class SpecialRatePageContests extends SpecialPage {
 	public static $mLoadedRow = null;

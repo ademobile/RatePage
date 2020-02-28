@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Some of this code is based on the AbuseFilter extension.
+ * You can find the extension's code and list of authors here:
+ * https://github.com/wikimedia/mediawiki-extensions-AbuseFilter
+ *
+ * AbuseFilter's code is licensed under GPLv2
+ */
+
 class RatePageContestLogFormatter extends LogFormatter {
 
 	/**

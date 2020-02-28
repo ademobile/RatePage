@@ -5,8 +5,8 @@
             "Polskacafe"
         ]
     },
-    "ratePage": "Ocenianie stron",
-    "ratePage-desc": "Pozwala użytkownikom oceniać strony.",
+    "ratePage": "RatePage",
+    "ratePage-desc": "Pozwala na ocenianie stron i tworzenie konkursów.",
     "apihelp-pagerating-summary": "Pozwala ocenić stronę i pobiera oceny użytkowników dla danej strony. Należy podać jeden z dwóch argumentów: pageid lub pagetitle.",
     "apihelp-pagerating-param-pageid": "ID strony",
     "apihelp-pagerating-param-pagetitle": "Tytuł strony",

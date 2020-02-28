@@ -6,7 +6,7 @@
         ]
     },
     "ratePage": "RatePage",
-    "ratePage-desc": "Enables users to rate pages.",
+    "ratePage-desc": "Enables users to rate pages and administrators to organize contests.",
     "apihelp-pagerating-summary": "Allows a user to vote on a page and gets the rating for a page. Requires specyfying one of two parameters: pageid or pagetitle.",
     "apihelp-pagerating-param-pageid": "Page ID",
     "apihelp-pagerating-param-pagetitle": "Page title",
