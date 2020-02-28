@@ -359,7 +359,7 @@ class SpecialRatePageContests extends SpecialPage {
 				continue;
 			}
 
-			$row->$col = trim( $request->getVal( $field ) );
+			$row->$col = trim( $request->getVal( $field ) ?? '' );
 		}
 
 		$row->rpc_enabled = $request->getCheck( 'wpContestEnabled' );

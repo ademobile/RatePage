@@ -68,5 +68,7 @@
     "logentry-ratepage-contest-create": "",
     "logentry-ratepage-contest-change": "",
     "ratePage-log-contest-formatter": "",
-    "ratePage-no-such-contest": ""
+    "ratePage-no-such-contest": "",
+    "ratePage-vote-cannot-vote": "",
+    "ratePage-vote-cannot-see": ""
 }

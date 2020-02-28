@@ -17,13 +17,18 @@ $( function() {
 					mw.notify( mw.message( 'ratePage-vote-error' ).text(), {type: 'error'} );
 					return;
 				}
-				var voteCount = 0;
-				for ( var i = 1; i <= 5; i++ ) voteCount += ( data.pageRating[i] );
-				var avg = 0;
-				for ( i = 1; i <= 5; i++ ) avg += ( data.pageRating[i] * i );
-				avg = avg / voteCount;
 
-				callback( avg, voteCount, data.userVote );
+				var voteCount = null, avg = null;
+
+				if ( data.pageRating ) {
+					voteCount = 0;
+					for ( var i = 1; i <= 5; i++ ) voteCount += ( data.pageRating[i] );
+					avg = 0;
+					for ( i = 1; i <= 5; i++ ) avg += ( data.pageRating[i] * i );
+					avg = avg / voteCount;
+				}
+
+				callback( avg, voteCount, data.userVote, data.canVote, data.canSee );
 			} );
 	}
 
@@ -35,17 +40,21 @@ $( function() {
 			contest: contest,
 		} )
 			.done( function ( data ) {
-				var voteCount = 0;
-				for ( var i = 1; i <= 5; i++ ) voteCount += ( data.pageRating[i] );
-				var avg = 0;
-				for ( i = 1; i <= 5; i++ ) avg += ( data.pageRating[i] * i );
-				avg = avg / voteCount;
+				var voteCount = null, avg = null;
 
-				callback( avg, voteCount, data.userVote );
+				if ( data.pageRating ) {
+					voteCount = 0;
+					for ( var i = 1; i <= 5; i++ ) voteCount += ( data.pageRating[i] );
+					avg = 0;
+					for ( i = 1; i <= 5; i++ ) avg += ( data.pageRating[i] * i );
+					avg = avg / voteCount;
+				}
+
+				callback( avg, voteCount, data.userVote, data.canVote, data.canSee );
 			} );
 	}
 
-	function updateStars( average, vCount, userVote, pageId, contest ) {
+	function updateStars( average, vCount, userVote, canVote, canSee, isNew, pageId, contest ) {
 		function typeForLastStar( f2 ) {
 			if ( f2 < 0.05 ) {
 				return 'ratingstar-plain';
@@ -57,7 +66,7 @@ $( function() {
 				return 'ratingstar-3-4';
 			}
 		}
-
+		
 		var parent = null;
 		if ( !pageId ) {
 			if ( mw.config.get( 'skin' ) === "minerva" ) {
@@ -69,30 +78,91 @@ $( function() {
 			parent = $( "div.ratepage-embed#" + pageId + "c" + contest );
 		}
 
-		if ( userVote !== -1 ) {
-			if ( isNaN( average ) ) parent.find( '#ratingsinfo-avg' ).text( "" );
-			else parent.find( '#ratingsinfo-avg' ).text( mw.message( 'ratePage-vote-average-info', average.toFixed(2), vCount.toString() ).text() );
+		if ( canVote ) {
+			parent.find( '#ratingsinfo-yourvote' ).text( mw.message( 'ratePage-prompt' ).text() );
+		} else {
+			parent.find( '#ratingsinfo-yourvote' ).text( mw.message( 'ratePage-vote-cannot-vote' ).text() );
+		}
 
-			parent.find( '#ratingsinfo-yourvote' ).text( mw.message( 'ratePage-vote-info', userVote.toString() ).text() );
+		if ( userVote !== -1 || ( !canVote && canSee ) ) {
+			if ( userVote !== -1 ) {
+				parent.find( '#ratingsinfo-yourvote' ).text( mw.message( 'ratePage-vote-info', userVote.toString() ).text() );
+			}
 
-			var f1 = parseInt( average.toFixed( 1 ).slice( 0, -1 ).replace( '.', '' ) );
-			for ( var i = 1; i <= 5; i++ ) {
-				if ( i <= f1 ) {
-					parent.find( '.ratingstar[data-ratingstar-no="' + i.toString() + '"]' )
-						.removeClass( "ratingstar-plain ratingstar-1-4 ratingstar-2-4 ratingstar-3-4 ratingstar-full" )
-						.addClass( "ratingstar-full" );
-				} else if ( i === f1 + 1 ) {
-					parent.find( '.ratingstar[data-ratingstar-no="' + i.toString() + '"]' )
-						.removeClass( "ratingstar-plain ratingstar-1-4 ratingstar-2-4 ratingstar-3-4 ratingstar-full" )
-						.addClass( typeForLastStar( average - f1 ) );
+			if ( !average ) {
+				if ( canSee ) {
+					parent.find( '#ratingsinfo-avg' ).text( "" );
 				} else {
-					parent.find( '.ratingstar[data-ratingstar-no="' + i.toString() + '"]' )
-						.removeClass( "ratingstar-1-4 ratingstar-2-4 ratingstar-3-4 ratingstar-full" )
-						.addClass( "ratingstar-plain" );
+					parent.find( '#ratingsinfo-avg' ).text( mw.message( 'ratePage-vote-cannot-see' ) );
+				}
+
+				for ( var i = 1; i <= 5; i++ ) {
+					if ( i <= userVote ) {
+						parent.find( '.ratingstar[data-ratingstar-no="' + i.toString() + '"]' )
+							.removeClass( "ratingstar-plain ratingstar-1-4 ratingstar-2-4 ratingstar-3-4 ratingstar-full" )
+							.addClass( "ratingstar-full" );
+					} else {
+						parent.find( '.ratingstar[data-ratingstar-no="' + i.toString() + '"]' )
+							.removeClass( "ratingstar-1-4 ratingstar-2-4 ratingstar-3-4 ratingstar-full" )
+							.addClass( "ratingstar-plain" );
+					}
+				}
+			} else {
+				parent.find( '#ratingsinfo-avg' ).text( mw.message( 'ratePage-vote-average-info', average.toFixed(2), vCount.toString() ).text() );
+
+				var f1 = parseInt( average.toFixed( 1 ).slice( 0, -1 ).replace( '.', '' ) );
+				for ( i = 1; i <= 5; i++ ) {
+					if ( i <= f1 ) {
+						parent.find( '.ratingstar[data-ratingstar-no="' + i.toString() + '"]' )
+							.removeClass( "ratingstar-plain ratingstar-1-4 ratingstar-2-4 ratingstar-3-4 ratingstar-full" )
+							.addClass( "ratingstar-full" );
+					} else if ( i === f1 + 1 ) {
+						parent.find( '.ratingstar[data-ratingstar-no="' + i.toString() + '"]' )
+							.removeClass( "ratingstar-plain ratingstar-1-4 ratingstar-2-4 ratingstar-3-4 ratingstar-full" )
+							.addClass( typeForLastStar( average - f1 ) );
+					} else {
+						parent.find( '.ratingstar[data-ratingstar-no="' + i.toString() + '"]' )
+							.removeClass( "ratingstar-1-4 ratingstar-2-4 ratingstar-3-4 ratingstar-full" )
+							.addClass( "ratingstar-plain" );
+					}
 				}
 			}
-		} else {
-			parent.find( '#ratingsinfo-yourvote' ).html( mw.message( 'ratePage-prompt' ).text() );
+		}
+
+		if ( isNew && canVote ) {
+			parent.find( '.ratingstar' ).addClass( 'canvote' );
+
+			/* add behavior to the stars */
+			var stars = parent.find( '.ratingstar' );
+			stars.click( function () {
+				var answer = $( this ).attr( 'data-ratingstar-no' );
+
+				if ( !$( this ).attr( 'page-id' ) ) {
+					ratePage( mw.config.get( 'wgArticleId' ), '', answer,
+						function ( avg, voteCount, userVote, canVote, canSee ) {
+							updateStars( avg, voteCount, userVote, canVote, canSee, false );
+						} );
+				} else {
+					var pageId = $( this ).attr( 'page-id' );
+					var contest = $( this ).attr( 'contest' );
+					ratePage( pageId, contest, answer,
+						function ( avg, voteCount, userVote, canVote, canSee ) {
+							updateStars( avg, voteCount, userVote, canVote, canSee, false, pageId, contest );
+						} );
+				}
+			} );
+
+			if ( mw.config.get( 'skin' ) !== "minerva" ) {
+				stars.mouseover( function () {
+					var no = $( this ).attr( 'data-ratingstar-no' );
+					for ( var i = 1; i <= no; i++ ) {
+						$( this ).siblings( '.ratingstar[data-ratingstar-no="' + i.toString() + '"]' ).addBack()
+							.addClass( 'ratingstar-mousedown' );
+					}
+				} ).mouseout( function () {
+					$( this ).siblings( '.ratingstar' ).addBack().removeClass( 'ratingstar-mousedown' );
+				} );
+			}
 		}
 	}
 
@@ -114,8 +184,8 @@ $( function() {
 		stars.append( '<div class="ratingsinfo-embed"><div id="ratingsinfo-yourvote"></div><div id="ratingsinfo-avg"></div></div>' );
 
 		getRating( pageId, contest,
-			function ( avg, voteCount, userVote ) {
-				updateStars( avg, voteCount, userVote, pageId, contest );
+			function ( avg, voteCount, userVote, canVote, canSee ) {
+				updateStars( avg, voteCount, userVote, canVote, canSee, true, pageId, contest );
 			} );
 	} );
 
@@ -157,44 +227,10 @@ $( function() {
 			stars.after( '<div class="ratingsinfo-desktop"><div id="ratingsinfo-yourvote"></div><div id="ratingsinfo-avg"></div></div>' );
 		}
 
-		var parent = null;
-		if ( mw.config.get( 'skin' ) === "minerva" ) {
-			parent = $( '.pageRatingStars' );
-		} else {
-			parent = $( '#p-ratePage-vote-title' );
-		}
-
 		/* initialize the stars */
-		getRating( mw.config.get( 'wgArticleId' ), '', updateStars );
-	}
-
-	/* add behavior to the stars */
-	var allStars = $( '.ratingstar' );   // hey now, you're an all star!
-	allStars.click( function () {
-		var answer = $( this ).attr( 'data-ratingstar-no' );
-
-		if ( !$( this ).attr( 'page-id' ) ) {
-			ratePage( mw.config.get( 'wgArticleId' ), '', answer, updateStars );
-		} else {
-			console.debug('lel');
-			var pageId = $( this ).attr( 'page-id' );
-			var contest = $( this ).attr( 'contest' );
-			ratePage( pageId, contest, answer,
-				function ( avg, voteCount, userVote ) {
-					updateStars( avg, voteCount, userVote, pageId, contest );
-				} );
-		}
-	} );
-
-	if ( mw.config.get( 'skin' ) !== "minerva" ) {
-		allStars.mouseover( function () {
-			var no = $( this ).attr( 'data-ratingstar-no' );
-			for ( var i = 1; i <= no; i++ ) {
-				$( this ).siblings( '.ratingstar[data-ratingstar-no="' + i.toString() + '"]' ).addBack()
-					.addClass( 'ratingstar-mousedown' );
-			}
-		} ).mouseout( function () {
-			$( this ).siblings( '.ratingstar' ).addBack().removeClass( 'ratingstar-mousedown' );
+		getRating( mw.config.get( 'wgArticleId' ), '',
+			function ( avg, voteCount, userVote, canVote, canSee ) {
+			updateStars( avg, voteCount, userVote, canVote, canSee, true );
 		} );
 	}
 } );

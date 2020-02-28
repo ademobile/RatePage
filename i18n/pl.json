@@ -68,5 +68,7 @@
     "logentry-ratepage-contest-create": "$1 {{GENDER:$2|utworzył|utworzyła}} $4",
     "logentry-ratepage-contest-change": "$1 {{GENDER:$2|zmienił|zmieniła}} $4",
     "ratePage-log-contest-formatter": "konkurs $1",
-    "ratePage-no-such-contest": "Błąd: konkurs „$1” nie istnieje."
+    "ratePage-no-such-contest": "Błąd: konkurs „$1” nie istnieje.",
+    "ratePage-vote-cannot-vote": "Nie możesz głosować w tym konkursie",
+    "ratePage-vote-cannot-see": "Nie możesz sprawdzić wyników tego konkursu"
 }
