@@ -70,5 +70,6 @@
     "ratePage-log-contest-formatter": "contest $1",
     "ratePage-no-such-contest": "Error: contest \"$1\" does not exist.",
     "ratePage-vote-cannot-vote": "You cannot vote in this contest",
-    "ratePage-vote-cannot-see": "You cannot see the results of this contest"
+    "ratePage-vote-cannot-see": "You cannot see the results of this contest",
+    "ratepagecontests": "RatePage contests management"
 }
