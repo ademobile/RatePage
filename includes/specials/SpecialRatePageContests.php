@@ -83,6 +83,7 @@ class SpecialRatePageContests extends SpecialPage {
 			'<br><br>' .
 			$pager->getFullOutput()->getText()
 		);
+		$this->getOutput()->addModules( $pager->getModuleStyles() );
 	}
 
 	protected function showEditView() {
@@ -302,6 +303,7 @@ class SpecialRatePageContests extends SpecialPage {
 				$this->getLinkRenderer()
 			);
 			$form .= '<br><br>' . $pager->getFullOutput()->getText();
+			$this->getOutput()->addModules( $pager->getModuleStyles() );
 		}
 
 		return $form;
