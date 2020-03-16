@@ -34,8 +34,7 @@ class RatePageContestLogFormatter extends LogFormatter {
 			$this->makePageLink(
 				$this->entry->getTarget(),
 				[],
-				$this->msg( 'ratePage-log-contest-formatter' )
-					->numParams( $contestId )->escaped()
+				$this->msg( 'ratePage-log-contest-formatter', $contestId )->escaped()
 			)
 		);
 
