@@ -373,7 +373,7 @@ class SpecialRatePageContests extends SpecialPage {
 
 		$row->rpc_enabled = $request->getCheck( 'wpContestEnabled' );
 
-		$perm = $request->getArray('wpContestPermissions');
+		$perm = $request->getArray('wpContestPermissions') ?? [];
 		$pVote = [];
 		$pSee = [];
 
