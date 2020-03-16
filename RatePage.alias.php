@@ -13,5 +13,5 @@ $specialPageAliases['en'] = [
  * Polish
  */
 $specialPageAliases['pl'] = [
-	'AdvancedBacklinks' => [ 'Konkursy_RatePage' ]
+	'RatePageContests' => [ 'Konkursy_RatePage' ]
 ];
