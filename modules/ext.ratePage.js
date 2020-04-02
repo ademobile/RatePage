@@ -84,8 +84,8 @@ $( function() {
 			parent.find( '#ratingsinfo-yourvote' ).text( mw.message( 'ratePage-vote-cannot-vote' ).text() );
 		}
 
-		if ( userVote !== -1 || ( !canVote && canSee ) ) {
-			if ( userVote !== -1 ) {
+		if ( (userVote && userVote !== -1 ) || ( !canVote && canSee ) ) {
+			if ( userVote && userVote !== -1 ) {
 				parent.find( '#ratingsinfo-yourvote' ).text( mw.message( 'ratePage-vote-info', userVote.toString() ).text() );
 			}
 
