@@ -22,7 +22,7 @@ class ApiQueryPageRatingProp extends ApiQueryBase {
 		$result = $this->getResult();
 
 		foreach ( $titles as $title ) {
-			if ( !RatePageRating::canPageBeRated( $title ) ) continue;
+			if ( !$this->contest && !RatePageRating::canPageBeRated( $title ) ) continue;
 
 			$path = [ 'query', 'pages', $title->getArticleID(), $this->getModuleName() ];
 			$this->addTitleToResults( $title, $path, $result );

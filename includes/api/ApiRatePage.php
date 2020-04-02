@@ -28,11 +28,11 @@ class ApiRatePage extends ApiBase {
 
 		$this->getResult()->addValue( null, "pageId", $title->getArticleID() );
 
-		if ( !RatePageRating::canPageBeRated( $title ) ) {
+		$this->processParams( $params, $this->getContext(), $this );
+
+		if ( !$this->contest && !RatePageRating::canPageBeRated( $title ) ) {
 			return;
 		}
-
-		$this->processParams( $params, $this->getContext(), $this );
 
 		$config = MediaWikiServices::getInstance()->getMainConfig();
 		$ratingMin = $config->get( 'RPRatingMin' );
