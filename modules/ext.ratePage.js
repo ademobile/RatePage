@@ -6,7 +6,7 @@ $( function() {
 	/* first, some helper functions */
 	function ratePage( pageId, contest, answer, callback ) {
 		( new mw.Api() ).post( {
-			action: 'pagerating',
+			action: 'ratepage',
 			format: 'json',
 			pageid: pageId,
 			contest: contest,
@@ -32,25 +32,29 @@ $( function() {
 			} );
 	}
 
-	function getRating( pageId, contest, callback ) {
+	function getRating( idToCallbackMap, contest ) {
 		( new mw.Api() ).post( {
-			action: 'pagerating',
+			action: 'query',
+			prop: 'pagerating',
 			format: 'json',
-			pageid: pageId,
-			contest: contest,
+			prcontest: contest,
+			pageids: Object.keys( idToCallbackMap )
 		} )
 			.done( function ( data ) {
-				var voteCount = null, avg = null;
+				Object.keys( data.query.pages ).forEach( function ( pageid ) {
+					var voteCount = null, avg = null;
+					var d = data.query.pages[pageid].pagerating;
 
-				if ( data.pageRating ) {
-					voteCount = 0;
-					for ( var i = 1; i <= 5; i++ ) voteCount += ( data.pageRating[i] );
-					avg = 0;
-					for ( i = 1; i <= 5; i++ ) avg += ( data.pageRating[i] * i );
-					avg = avg / voteCount;
-				}
+					if ( d.pageRating ) {
+						voteCount = 0;
+						for ( var i = 1; i <= 5; i++ ) voteCount += ( d.pageRating[i] );
+						avg = 0;
+						for ( i = 1; i <= 5; i++ ) avg += ( d.pageRating[i] * i );
+						avg = avg / voteCount;
+					}
 
-				callback( avg, voteCount, data.userVote, data.canVote, data.canSee );
+					idToCallbackMap[pageid]( avg, voteCount, d.userVote, d.canVote, d.canSee );
+				} );
 			} );
 	}
 
@@ -66,8 +70,8 @@ $( function() {
 				return 'ratingstar-3-4';
 			}
 		}
-		
-		var parent = null;
+
+		var parent;
 		if ( !pageId ) {
 			if ( mw.config.get( 'skin' ) === "minerva" ) {
 				parent = $( '.footer-ratingstars' );
@@ -166,6 +170,9 @@ $( function() {
 		}
 	}
 
+	// a map for batch requesting
+	var starMap = {};
+
 	/* now process all <ratepage> tags */
 	$( 'div.ratepage-embed' ).each( function () {
 		var stars = $( this );
@@ -183,10 +190,10 @@ $( function() {
 		}
 		stars.append( '<div class="ratingsinfo-embed"><div id="ratingsinfo-yourvote"></div><div id="ratingsinfo-avg"></div></div>' );
 
-		getRating( pageId, contest,
-			function ( avg, voteCount, userVote, canVote, canSee ) {
-				updateStars( avg, voteCount, userVote, canVote, canSee, true, pageId, contest );
-			} );
+		if ( !starMap[contest] ) starMap[contest] = {};
+		starMap[contest][pageId] = function ( avg, voteCount, userVote, canVote, canSee ) {
+			updateStars( avg, voteCount, userVote, canVote, canSee, true, pageId, contest );
+		};
 	} );
 
 	/* and now the main rating widget in the sidebar or footer */
@@ -227,10 +234,14 @@ $( function() {
 			stars.after( '<div class="ratingsinfo-desktop"><div id="ratingsinfo-yourvote"></div><div id="ratingsinfo-avg"></div></div>' );
 		}
 
-		/* initialize the stars */
-		getRating( mw.config.get( 'wgArticleId' ), '',
-			function ( avg, voteCount, userVote, canVote, canSee ) {
+		if ( !starMap[''] ) starMap[''] = {};
+		starMap[''][mw.config.get( 'wgArticleId' )] = function ( avg, voteCount, userVote, canVote, canSee ) {
 			updateStars( avg, voteCount, userVote, canVote, canSee, true );
-		} );
+		}
 	}
+
+	// get data in batches
+	Object.keys( starMap ).forEach( function ( contest ) {
+		getRating( starMap[contest], contest );
+	} );
 } );
