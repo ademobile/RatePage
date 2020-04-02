@@ -85,8 +85,8 @@ class ApiRatePage extends ApiBase {
 	 */
 	protected function getExamplesMessages() {
 		return [
-			'action=pagerating&pagetitle=Example' => 'apihelp-ratepage-example-1',
-			'action=pagerating&pagetitle=Example&answer=2' => 'apihelp-ratepage-example-2'
+			'action=ratepage&pagetitle=Example' => 'apihelp-ratepage-example-1',
+			'action=ratepage&pagetitle=Example&answer=2' => 'apihelp-ratepage-example-2'
 		];
 	}
 

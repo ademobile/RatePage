@@ -45,6 +45,7 @@
 	"RatePageRights": "includes/RatePageRights.php",
 	"RatePageContestLogFormatter": "includes/RatePageContestLogFormatter.php",
 
+	"RatePageApiTrait": "includes/api/RatePageApiTrait.php",
 	"ApiQueryPageRatingProp": "includes/api/ApiQueryPageRatingProp.php",
 	"ApiRatePage": "includes/api/ApiRatePage.php"
   },
