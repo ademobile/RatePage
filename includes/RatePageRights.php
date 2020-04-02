@@ -26,6 +26,11 @@ class RatePageRights {
 		$eg = $user->getEffectiveGroups();
 		$contest = RatePageContestDB::loadContest( $contestId );
 
+		if ( !$contest ) return [
+			'vote' => false,
+			'see' => false
+		];
+
 		return [
 			'vote' => ( (bool) sizeof( array_intersect(
 				explode( ',', $contest->rpc_allowed_to_vote ),
