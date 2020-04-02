@@ -1,5 +1,7 @@
 <?php
 
+use MediaWiki\MediaWikiServices;
+
 /**
  * API for getting the page rating and voting for pages
  *
@@ -7,10 +9,10 @@
  * @ingroup Extensions
  * @license MIT
  */
-class ApiPageRating extends ApiBase {
-	public function execute() {
-		global $wgRPRatingMin, $wgRPRatingMax;
+class ApiRatePage extends ApiBase {
+	use RatePageApiTrait;
 
+	public function execute() {
 		$params = $this->extractRequestParams();
 		$this->requireOnlyOneParameter( $params, 'pageid', 'pagetitle' );
 
@@ -30,60 +32,29 @@ class ApiPageRating extends ApiBase {
 			return;
 		}
 
-		$user = RequestContext::getMain()->getUser();
-		$ip = RequestContext::getMain()->getRequest()->getIP();
-		if ( $user->getName() == '' ) {
-			$userName = $ip;
-		} else {
-			$userName = $user->getName();
-		}
+		$this->processParams( $params, $this->getContext(), $this );
 
-		$contest = '';
-		$permissions = [
-			'vote' => true,
-			'see' => true
-		];
-
-		if ( isset( $params['contest'] ) ) {
-			$contest = trim( $params['contest'] );
-			if ( strlen( $contest ) > 255 ) {
-				$this->dieWithError( 'Contest ID length exceeds the limit (255 characters)' );
-			}
-			if ( strlen( $contest ) > 0 ) {
-				if ( !ctype_alnum( $contest ) ) {
-					$this->dieWithError( 'Contest ID must be alphanumeric, no other characters are allowed' );
-				}
-
-				$permissions = RatePageRights::checkUserPermissionsOnContest( $contest, $user );
-			}
-		}
+		$config = MediaWikiServices::getInstance()->getMainConfig();
+		$ratingMin = $config->get( 'RPRatingMin' );
+		$ratingMax = $config->get( 'RPRatingMax' );
 
 		if ( isset( $params['answer'] ) ) {
-			if ( !$permissions['vote'] ) {
+			if ( !$this->permissions['vote'] ) {
 				$this->dieWithError( 'You do not have permissions to vote in this contest' );
 			}
 
-			if ( $user->pingLimiter( 'ratepage' ) ) {
+			if ( $this->user->pingLimiter( 'ratepage' ) ) {
 				$this->dieWithError( 'Rate limit for voting exceeded, please try again later' );
 			}
 
 			$answer = $params['answer'];
-			if ( $answer < $wgRPRatingMin || $answer > $wgRPRatingMax ) {
+			if ( $answer < $ratingMin || $answer > $ratingMax ) {
 				$this->dieWithError( 'Incorrect answer specified' );
 			}
-			RatePageRating::voteOnPage( $title, $userName, $ip, $answer, $contest );
+			RatePageRating::voteOnPage( $title, $this->userName, $this->ip, $answer, $this->contest );
 		}
 
-		$userVote = RatePageRating::getUserVote( $title, $userName, $contest );
-
-		if ( $permissions['see'] ) {
-			$pageRating = RatePageRating::getPageRating( $title, $contest );
-			$this->getResult()->addValue( null, "pageRating", $pageRating );
-		}
-
-		$this->getResult()->addValue( null, "userVote", $userVote );
-		$this->getResult()->addValue( null, 'canVote', (int) $permissions['vote'] );
-		$this->getResult()->addValue( null, 'canSee', (int) $permissions['see'] );
+		$this->addTitleToResults( $title, null, $this->getResult() );
 	}
 
 	/**
