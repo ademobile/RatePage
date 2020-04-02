@@ -38,6 +38,7 @@ class SpecialRatePageContests extends SpecialPage {
 		$this->setHeaders();
 		$this->addHelpLink( 'Extension:RatePage' );
 		$out->enableOOUI();
+		$out->addModules( 'ext.ratePage.contests' );
 
 		$this->checkPermissions();
 

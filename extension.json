@@ -99,6 +99,15 @@
 		"desktop",
 		"mobile"
 	  ]
+	},
+	"ext.ratePage.contests": {
+	  "styles": [
+		"ext.ratePage.contests.less"
+	  ],
+	  "targets": [
+		"desktop",
+		"mobile"
+	  ]
 	}
   },
   "Hooks": {
