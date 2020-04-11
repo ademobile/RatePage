@@ -23,6 +23,20 @@ class RatePageHooks {
 		return true;
 	}
 
+	/**
+	 * Load an additional class if MMV is present.
+	 */
+	public static function onRegistration() : void {
+		if ( ExtensionRegistry::getInstance()->isLoaded( 'MultimediaViewer' ) ) {
+			global $wgAutoloadClasses;
+			$wgAutoloadClasses['RatePageMmvHooks'] = __DIR__ . '/MultimediaViewer/RatePageMmvHooks.php';
+		}
+	}
+
+	/**
+	 * @param OutputPage $out
+	 * @param Skin $skin
+	 */
 	public static function onBeforePageDisplay( OutputPage $out, Skin $skin ) {
 		global $wgRPRatingAllowedNamespaces;
 		global $wgRPRatingPageBlacklist;

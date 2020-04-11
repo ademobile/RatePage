@@ -1,140 +1,141 @@
 {
-  "name": "RatePage",
-  "author": [
-	"Ostrzyciel",
-	"Polskacafe"
-  ],
-  "license-name": "GPL-2.0-or-later",
-  "version": "2.0.0",
-  "namemsg": "ratePage",
-  "descriptionmsg": "ratePage-desc",
-  "url": "https://www.mediawiki.org/wiki/Extension:RatePage",
-  "manifest_version": 1,
-  "MessagesDirs": {
-	"RatePage": [ "i18n" ]
-  },
-  "config": {
-	"RPRatingAllowedNamespaces": null,
-	"RPRatingPageBlacklist": [],
-	"RPSidebarPosition": 2,
-	"RPRatingMin": 1,
-	"RPRatingMax": 5,
-	"RPFrontendEnabled": true,
-	"RPAddSidebarSection": true
-  },
-  "GroupPermissions": {
-	"*": {
-	  "ratepage-contests-view-list": true
+	"name": "RatePage",
+	"author": [
+		"Ostrzyciel",
+		"Polskacafe"
+	],
+	"license-name": "GPL-2.0-or-later",
+	"version": "2.0.0",
+	"namemsg": "ratePage",
+	"descriptionmsg": "ratePage-desc",
+	"url": "https://www.mediawiki.org/wiki/Extension:RatePage",
+	"manifest_version": 1,
+	"MessagesDirs": {
+		"RatePage": [ "i18n" ]
 	},
-	"sysop": {
-	  "ratepage-contests-view-details": true,
-	  "ratepage-contests-edit": true
+	"config": {
+		"RPRatingAllowedNamespaces": null,
+		"RPRatingPageBlacklist": [],
+		"RPSidebarPosition": 2,
+		"RPRatingMin": 1,
+		"RPRatingMax": 5,
+		"RPFrontendEnabled": true,
+		"RPAddSidebarSection": true
 	},
-	"bureaucrat": {
-	  "ratepage-contests-clear": true
-	}
-  },
-  "AutoloadClasses": {
-	"RatePageRating": "includes/RatePageRating.php",
-	"RatePageHooks": "includes/RatePageHooks.php",
-	"AddMissingContests": "maintenance/addMissingContests.php",
-	"SpecialRatePageContests": "includes/specials/SpecialRatePageContests.php",
-	"ContestsPager": "includes/pagers/ContestsPager.php",
-	"ContestResultsPager": "includes/pagers/ContestResultsPager.php",
-	"RatePageContestDB": "includes/RatePageContestDB.php",
-	"RatePageRights": "includes/RatePageRights.php",
-	"RatePageContestLogFormatter": "includes/RatePageContestLogFormatter.php",
+	"GroupPermissions": {
+		"*": {
+			"ratepage-contests-view-list": true
+		},
+		"sysop": {
+			"ratepage-contests-view-details": true,
+			"ratepage-contests-edit": true
+		},
+		"bureaucrat": {
+			"ratepage-contests-clear": true
+		}
+	},
+	"AutoloadClasses": {
+		"RatePageRating": "includes/RatePageRating.php",
+		"RatePageHooks": "includes/RatePageHooks.php",
+		"AddMissingContests": "maintenance/addMissingContests.php",
+		"SpecialRatePageContests": "includes/specials/SpecialRatePageContests.php",
+		"ContestsPager": "includes/pagers/ContestsPager.php",
+		"ContestResultsPager": "includes/pagers/ContestResultsPager.php",
+		"RatePageContestDB": "includes/RatePageContestDB.php",
+		"RatePageRights": "includes/RatePageRights.php",
+		"RatePageContestLogFormatter": "includes/RatePageContestLogFormatter.php",
 
-	"RatePageApiTrait": "includes/api/RatePageApiTrait.php",
-	"ApiQueryPageRatingProp": "includes/api/ApiQueryPageRatingProp.php",
-	"ApiRatePage": "includes/api/ApiRatePage.php"
-  },
-  "ExtensionMessagesFiles": {
-	"RatePageMagic": "RatePage.magic.php",
-	"RatePageAlias": "RatePage.alias.php"
-  },
-  "ResourceFileModulePaths": {
-	"localBasePath": "modules",
-	"remoteExtPath": "RatePage/modules"
-  },
-  "ResourceModules": {
-	"ext.ratePage": {
-	  "scripts": [
-		"ext.ratePage.js"
-	  ],
-	  "styles": [
-		"ext.ratePage.less"
-	  ],
-	  "skinStyles": {
-		"timeless": [
-		  "ext.ratePage.timeless.less"
-		],
-		"monobook": [
-		  "ext.ratePage.monobook.less"
-		],
-		"minerva": [
-		  "ext.ratePage.minerva.less"
-		]
-	  },
-	  "messages": [
-		"ratePage",
-		"ratePage-desc",
-		"ratePage-vote-error",
-		"ratePage-vote-title",
-		"ratePage-vote-info",
-		"ratePage-vote-average-info",
-		"ratePage-caption-1",
-		"ratePage-caption-2",
-		"ratePage-caption-3",
-		"ratePage-caption-4",
-		"ratePage-caption-5",
-		"ratePage-prompt",
-		"ratePage-vote-cannot-vote",
-		"ratePage-vote-cannot-see"
-	  ],
-	  "dependencies": [
-		"mediawiki.api"
-	  ],
-	  "targets": [
-		"desktop",
-		"mobile"
-	  ]
+		"RatePageApiTrait": "includes/api/RatePageApiTrait.php",
+		"ApiQueryPageRatingProp": "includes/api/ApiQueryPageRatingProp.php",
+		"ApiRatePage": "includes/api/ApiRatePage.php"
 	},
-	"ext.ratePage.contests": {
-	  "styles": [
-		"ext.ratePage.contests.less"
-	  ],
-	  "targets": [
-		"desktop",
-		"mobile"
-	  ]
-	}
-  },
-  "Hooks": {
-	"ResourceLoaderTestModules": "RatePageHooks::onResourceLoaderTestModules",
-	"BeforePageDisplay": "RatePageHooks::onBeforePageDisplay",
-	"LoadExtensionSchemaUpdates": "RatePageHooks::onLoadExtensionSchemaUpdates",
-	"SkinBuildSidebar": "RatePageHooks::onSkinBuildSidebar",
-	"ParserFirstCallInit": "RatePageHooks::onParserFirstCallInit"
-  },
-  "SpecialPages": {
-	"RatePageContests": "SpecialRatePageContests"
-  },
-  "APIModules": {
-	"ratepage": "ApiRatePage"
-  },
-  "APIPropModules": {
-	"pagerating": "ApiQueryPageRatingProp"
-  },
-  "LogTypes": [ "ratepage-contest" ],
-  "LogNames": {
-	"ratepage-contest": "ratePage-contest-log"
-  },
-  "LogHeaders": {
-	"ratepage-contest": "ratePage-contest-log-header"
-  },
-  "LogActionsHandlers": {
-	"ratepage-contest/*": "RatePageContestLogFormatter"
-  },
-  "type": "other"
+	"ExtensionMessagesFiles": {
+		"RatePageMagic": "RatePage.magic.php",
+		"RatePageAlias": "RatePage.alias.php"
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "modules",
+		"remoteExtPath": "RatePage/modules"
+	},
+	"ResourceModules": {
+		"ext.ratePage": {
+			"scripts": [
+				"ext.ratePage.js"
+			],
+			"styles": [
+				"ext.ratePage.less"
+			],
+			"skinStyles": {
+				"timeless": [
+					"ext.ratePage.timeless.less"
+				],
+				"monobook": [
+					"ext.ratePage.monobook.less"
+				],
+				"minerva": [
+					"ext.ratePage.minerva.less"
+				]
+			},
+			"messages": [
+				"ratePage",
+				"ratePage-desc",
+				"ratePage-vote-error",
+				"ratePage-vote-title",
+				"ratePage-vote-info",
+				"ratePage-vote-average-info",
+				"ratePage-caption-1",
+				"ratePage-caption-2",
+				"ratePage-caption-3",
+				"ratePage-caption-4",
+				"ratePage-caption-5",
+				"ratePage-prompt",
+				"ratePage-vote-cannot-vote",
+				"ratePage-vote-cannot-see"
+			],
+			"dependencies": [
+				"mediawiki.api"
+			],
+			"targets": [
+				"desktop",
+				"mobile"
+			]
+		},
+		"ext.ratePage.contests": {
+			"styles": [
+				"ext.ratePage.contests.less"
+			],
+			"targets": [
+				"desktop",
+				"mobile"
+			]
+		}
+	},
+	"Hooks": {
+		"ResourceLoaderTestModules": "RatePageHooks::onResourceLoaderTestModules",
+		"BeforePageDisplay": "RatePageHooks::onBeforePageDisplay",
+		"LoadExtensionSchemaUpdates": "RatePageHooks::onLoadExtensionSchemaUpdates",
+		"SkinBuildSidebar": "RatePageHooks::onSkinBuildSidebar",
+		"ParserFirstCallInit": "RatePageHooks::onParserFirstCallInit"
+	},
+	"SpecialPages": {
+		"RatePageContests": "SpecialRatePageContests"
+	},
+	"APIModules": {
+		"ratepage": "ApiRatePage"
+	},
+	"APIPropModules": {
+		"pagerating": "ApiQueryPageRatingProp"
+	},
+	"LogTypes": [ "ratepage-contest" ],
+	"LogNames": {
+		"ratepage-contest": "ratePage-contest-log"
+	},
+	"LogHeaders": {
+		"ratepage-contest": "ratePage-contest-log-header"
+	},
+	"LogActionsHandlers": {
+		"ratepage-contest/*": "RatePageContestLogFormatter"
+	},
+	"type": "other",
+	"callback": "RatePageHooks::onRegistration"
 }
