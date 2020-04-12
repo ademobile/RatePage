@@ -144,7 +144,7 @@ class RatePageHooks {
 			return self::renderError( wfMessage( 'ratePage-no-such-contest', $contest )->escaped(), $parser );
 		}
 
-		return '<div class="ratepage-embed" id="' . $title->getArticleID() . 'c' . $contest .
+		return '<div class="ratepage-embed" data-page-id="' . $title->getArticleID() . '" data-contest="' . $contest .
 			'" style="width: ' . $width .
 			';"></div>';
 	}

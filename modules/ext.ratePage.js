@@ -2,7 +2,7 @@
  * ratePage stars
  * tested on minerva, timeless, vector and monobook
  **/
-var RatePage = function() {
+var RatePage = function () {
 	var self = this;
 
 	/**
@@ -79,10 +79,9 @@ var RatePage = function() {
 	 * @param canVote
 	 * @param canSee
 	 * @param isNew
-	 * @param pageId
-	 * @param contest
+	 * @param parent
 	 */
-	self.updateStars = function ( average, vCount, userVote, canVote, canSee, isNew, pageId, contest ) {
+	self.updateStars = function ( average, vCount, userVote, canVote, canSee, isNew, parent ) {
 		function typeForLastStar( f2 ) {
 			if ( f2 < 0.05 ) {
 				return 'ratingstar-plain';
@@ -95,33 +94,26 @@ var RatePage = function() {
 			}
 		}
 
-		var parent;
-		if ( !pageId ) {
-			if ( mw.config.get( 'skin' ) === "minerva" ) {
-				parent = $( '.footer-ratingstars' );
-			} else {
-				parent = $( '#p-ratePage-vote-title' );
-			}
-		} else {
-			parent = $( "div.ratepage-embed#" + pageId + "c" + contest );
+		if ( !parent.attr( 'data-page-id' ) ) {
+			parent = parent.parent();
 		}
 
 		if ( canVote ) {
-			parent.find( '#ratingsinfo-yourvote' ).text( mw.message( 'ratePage-prompt' ).text() );
+			parent.find( '.ratingsinfo-yourvote' ).text( mw.message( 'ratePage-prompt' ).text() );
 		} else {
-			parent.find( '#ratingsinfo-yourvote' ).text( mw.message( 'ratePage-vote-cannot-vote' ).text() );
+			parent.find( '.ratingsinfo-yourvote' ).text( mw.message( 'ratePage-vote-cannot-vote' ).text() );
 		}
 
 		if ( ( userVote && userVote !== -1 ) || ( !canVote && canSee ) ) {
 			if ( userVote && userVote !== -1 ) {
-				parent.find( '#ratingsinfo-yourvote' ).text( mw.message( 'ratePage-vote-info', userVote.toString() ).text() );
+				parent.find( '.ratingsinfo-yourvote' ).text( mw.message( 'ratePage-vote-info', userVote.toString() ).text() );
 			}
 
 			if ( !average ) {
 				if ( canSee ) {
-					parent.find( '#ratingsinfo-avg' ).text( "" );
+					parent.find( '.ratingsinfo-avg' ).text( "" );
 				} else {
-					parent.find( '#ratingsinfo-avg' ).text( mw.message( 'ratePage-vote-cannot-see' ) );
+					parent.find( '.ratingsinfo-avg' ).text( mw.message( 'ratePage-vote-cannot-see' ) );
 				}
 
 				for ( var i = 1; i <= 5; i++ ) {
@@ -136,7 +128,7 @@ var RatePage = function() {
 					}
 				}
 			} else {
-				parent.find( '#ratingsinfo-avg' ).text( mw.message( 'ratePage-vote-average-info', average.toFixed( 2 ), vCount.toString() ).text() );
+				parent.find( '.ratingsinfo-avg' ).text( mw.message( 'ratePage-vote-average-info', average.toFixed( 2 ), vCount.toString() ).text() );
 
 				var f1 = parseInt( average.toFixed( 1 ).slice( 0, -1 ).replace( '.', '' ) );
 				for ( i = 1; i <= 5; i++ ) {
@@ -164,18 +156,19 @@ var RatePage = function() {
 			var stars = parent.find( '.ratingstar' );
 			stars.click( function () {
 				var answer = $( this ).attr( 'data-ratingstar-no' );
+				var p = $( this ).parent();
+				var pageId = p.attr( 'data-page-id' );
 
-				if ( !$( this ).attr( 'page-id' ) ) {
+				if ( !pageId ) {
 					self.ratePage( mw.config.get( 'wgArticleId' ), '', answer,
 						function ( avg, voteCount, userVote, canVote, canSee ) {
-							self.updateStars( avg, voteCount, userVote, canVote, canSee, false );
+							self.updateStars( avg, voteCount, userVote, canVote, canSee, false, p );
 						} );
 				} else {
-					var pageId = $( this ).attr( 'page-id' );
-					var contest = $( this ).attr( 'contest' );
+					var contest = p.attr( 'data-contest' );
 					self.ratePage( pageId, contest, answer,
 						function ( avg, voteCount, userVote, canVote, canSee ) {
-							self.updateStars( avg, voteCount, userVote, canVote, canSee, false, pageId, contest );
+							self.updateStars( avg, voteCount, userVote, canVote, canSee, false, p );
 						} );
 				}
 			} );
@@ -195,33 +188,38 @@ var RatePage = function() {
 	};
 
 	/**
+	 * Initialize an embedded widget.
+	 * @param stars
+	 * @param starMap
+	 */
+	self.initializeTag = function ( stars, starMap ) {
+		var pageId = stars.attr( 'data-page-id' );
+		var contest = stars.attr( 'data-contest' );
+		for ( var i = 1; i <= 5; i++ ) {
+			stars.append( '<div class="ratingstar ratingstar-embed ratingstar-plain" title="' +
+				mw.message( 'ratePage-caption-' + i.toString() ).text() +
+				'" data-ratingstar-no="' + i.toString() +
+				'"></div>'
+			);
+		}
+		stars.append( '<div class="ratingsinfo-embed"><div class="ratingsinfo-yourvote"></div><div class="ratingsinfo-avg"></div></div>' );
+
+		if ( !starMap[contest] ) starMap[contest] = {};
+		starMap[contest][pageId] = function ( avg, voteCount, userVote, canVote, canSee ) {
+			self.updateStars( avg, voteCount, userVote, canVote, canSee, true, stars );
+		};
+	};
+
+	/**
 	 * Initialize the sidebar widget and embedded rating widgets.
 	 */
 	self.initialize = function () {
 		// a map for batch requesting
 		var starMap = {};
 
-		/* now process all <ratepage> tags */
+		/* process all embedded widgets */
 		$( 'div.ratepage-embed' ).each( function () {
-			var stars = $( this );
-			var id = stars.attr( 'id' );
-			var pageId = id.slice( 0, id.indexOf( 'c' ) );
-			var contest = id.slice( id.indexOf( 'c' ) + 1 );
-			for ( var i = 1; i <= 5; i++ ) {
-				stars.append( '<div class="ratingstar ratingstar-embed ratingstar-plain" title="' +
-					mw.message( 'ratePage-caption-' + i.toString() ).text() +
-					'" data-ratingstar-no="' + i.toString() +
-					'" page-id="' + pageId +
-					'" contest="' + contest +
-					'"></div>'
-				);
-			}
-			stars.append( '<div class="ratingsinfo-embed"><div id="ratingsinfo-yourvote"></div><div id="ratingsinfo-avg"></div></div>' );
-
-			if ( !starMap[contest] ) starMap[contest] = {};
-			starMap[contest][pageId] = function ( avg, voteCount, userVote, canVote, canSee ) {
-				self.updateStars( avg, voteCount, userVote, canVote, canSee, true, pageId, contest );
-			};
+			self.initializeTag( $( this ), starMap );
 		} );
 
 		/* and now the main rating widget in the sidebar or footer */
@@ -249,9 +247,9 @@ var RatePage = function() {
 			} else {
 				/* for timeless */
 				$( '#p-ratePage-vote-title' ).removeClass( "emptyPortlet" );
-				$( '#p-ratePage-vote-title > div' ).append( '<div id="ratingstars" />' );
+				var stars = $( '<div id="ratingstars" />' );
+				$( '#p-ratePage-vote-title > div' ).append( stars );
 
-				var stars = $( "#ratingstars" );
 				for ( var i = 1; i <= 5; i++ ) {
 					stars.append( '<div class="ratingstar ratingstar-desktop ratingstar-plain" title="' +
 						mw.message( 'ratePage-caption-' + i.toString() ).text() +
@@ -259,12 +257,12 @@ var RatePage = function() {
 						'"></div>'
 					);
 				}
-				stars.after( '<div class="ratingsinfo-desktop"><div id="ratingsinfo-yourvote"></div><div id="ratingsinfo-avg"></div></div>' );
+				stars.after( '<div class="ratingsinfo-desktop"><div class="ratingsinfo-yourvote"></div><div class="ratingsinfo-avg"></div></div>' );
 			}
 
 			if ( !starMap[''] ) starMap[''] = {};
 			starMap[''][mw.config.get( 'wgArticleId' )] = function ( avg, voteCount, userVote, canVote, canSee ) {
-				self.updateStars( avg, voteCount, userVote, canVote, canSee, true );
+				self.updateStars( avg, voteCount, userVote, canVote, canSee, true, stars );
 			}
 		}
 
