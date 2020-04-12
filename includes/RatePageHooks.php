@@ -44,8 +44,16 @@ class RatePageHooks {
 
 		$out->addJsConfigVars( [ 'wgRPRatingAllowedNamespaces' => $wgRPRatingAllowedNamespaces, 'wgRPRatingPageBlacklist' => $wgRPRatingPageBlacklist ] );
 
-		if ( $wgRPFrontendEnabled ) {
-			$out->addModules( 'ext.ratePage' );
+		if ( !$wgRPFrontendEnabled ) {
+			return;
+		}
+
+		$out->addModules( 'ext.ratePage' );
+
+		if ( class_exists( 'RatePageMmvHooks' ) ) {
+			if ( RatePageMmvHooks::isMmvEnabled( $out->getUser() ) ) {
+				$out->addModules( 'ext.ratePage.mmv' );
+			}
 		}
 	}
 

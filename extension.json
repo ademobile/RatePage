@@ -108,6 +108,17 @@
 				"desktop",
 				"mobile"
 			]
+		},
+		"ext.ratePage.mmv": {
+			"scripts": [
+				"ext.ratePage.mmv.js"
+			],
+			"dependencies": [
+				"ext.ratePage"
+			],
+			"targets": [
+				"desktop"
+			]
 		}
 	},
 	"Hooks": {
