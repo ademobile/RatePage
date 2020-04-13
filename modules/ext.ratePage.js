@@ -239,8 +239,10 @@ mw.RatePage = function () {
 			mw.config.get( 'wgRevisionId' ) !== 0 ) {
 
 			/* add main rating stars (in sidebar or footer) */
+			var stars;
+
 			if ( mw.config.get( 'skin' ) === "minerva" ) {
-				var htmlCode = '<div class="post-content footer-element active footer-ratingstars" style="margin-top: 22px"> \
+				stars = $( '<div class="post-content footer-element active footer-ratingstars" style="margin-top: 22px"> \
 			<h3>' + mw.message( "ratePage-vote-title" ).text() + '</h3> \
 			<div class="pageRatingStars"> \
 			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="1"></div> \
@@ -248,13 +250,13 @@ mw.RatePage = function () {
 			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="3"></div> \
 			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="4"></div> \
 			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="5"></div> \
-			</div><span class="ratingsinfo-mobile"><span id="ratingsinfo-yourvote"></span> <span id="ratingsinfo-avg"></span></span></div>';
+			</div><span class="ratingsinfo-mobile"><span class="ratingsinfo-yourvote"></span> <span class="ratingsinfo-avg"></span></span></div>' );
 
-				$( '.last-modified-bar' ).after( htmlCode );
+				$( '.last-modified-bar' ).after( stars );
 			} else {
 				/* for timeless */
 				$( '#p-ratePage-vote-title' ).removeClass( "emptyPortlet" );
-				var stars = $( '<div id="ratingstars" />' );
+				stars = $( '<div id="ratingstars" />' );
 				$( '#p-ratePage-vote-title > div' ).append( stars );
 
 				for ( var i = 1; i <= 5; i++ ) {
