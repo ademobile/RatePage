@@ -23,15 +23,38 @@ class RatePageHooks {
 		return true;
 	}
 
+	/**
+	 * Load an additional class if MMV is present.
+	 */
+	public static function onRegistration() : void {
+		if ( ExtensionRegistry::getInstance()->isLoaded( 'MultimediaViewer' ) ) {
+			global $wgAutoloadClasses;
+			$wgAutoloadClasses['RatePageMmvHooks'] = __DIR__ . '/MultimediaViewer/RatePageMmvHooks.php';
+		}
+	}
+
+	/**
+	 * @param OutputPage $out
+	 * @param Skin $skin
+	 */
 	public static function onBeforePageDisplay( OutputPage $out, Skin $skin ) {
 		global $wgRPRatingAllowedNamespaces;
 		global $wgRPRatingPageBlacklist;
 		global $wgRPFrontendEnabled;
+		global $wgRPUseMMVModule;
 
 		$out->addJsConfigVars( [ 'wgRPRatingAllowedNamespaces' => $wgRPRatingAllowedNamespaces, 'wgRPRatingPageBlacklist' => $wgRPRatingPageBlacklist ] );
 
-		if ( $wgRPFrontendEnabled ) {
-			$out->addModules( 'ext.ratePage' );
+		if ( !$wgRPFrontendEnabled ) {
+			return;
+		}
+
+		$out->addModules( 'ext.ratePage' );
+
+		if ( $wgRPUseMMVModule && class_exists( 'RatePageMmvHooks' ) ) {
+			if ( RatePageMmvHooks::isMmvEnabled( $out->getUser() ) ) {
+				$out->addModules( 'ext.ratePage.mmv' );
+			}
 		}
 	}
 
@@ -122,7 +145,7 @@ class RatePageHooks {
 			return self::renderError( wfMessage( 'ratePage-no-such-contest', $contest )->escaped(), $parser );
 		}
 
-		return '<div class="ratepage-embed" id="' . $title->getArticleID() . 'c' . $contest .
+		return '<div class="ratepage-embed" data-page-id="' . $title->getArticleID() . '" data-contest="' . $contest .
 			'" style="width: ' . $width .
 			';"></div>';
 	}
