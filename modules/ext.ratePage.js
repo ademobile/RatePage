@@ -2,8 +2,8 @@
  * ratePage stars
  * tested on minerva, timeless, vector and monobook
  **/
-var RatePage = function () {
-	var self = this;
+mw.RatePage = function () {
+	var self = {};
 
 	/**
 	 * Rate a page.
@@ -187,6 +187,13 @@ var RatePage = function () {
 		}
 	};
 
+	self.submitStarMap = function ( starMap ) {
+		// get data in batches
+		Object.keys( starMap ).forEach( function ( contest ) {
+			self.getRating( starMap[contest], contest );
+		} );
+	};
+
 	/**
 	 * Initialize an embedded widget.
 	 * @param stars
@@ -194,7 +201,7 @@ var RatePage = function () {
 	 */
 	self.initializeTag = function ( stars, starMap ) {
 		var pageId = stars.attr( 'data-page-id' );
-		var contest = stars.attr( 'data-contest' );
+		var contest = stars.attr( 'data-contest' ) || '';
 		for ( var i = 1; i <= 5; i++ ) {
 			stars.append( '<div class="ratingstar ratingstar-embed ratingstar-plain" title="' +
 				mw.message( 'ratePage-caption-' + i.toString() ).text() +
@@ -263,16 +270,13 @@ var RatePage = function () {
 			if ( !starMap[''] ) starMap[''] = {};
 			starMap[''][mw.config.get( 'wgArticleId' )] = function ( avg, voteCount, userVote, canVote, canSee ) {
 				self.updateStars( avg, voteCount, userVote, canVote, canSee, true, stars );
-			}
-		}
+			};
 
-		// get data in batches
-		Object.keys( starMap ).forEach( function ( contest ) {
-			self.getRating( starMap[contest], contest );
-		} );
+			self.submitStarMap( starMap );
+		}
 	};
 
 	return self;
 }();
 
-$( document ).ready( RatePage.initialize() );
+$( document ).ready( mw.RatePage.initialize() );

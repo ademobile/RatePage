@@ -113,6 +113,9 @@
 			"scripts": [
 				"ext.ratePage.mmv.js"
 			],
+			"styles": [
+				"ext.ratePage.mmv.less"
+			],
 			"dependencies": [
 				"ext.ratePage"
 			],
