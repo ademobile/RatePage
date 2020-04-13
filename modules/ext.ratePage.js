@@ -271,9 +271,9 @@ mw.RatePage = function () {
 			starMap[''][mw.config.get( 'wgArticleId' )] = function ( avg, voteCount, userVote, canVote, canSee ) {
 				self.updateStars( avg, voteCount, userVote, canVote, canSee, true, stars );
 			};
-
-			self.submitStarMap( starMap );
 		}
+
+		self.submitStarMap( starMap );
 	};
 
 	return self;
