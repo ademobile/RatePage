@@ -20,7 +20,8 @@
 		"RPRatingMin": 1,
 		"RPRatingMax": 5,
 		"RPFrontendEnabled": true,
-		"RPAddSidebarSection": true
+		"RPAddSidebarSection": true,
+		"RPUseMMVModule": true
 	},
 	"GroupPermissions": {
 		"*": {
