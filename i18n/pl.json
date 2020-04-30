@@ -73,5 +73,6 @@
   "ratePage-no-such-contest": "Błąd: konkurs „$1” nie istnieje.",
   "ratePage-vote-cannot-vote": "Nie możesz głosować w tym konkursie",
   "ratePage-vote-cannot-see": "Nie możesz sprawdzić wyników tego konkursu",
-  "ratepagecontests": "Zarządzanie konkursami RatePage"
+  "ratepagecontests": "Zarządzanie konkursami RatePage",
+  "ratePage-deleted-page": "(usunięta strona)"
 }
