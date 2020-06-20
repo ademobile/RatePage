@@ -245,7 +245,7 @@ mw.RatePage = function () {
 			if ( skin === 'minerva' || mw.config.get( 'wgRPTarget' ) === 'mobile' ) {
 				console.log('xd');
 				stars = $( '<div class="post-content footer-element active footer-ratingstars" style="margin-top: 22px"> \
-					<h3>' + mw.message( "ratePage-vote-title" ).text() + '</h3> \
+					<h2>' + mw.message( "ratePage-vote-title" ).text() + '</h2> \
 					<div class="pageRatingStars"> \
 						<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="1"></div> \
 						<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="2"></div> \
