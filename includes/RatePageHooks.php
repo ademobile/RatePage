@@ -5,23 +5,10 @@
  *
  * @file
  * @ingroup Extensions
- * @license MIT
  */
 class RatePageHooks {
+	// TODO: get rid of all the globals, ugh
 	const PROP_NAME = 'page_views';
-
-	/**
-	 * Conditionally register the unit testing module for the ext.ratePage module
-	 * only if that module is loaded
-	 *
-	 * @param array $testModules The array of registered test modules
-	 * @param ResourceLoader $resourceLoader The reference to the resource loader
-	 * @return true
-	 */
-	public static function onResourceLoaderTestModules( array &$testModules, ResourceLoader &$resourceLoader ) {
-		$testModules['qunit']['ext.ratePage.tests'] = [ 'scripts' => [ 'tests/RatePage.test.js' ], 'dependencies' => [ 'ext.ratePage' ], 'localBasePath' => __DIR__, 'remoteExtPath' => 'RatePage', ];
-		return true;
-	}
 
 	/**
 	 * Load an additional class if MMV is present.
@@ -43,7 +30,12 @@ class RatePageHooks {
 		global $wgRPFrontendEnabled;
 		global $wgRPUseMMVModule;
 
-		$out->addJsConfigVars( [ 'wgRPRatingAllowedNamespaces' => $wgRPRatingAllowedNamespaces, 'wgRPRatingPageBlacklist' => $wgRPRatingPageBlacklist ] );
+		$out->addJsConfigVars( [
+			'wgRPRatingAllowedNamespaces' => $wgRPRatingAllowedNamespaces,
+			'wgRPRatingPageBlacklist' => $wgRPRatingPageBlacklist,
+			// why the hell is this not passed on to frontend by MF?!
+			'wgRPTarget' => $out->getTarget()
+		] );
 
 		if ( !$wgRPFrontendEnabled ) {
 			return;
@@ -76,6 +68,7 @@ class RatePageHooks {
 				$patchPath . 'upgrade-from-0.2-to-0.3.sql'
 			);
 
+			// TODO: remove the use of modifyTable()
 			$updater->modifyTable(
 				'ratepage_vote',
 				$patchPath . 'upgrade-from-0.3-to-1.0.sql',
@@ -101,8 +94,12 @@ class RatePageHooks {
 	public static function onSkinBuildSidebar( Skin $skin, &$bar ) {
 		global $wgRPAddSidebarSection, $wgRPSidebarPosition;
 
-		if ( !$wgRPAddSidebarSection || !RatePageRating::canPageBeRated( $skin->getTitle() ) )
+		if ( !$wgRPAddSidebarSection ||
+			!RatePageRating::canPageBeRated( $skin->getTitle() ) ||
+			$skin->getOutput()->getTarget() === 'mobile'
+		) {
 			return;
+		}
 
 		$query = $skin->getRequest()->getQueryValues();
 		if ( array_key_exists('action', $query ) && $query['action'] != 'view' )
