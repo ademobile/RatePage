@@ -1,7 +1,5 @@
 <?php
 
-use MediaWiki\MediaWikiServices;
-
 class ApiQueryPageRatingProp extends ApiQueryBase {
 	use RatePageApiTrait;
 

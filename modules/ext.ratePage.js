@@ -241,18 +241,32 @@ mw.RatePage = function () {
 			/* add main rating stars (in sidebar or footer) */
 			var stars;
 
-			if ( mw.config.get( 'skin' ) === "minerva" ) {
+			var skin = mw.config.get( 'skin' );
+			if ( skin === 'minerva' || mw.config.get( 'wgRPTarget' ) === 'mobile' ) {
+				console.log('xd');
 				stars = $( '<div class="post-content footer-element active footer-ratingstars" style="margin-top: 22px"> \
-			<h3>' + mw.message( "ratePage-vote-title" ).text() + '</h3> \
-			<div class="pageRatingStars"> \
-			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="1"></div> \
-			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="2"></div> \
-			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="3"></div> \
-			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="4"></div> \
-			<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="5"></div> \
-			</div><span class="ratingsinfo-mobile"><span class="ratingsinfo-yourvote"></span> <span class="ratingsinfo-avg"></span></span></div>' );
+					<h2>' + mw.message( "ratePage-vote-title" ).text() + '</h2> \
+					<div class="pageRatingStars"> \
+						<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="1"></div> \
+						<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="2"></div> \
+						<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="3"></div> \
+						<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="4"></div> \
+						<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="5"></div> \
+					</div> \
+					<span class="ratingsinfo-mobile"><span class="ratingsinfo-yourvote"></span> <span class="ratingsinfo-avg"></span></span></div>'
+				);
+				if ( skin === 'minerva' ) {
+					$( '.last-modified-bar' ).after( stars );
+				} else if ( skin === 'timeless' ) {
+					var afterContent = $( '#mw-data-after-content' );
+					if ( afterContent.length === 1 ) {
+						afterContent.prepend( stars );
+					} else {
+						afterContent = $( '<div id="mw-data-after-content" />' ).append( stars );
+						$( '#content-bottom-stuff' ).append( afterContent );
+					}
 
-				$( '.last-modified-bar' ).after( stars );
+				}
 			} else {
 				/* for timeless */
 				$( '#p-ratePage-vote-title' ).removeClass( "emptyPortlet" );

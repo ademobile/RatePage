@@ -5,7 +5,7 @@
 		"Polskacafe"
 	],
 	"license-name": "GPL-2.0-or-later",
-	"version": "2.1.0",
+	"version": "2.2.0",
 	"namemsg": "ratePage",
 	"descriptionmsg": "ratePage-desc",
 	"url": "https://www.mediawiki.org/wiki/Extension:RatePage",
@@ -126,7 +126,6 @@
 		}
 	},
 	"Hooks": {
-		"ResourceLoaderTestModules": "RatePageHooks::onResourceLoaderTestModules",
 		"BeforePageDisplay": "RatePageHooks::onBeforePageDisplay",
 		"LoadExtensionSchemaUpdates": "RatePageHooks::onLoadExtensionSchemaUpdates",
 		"SkinBuildSidebar": "RatePageHooks::onSkinBuildSidebar",

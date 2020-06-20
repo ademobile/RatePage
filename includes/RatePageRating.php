@@ -5,7 +5,6 @@
  *
  * @file
  * @ingroup Extensions
- * @license MIT
  */
 class RatePageRating {
 
