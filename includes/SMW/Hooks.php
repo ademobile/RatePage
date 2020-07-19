@@ -3,6 +3,7 @@
 namespace RatePage\SMW;
 
 use MediaWiki\MediaWikiServices;
+use RatePage\Rating;
 use RatePage\SMW\PropertyAnnotator\RatingAnnotatorFactory;
 use SMW\PropertyRegistry;
 use SMW\SemanticData;
@@ -82,7 +83,7 @@ class Hooks {
 	public static function onBeforeDataUpdateComplete( Store $store, SemanticData $semanticData ) {
 		$config = MediaWikiServices::getInstance()->getMainConfig();
 		$title = $semanticData->getSubject()->getTitle();
-		if ( $title === null ) {
+		if ( $title === null || !Rating::canPageBeRated( $title ) ) {
 			return true;
 		}
 
