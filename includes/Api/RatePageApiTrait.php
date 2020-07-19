@@ -1,7 +1,19 @@
 <?php
 
+namespace RatePage\Api;
+
+use ApiBase;
+use ApiResult;
+use ApiUsageException;
+use IContextSource;
+use MWException;
+use RatePage\Rights;
+use RatePage\Rating;
+use Title;
+use User;
+
 /**
- * Trait RatePageApiTrait
+ * Trait RatePage\Api\RatePageApiTrait
  * Common code for both API endpoints.
  */
 trait RatePageApiTrait {
@@ -32,9 +44,11 @@ trait RatePageApiTrait {
 
 	/**
 	 * Processes the contest parameter and checks user permissions.
+	 *
 	 * @param array $params
 	 * @param IContextSource $context
 	 * @param ApiBase $parent
+	 *
 	 * @throws ApiUsageException
 	 * @throws MWException
 	 */
@@ -48,10 +62,8 @@ trait RatePageApiTrait {
 		}
 
 		$this->contest = '';
-		$this->permissions = [
-			'vote' => true,
-			'see' => true
-		];
+		$this->permissions = [ 'vote' => true,
+			'see' => true ];
 
 		if ( isset( $params['contest'] ) ) {
 			$this->contest = trim( $params['contest'] );
@@ -63,27 +75,40 @@ trait RatePageApiTrait {
 					$parent->dieWithError( 'Contest ID must be alphanumeric, no other characters are allowed' );
 				}
 
-				$this->permissions = RatePageRights::checkUserPermissionsOnContest( $this->contest, $this->user );
+				$this->permissions = Rights::checkUserPermissionsOnContest( $this->contest,
+					$this->user );
 			}
 		}
 	}
 
 	/**
 	 * Adds a title to API results given a path.
+	 *
 	 * @param Title $title
 	 * @param array|null $path
 	 * @param ApiResult $result
 	 */
 	protected function addTitleToResults( Title $title, ?array $path, ApiResult $result ) {
-		$userVote = RatePageRating::getUserVote( $title, $this->userName, $this->contest );
+		$userVote = Rating::getUserVote( $title,
+			$this->userName,
+			$this->contest );
 
 		if ( $this->permissions['see'] ) {
-			$pageRating = RatePageRating::getPageRating( $title, $this->contest );
-			$result->addValue( $path, "pageRating", $pageRating );
+			$pageRating = Rating::getPageRating( $title,
+				$this->contest );
+			$result->addValue( $path,
+				"pageRating",
+				$pageRating );
 		}
 
-		$result->addValue( $path, "userVote", $userVote );
-		$result->addValue( $path, 'canVote', (int) $this->permissions['vote'] );
-		$result->addValue( $path, 'canSee', (int) $this->permissions['see'] );
+		$result->addValue( $path,
+			"userVote",
+			$userVote );
+		$result->addValue( $path,
+			'canVote',
+			(int) $this->permissions['vote'] );
+		$result->addValue( $path,
+			'canSee',
+			(int) $this->permissions['see'] );
 	}
 }

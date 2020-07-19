@@ -1,6 +1,13 @@
 <?php
 
+namespace RatePage\Pager;
+
+use IContextSource;
 use MediaWiki\Linker\LinkRenderer;
+use Message;
+use MWException;
+use TablePager;
+use Title;
 
 class ContestResultsPager extends TablePager {
 
@@ -14,7 +21,8 @@ class ContestResultsPager extends TablePager {
 		$this->ratingMin = $this->getConfig()->get( 'RPRatingMin' );
 		$this->ratingMax = $this->getConfig()->get( 'RPRatingMax' );
 
-		parent::__construct( $context, $linkRenderer );
+		parent::__construct( $context,
+			$linkRenderer );
 	}
 
 	/**
@@ -29,26 +37,15 @@ class ContestResultsPager extends TablePager {
 	 * @return array
 	 */
 	function getQueryInfo() {
-		$res = [
-			'tables' => [
-				'ratepage_vote'
-			],
-			'fields' => [
-				'rv_page_id',
+		$res = [ 'tables' => [ 'ratepage_vote' ],
+			'fields' => [ 'rv_page_id',
 				'ans_avg' => 'AVG(rv_answer)',
-				'ans_count' => 'COUNT(rv_answer)'
-			],
-			'conds' => [
-				'rv_contest' => $this->mContest
-			],
-			'options' => [
-				'GROUP BY' => 'rv_page_id'
-			]
-		];
+				'ans_count' => 'COUNT(rv_answer)' ],
+			'conds' => [ 'rv_contest' => $this->mContest ],
+			'options' => [ 'GROUP BY' => 'rv_page_id' ] ];
 
 		for ( $i = $this->ratingMin; $i <= $this->ratingMax; $i++ ) {
-			$res['fields']["ans_$i"] =
-				"sum(case when rv_answer = $i then 1 else 0 end)";
+			$res['fields']["ans_$i"] = "sum(case when rv_answer = $i then 1 else 0 end)";
 		}
 
 		return $res;
@@ -59,6 +56,7 @@ class ContestResultsPager extends TablePager {
 	 * otherwise
 	 *
 	 * @param string $field
+	 *
 	 * @return bool
 	 */
 	function isFieldSortable( $field ) {
@@ -76,11 +74,13 @@ class ContestResultsPager extends TablePager {
 	 *
 	 * @param string $name The database field name
 	 * @param string $value The value retrieved from the database
+	 *
 	 * @return Message|string
 	 * @throws MWException
 	 */
 	function formatValue( $name, $value ) {
-		if ( strpos( $name, 'ans_' ) === 0 ) {
+		if ( strpos( $name,
+				'ans_' ) === 0 ) {
 			return $this->getLanguage()->formatNum( $value );
 		}
 
@@ -90,7 +90,8 @@ class ContestResultsPager extends TablePager {
 			if ( $title ) {
 				return $this->linkRenderer->makeLink( $title );
 			} else {
-				return $this->msg( 'ratePage-deleted-page', $value );
+				return $this->msg( 'ratePage-deleted-page',
+					$value );
 			}
 		}
 
@@ -126,19 +127,17 @@ class ContestResultsPager extends TablePager {
 			return $headers;
 		}
 
-		$headers = [
-			'rv_page_id' => 'ratePage-results-list-page',
+		$headers = [ 'rv_page_id' => 'ratePage-results-list-page',
 			'ans_avg' => 'ratePage-results-list-avg',
-			'ans_count' => 'ratePage-results-list-count'
-		];
+			'ans_count' => 'ratePage-results-list-count' ];
 
 		foreach ( $headers as &$msg ) {
 			$msg = $this->msg( $msg )->text();
 		}
 
 		for ( $i = $this->ratingMin; $i <= $this->ratingMax; $i++ ) {
-			$headers["ans_$i"] =
-				$this->msg( 'ratePage-results-list-ans', $i )->text();
+			$headers["ans_$i"] = $this->msg( 'ratePage-results-list-ans',
+				$i )->text();
 		}
 
 		return $headers;

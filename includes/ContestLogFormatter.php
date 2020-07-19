@@ -1,5 +1,9 @@
 <?php
 
+namespace RatePage;
+use LogFormatter;
+use Message;
+
 /**
  * Some of this code is based on the AbuseFilter extension.
  * You can find the extension's code and list of authors here:
@@ -7,14 +11,14 @@
  *
  * AbuseFilter's code is licensed under GPLv2
  */
-
-class RatePageContestLogFormatter extends LogFormatter {
+class ContestLogFormatter extends LogFormatter {
 
 	/**
 	 * @return string
 	 */
 	protected function getMessageKey() {
 		$subtype = $this->entry->getSubtype();
+
 		return "logentry-ratepage-contest-$subtype";
 	}
 
@@ -30,13 +34,10 @@ class RatePageContestLogFormatter extends LogFormatter {
 		}
 
 		$params = [];
-		$params[3] = Message::rawParam(
-			$this->makePageLink(
-				$this->entry->getTarget(),
-				[],
-				$this->msg( 'ratePage-log-contest-formatter', $contestId )->escaped()
-			)
-		);
+		$params[3] = Message::rawParam( $this->makePageLink( $this->entry->getTarget(),
+			[],
+			$this->msg( 'ratePage-log-contest-formatter',
+				$contestId )->escaped() ) );
 
 		return $params;
 	}

@@ -1,19 +1,19 @@
 <?php
 
-class RatePageContestDB {
+namespace RatePage;
+use Exception;
+use IContextSource;
+use ManualLogEntry;
+use Title;
+
+class ContestDB {
 
 	public static function loadContest( $contest ) {
 		$dbr = wfGetDB( DB_REPLICA );
-		$contest = $dbr->selectRow(
-			[
-				'ratepage_contest',
-			],
+		$contest = $dbr->selectRow( [ 'ratepage_contest', ],
 			'*',
-			[
-				'rpc_id' => $contest,
-			],
-			__METHOD__
-		);
+			[ 'rpc_id' => $contest, ],
+			__METHOD__ );
 
 		return $contest;
 	}
@@ -22,23 +22,13 @@ class RatePageContestDB {
 		$votes = [];
 		$dbr = wfGetDB( DB_REPLICA );
 
-		$votesRes = $dbr->select(
-			[
-				'ratepage_vote'
-			],
-			[
-				'rv_page_id',
+		$votesRes = $dbr->select( [ 'ratepage_vote' ],
+			[ 'rv_page_id',
 				'rv_answer',
-				'answer_count' => 'COUNT(rv_user)'
-			],
-			[
-				'rv_contest' => $contest
-			],
+				'answer_count' => 'COUNT(rv_user)' ],
+			[ 'rv_contest' => $contest ],
 			__METHOD__,
-			[
-				'GROUP BY' => 'rv_page_id',
-			]
-		);
+			[ 'GROUP BY' => 'rv_page_id', ] );
 
 		if ( !empty( $votesRes ) ) {
 			foreach ( $votesRes as $res ) {
@@ -52,39 +42,31 @@ class RatePageContestDB {
 	public static function saveContest( $newRow, IContextSource $context ) {
 		$dbw = wfGetDB( DB_MASTER );
 
-		$data = [
-			'rpc_description' => $newRow->rpc_description ?? '',
+		$data = [ 'rpc_description' => $newRow->rpc_description ?? '',
 			'rpc_enabled' => $newRow->rpc_enabled ?? 0,
 			'rpc_allowed_to_vote' => $newRow->rpc_allowed_to_vote ?? '',
-			'rpc_allowed_to_see' => $newRow->rpc_allowed_to_see ?? '',
-		];
+			'rpc_allowed_to_see' => $newRow->rpc_allowed_to_see ?? '', ];
 
 		$id = $newRow->rpc_id;
 		$dbw->startAtomic( __METHOD__ );
 
 		try {
-			$res = $dbw->selectField(
-				'ratepage_contest',
+			$res = $dbw->selectField( 'ratepage_contest',
 				'rpc_id',
 				[ 'rpc_id' => $id ],
-				__METHOD__
-			);
+				__METHOD__ );
 
 			if ( !$res ) {
-				$dbw->insert(
-					'ratepage_contest',
+				$dbw->insert( 'ratepage_contest',
 					$data + [ 'rpc_id' => $id ],
-					__METHOD__
-				);
+					__METHOD__ );
 
 				$subtype = 'create';
 			} else {
-				$dbw->update(
-					'ratepage_contest',
+				$dbw->update( 'ratepage_contest',
 					$data,
 					[ 'rpc_id' => $id ],
-					__METHOD__
-				);
+					__METHOD__ );
 
 				$subtype = 'change';
 			}
@@ -95,16 +77,15 @@ class RatePageContestDB {
 			throw $exception;
 		}
 
-		$logEntry = new ManualLogEntry( 'ratepage-contest', $subtype );
+		$logEntry = new ManualLogEntry( 'ratepage-contest',
+			$subtype );
 		$logEntry->setPerformer( $context->getUser() );
 		$logEntry->setTarget( Title::newFromText( "Special:RatePageContests/$id" ) );
-		$logEntry->setParameters( [
-			'id' => $id,
+		$logEntry->setParameters( [ 'id' => $id,
 			'description' => $data['rpc_description'],
 			'enabled' => $data['rpc_enabled'],
 			'allowed_to_vote' => $data['rpc_allowed_to_vote'],
-			'allowed_to_see' => $data['rpc_allowed_to_see'],
-		] );
+			'allowed_to_see' => $data['rpc_allowed_to_see'], ] );
 		$logid = $logEntry->insert();
 		$logEntry->publish( $logid );
 	}
@@ -126,13 +107,9 @@ class RatePageContestDB {
 		}
 
 		$dbr = wfGetDB( DB_REPLICA );
-		$res = $dbr->selectField(
-			'ratepage_contest',
+		$res = $dbr->selectField( 'ratepage_contest',
 			'rpc_id',
-			[
-				'rpc_id' => $id
-			]
-		);
+			[ 'rpc_id' => $id ] );
 
 		return (bool) $res;
 	}

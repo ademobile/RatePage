@@ -74,5 +74,9 @@
   "ratePage-vote-cannot-vote": "You cannot vote in this contest",
   "ratePage-vote-cannot-see": "You cannot see the results of this contest",
   "ratepagecontests": "RatePage contests management",
-  "ratePage-deleted-page": "(deleted page)"
+  "ratePage-deleted-page": "(deleted page)",
+  "ratePage-property-average-alias": "Average rating",
+  "ratePage-property-count-alias": "Rating count",
+  "ratePage-property-average-description": "Average rating of this page.",
+  "ratePage-property-count-description": "The number of ratings of this page."
 }
