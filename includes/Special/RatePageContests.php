@@ -23,6 +23,7 @@ use RatePage\Pager\ContestsPager;
 use RatePage\Rights;
 use SpecialPage;
 use Status;
+use stdClass;
 use Title;
 use WebRequest;
 use Xml;
@@ -312,8 +313,11 @@ class RatePageContests extends SpecialPage {
 			return ContestDB::loadContest( $contest );
 		}
 
-		$textLoads = [ 'rpc_id' => 'wpContestId',
-			'rpc_description' => 'wpContestDescription' ];
+		$row = new stdClass();
+		$textLoads = [
+			'rpc_id' => 'wpContestId',
+			'rpc_description' => 'wpContestDescription'
+		];
 
 		foreach ( $textLoads as $col => $field ) {
 			if ( $col == 'rpc_id' && isset( $row->rpc_id ) ) {
@@ -321,7 +325,7 @@ class RatePageContests extends SpecialPage {
 				continue;
 			}
 
-			$row->$col = trim( $request->getVal( $field ) ?? '' );
+			$row->$col = trim( $request->getVal( $field, '' ) );
 		}
 
 		$row->rpc_enabled = $request->getCheck( 'wpContestEnabled' );
