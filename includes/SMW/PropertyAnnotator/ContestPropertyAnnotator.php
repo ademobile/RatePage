@@ -7,6 +7,7 @@ use SMW\DataValueFactory;
 use SMW\SemanticData;
 use SMW\Subobject;
 use SMWDIBlob;
+use SMWDIProperty;
 use Title;
 
 class ContestPropertyAnnotator extends PropertyAnnotator {
@@ -47,8 +48,9 @@ class ContestPropertyAnnotator extends PropertyAnnotator {
 		$subobject->setEmptyContainerForId( '_ratepage_' . $this->contestId );
 
 		$subData = $subobject->getSemanticData();
-		$subData->addPropertyValue(
-			Hooks::PROP_CONTEST_ID,
+		// For some crazy reason addPropertyValue glitches out completely here
+		$subData->addPropertyObjectValue(
+			new SMWDIProperty( Hooks::PROP_CONTEST_ID ),
 			new SMWDIBlob( $this->contestId )
 		);
 		foreach ( $this->annotators as $annotator ) {

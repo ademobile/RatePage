@@ -13,13 +13,11 @@ class Hooks {
 	// property ids
 	const PROP_RATING_AVERAGE = '__rp_average';
 	const PROP_RATING_COUNT = '__rp_count';
-	//const PROP_CONTEST_CONTAINER = '__rp_contest_cont';
 	const PROP_CONTEST_ID = '__rp_contest_id';
 
 	// canonical labels
 	const PROP_LABEL_RATING_AVERAGE = 'Average rating';
 	const PROP_LABEL_RATING_COUNT = 'Ratings count';
-	//const PROP_LABEL_CONTEST_CONTAINER = 'Has rating in a contest';
 	const PROP_LABEL_CONTEST_ID = 'RatePage contest identifier';
 
 	/**

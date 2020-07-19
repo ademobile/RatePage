@@ -1,9 +1,9 @@
 {
   "@metadata": {
-	"authors": [
-	  "Ostrzyciel",
-	  "Polskacafe"
-	]
+    "authors": [
+      "Ostrzyciel",
+      "Polskacafe"
+    ]
   },
   "ratePage": "The name of the extension",
   "ratePage-desc": "{{desc|name=RatePage|url=}}",
@@ -77,6 +77,8 @@
   "ratePage-deleted-page": "Substitute text for deleted pages in contest results view",
   "ratePage-property-average-alias": "Special SMW property alias",
   "ratePage-property-count-alias": "Special SMW property alias",
+  "ratePage-property-contest-id-alias": "Special SMW property alias",
   "ratePage-property-average-description": "Special SMW property description",
-  "ratePage-property-count-description": "Special SMW property description"
+  "ratePage-property-count-description": "Special SMW property description",
+  "ratePage-property-contest-id-description": "Special SMW property description"
 }
