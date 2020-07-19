@@ -13,10 +13,12 @@ class Hooks {
 	// property ids
 	const PROP_RATING_AVERAGE = '__rp_average';
 	const PROP_RATING_COUNT = '__rp_count';
+	const PROP_CONTEST_ID = '__rp_contest_id';
 
 	// canonical labels
 	const PROP_LABEL_RATING_AVERAGE = 'Average rating';
 	const PROP_LABEL_RATING_COUNT = 'Ratings count';
+	const PROP_LABEL_CONTEST_ID = 'RatePage contest identifier';
 
 	/**
 	 * Register custom SMW properties
@@ -27,8 +29,11 @@ class Hooks {
 		$config = MediaWikiServices::getInstance()->getMainConfig();
 		$definitions = [];
 
-		if ( $config->get( 'RPEnableSMWRatings' ) ) {
+		if ( $config->get( 'RPEnableSMWRatings' ) || $config->get( 'RPEnableSMWContests' ) ) {
 			$definitions += self::getRatingPropDefinitions();
+		}
+		if ( $config->get( 'RPEnableSMWContests' ) ) {
+			$definitions += self::getContestPropDefinitions();
 		}
 
 		foreach ( $definitions as $propertyId => $definition ) {
@@ -80,6 +85,19 @@ class Hooks {
 		];
 	}
 
+	private static function getContestPropDefinitions() {
+		return [
+			self::PROP_CONTEST_ID => [
+				'label' => self::PROP_LABEL_CONTEST_ID,
+				'type'  => '_txt',
+				'alias' => 'ratePage-property-contest-id-alias',
+				'description' => 'ratePage-property-contest-id-description',
+				'viewable' => true,
+				'annotable' => false
+			]
+		];
+	}
+
 	public static function onBeforeDataUpdateComplete( Store $store, SemanticData $semanticData ) {
 		$config = MediaWikiServices::getInstance()->getMainConfig();
 		$title = $semanticData->getSubject()->getTitle();
@@ -89,7 +107,16 @@ class Hooks {
 
 		$annotators = [];
 		if ( $config->get( 'RPEnableSMWRatings' ) ) {
-			$annotators += RatingAnnotatorFactory::newFromTitle( $title );
+			$annotators = array_merge(
+				$annotators,
+				RatingAnnotatorFactory::newGeneralPropAnnotators( $title )
+			);
+		}
+		if ( $config->get( 'RPEnableSMWContests' ) ) {
+			$annotators = array_merge(
+				$annotators,
+				RatingAnnotatorFactory::newContestPropAnnotators( $title )
+			);
 		}
 
 		foreach ( $annotators as $annotator ) {

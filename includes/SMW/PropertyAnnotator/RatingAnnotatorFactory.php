@@ -7,12 +7,46 @@ use Title;
 
 class RatingAnnotatorFactory {
 
-	public static function newFromTitle( Title $title ) {
+	/**
+	 * @param Title $title
+	 *
+	 * @return PropertyAnnotator[]
+	 */
+	public static function newGeneralPropAnnotators( Title $title ) : array {
 		$ratings = Rating::getPageRating( $title );
+		return self::buildPropAnnotatorsFromData( $ratings );
+	}
+
+	/**
+	 * @param Title $title
+	 *
+	 * @return PropertyAnnotator[]
+	 */
+	public static function newContestPropAnnotators( Title $title ) : array {
+		$annotators = [];
+		$data = Rating::getPageContestRatings( $title, true );
+
+		foreach ( $data as $contestId => $contestData ) {
+			$annotators[] = new ContestPropertyAnnotator(
+				$title,
+				$contestId,
+				self::buildPropAnnotatorsFromData( $contestData )
+			);
+		}
+
+		return $annotators;
+	}
+
+	/**
+	 * @param array $data
+	 *
+	 * @return PropertyAnnotator[]
+	 */
+	private static function buildPropAnnotatorsFromData( array $data ) : array {
 		$total = 0;
 		$num = 0;
 
-		foreach ( $ratings as $answer => $count ) {
+		foreach ( $data as $answer => $count ) {
 			$total += $answer * $count;
 			$num += $count;
 		}

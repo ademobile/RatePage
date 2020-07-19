@@ -1,7 +1,9 @@
 <?php
 
 namespace RatePage;
+use MediaWiki\MediaWikiServices;
 use Title;
+use Traversable;
 
 /**
  * RatePage page rating code
@@ -43,6 +45,77 @@ class Rating {
 		return true;
 	}
 
+	public static function getPageContestRatings( Title $title, bool $onlyPubliclyViewable ) {
+		$pageId = $title->getArticleID();
+		if ( $pageId < 0 ) {
+			// no such page
+			return [];
+		}
+
+		$tables = [ 'ratepage_vote' ];
+		$fields = [
+			'rv_answer as answer',
+			"count(rv_page_id) as 'count'",
+			'rv_contest as contest'
+		];
+		$conds = [
+			'rv_page_id' => $pageId,
+			"rv_contest <> ''"
+		];
+
+		if ( $onlyPubliclyViewable ) {
+			$tables[] = 'ratepage_contest';
+			$fields[] = 'rpc_allowed_to_see';
+			$conds[] = 'rv_contest = rpc_id';
+		}
+
+		$dbr = wfGetDB( DB_REPLICA );
+		$res = $dbr->select(
+			$tables,
+			$fields,
+			$conds,
+			__METHOD__,
+			[
+				'GROUP BY' => [
+					'rv_answer',
+					'rv_contest'
+				],
+				'ORDER BY' => [
+					'rv_contest'
+				]
+			]
+		);
+
+		$contestMap = [];
+		$previousContest = '';
+		$contestBuffer = [];
+		foreach ( $res as $row ) {
+			if ( $onlyPubliclyViewable ) {
+				$groups = explode( ',', $row->rpc_allowed_to_see );
+				if ( !in_array( '*', $groups ) ) {
+					continue;
+				}
+			}
+
+			if ( $previousContest !== $row->contest ) {
+				if ( $contestBuffer !== [] ) {
+					$contestMap[$previousContest] = self::buildRatingTableFromRows( $contestBuffer );
+					$contestBuffer = [];
+				}
+
+				$previousContest = $row->contest;
+			}
+
+			$contestBuffer[] = $row;
+		}
+
+		if ( $contestBuffer !== [] ) {
+			$contestMap[$previousContest] = self::buildRatingTableFromRows( $contestBuffer );
+		}
+
+		return $contestMap;
+	}
+
 	/**
 	 * @param Title $title
 	 * @param string|null $contest
@@ -50,30 +123,49 @@ class Rating {
 	 * @return array
 	 */
 	public static function getPageRating( Title $title, string $contest = '' ) {
-		global $wgRPRatingMin, $wgRPRatingMax;
-
-		if ( $title->getArticleID() < 0 ) {
+		$pageId = $title->getArticleID();
+		if ( $pageId < 0 ) {
+			// no such page
 			return [];
-		}   //no such page
+		}
 
-		$where = [ 'rv_page_id' => $title->getArticleID(),
-			'rv_contest' => $contest ];
+		$where = [
+			'rv_page_id' => $pageId,
+			'rv_contest' => $contest
+		];
 
 		$dbr = wfGetDB( DB_REPLICA );
 		$res = $dbr->select( 'ratepage_vote',
-			[ 'rv_answer as answer',
-				"count(rv_page_id) as 'count'" ],
+			[
+				'rv_answer as answer',
+				"count(rv_page_id) as 'count'"
+			],
 			$where,
 			__METHOD__,
-			[ 'GROUP BY' => 'rv_answer',
-				'ORDER BT' => 'rv_answer' ] );
+			[
+				'GROUP BY' => 'rv_answer'
+			]
+		);
+
+		return self::buildRatingTableFromRows( $res );
+	}
+
+	/**
+	 * @param iterable $rows
+	 *
+	 * @return array
+	 */
+	private static function buildRatingTableFromRows( iterable $rows ) {
+		$config = MediaWikiServices::getInstance()->getMainConfig();
+		$ratingMin = $config->get( 'RPRatingMin' );
+		$ratingMax = $config->get( 'RPRatingMax' );
 
 		$pageRating = [];
-		for ( $i = $wgRPRatingMin; $i <= $wgRPRatingMax; $i++ ) {
+		for ( $i = $ratingMin; $i <= $ratingMax; $i++ ) {
 			$pageRating[$i] = 0;
 		}
 
-		foreach ( $res as $row ) {
+		foreach ( $rows as $row ) {
 			$pageRating[$row->answer] = (int) $row->count;
 		}
 
@@ -88,19 +180,25 @@ class Rating {
 	 * @return bool|int
 	 */
 	public static function getUserVote( Title $title, string $user, string $contest = '' ) {
-		if ( $title->getArticleID() < 0 ) {
+		$pageId = $title->getArticleID();
+		if ( $pageId < 0 ) {
+			// no such page
 			return false;
-		}   //no such page
+		}
 
-		$where = [ 'rv_page_id' => $title->getArticleID(),
+		$where = [
+			'rv_page_id' => $pageId,
 			'rv_user' => $user,
-			'rv_contest' => $contest ];
+			'rv_contest' => $contest
+		];
 
 		$dbr = wfGetDB( DB_REPLICA );
-		$res = $dbr->selectField( 'ratepage_vote',
+		$res = $dbr->selectField(
+			'ratepage_vote',
 			'rv_answer',
 			$where,
-			__METHOD__ );
+			__METHOD__
+		);
 
 		if ( $res != false && !is_null( $res ) ) {
 			return (int) $res;
@@ -121,11 +219,13 @@ class Rating {
 	 * @return bool
 	 */
 	public static function voteOnPage( Title $title, string $user, string $ip, int $answer, string $contest = '' ) {
-		if ( $title->getArticleID() < 0 ) {
+		$pageId = $title->getArticleID();
+		if ( $pageId < 0 ) {
+			// no such page
 			return false;
-		}   //no such page
+		}
 
-		$where = [ 'rv_page_id' => $title->getArticleID(),
+		$where = [ 'rv_page_id' => $pageId,
 			'rv_user' => $user,
 			'rv_contest' => $contest ];
 

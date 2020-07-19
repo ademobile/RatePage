@@ -77,6 +77,8 @@
   "ratePage-deleted-page": "(usunięta strona)",
   "ratePage-property-average-alias": "Średnia ocena",
   "ratePage-property-count-alias": "Liczba ocen",
+  "ratePage-property-contest-id-alias": "Identyfikator konkursu",
   "ratePage-property-average-description": "Średnia wszystkich ocen na tej stronie.",
-  "ratePage-property-count-description": "Liczba wszystkich ocen na tej stronie."
+  "ratePage-property-count-description": "Liczba wszystkich ocen na tej stronie.",
+  "ratePage-property-contest-id-description": "Identyfikator konkursu RatePage."
 }
