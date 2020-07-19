@@ -74,5 +74,9 @@
   "ratePage-vote-cannot-vote": "",
   "ratePage-vote-cannot-see": "",
   "ratepagecontests": "",
-  "ratePage-deleted-page": "Substitute text for deleted pages in contest results view"
+  "ratePage-deleted-page": "Substitute text for deleted pages in contest results view",
+  "ratePage-property-average-alias": "Special SMW property alias",
+  "ratePage-property-count-alias": "Special SMW property alias",
+  "ratePage-property-average-description": "Special SMW property description",
+  "ratePage-property-count-description": "Special SMW property description"
 }

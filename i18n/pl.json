@@ -74,5 +74,9 @@
   "ratePage-vote-cannot-vote": "Nie możesz głosować w tym konkursie",
   "ratePage-vote-cannot-see": "Nie możesz sprawdzić wyników tego konkursu",
   "ratepagecontests": "Zarządzanie konkursami RatePage",
-  "ratePage-deleted-page": "(usunięta strona)"
+  "ratePage-deleted-page": "(usunięta strona)",
+  "ratePage-property-average-alias": "Średnia ocena",
+  "ratePage-property-count-alias": "Liczba ocen",
+  "ratePage-property-average-description": "Średnia wszystkich ocen na tej stronie.",
+  "ratePage-property-count-description": "Liczba wszystkich ocen na tej stronie."
 }

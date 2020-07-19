@@ -5,7 +5,7 @@
 		"Polskacafe"
 	],
 	"license-name": "GPL-2.0-or-later",
-	"version": "2.2.0",
+	"version": "2.3.0",
 	"namemsg": "ratePage",
 	"descriptionmsg": "ratePage-desc",
 	"url": "https://www.mediawiki.org/wiki/Extension:RatePage",
@@ -38,6 +38,7 @@
 	"AutoloadClasses": {
 		"RatePageRating": "includes/RatePageRating.php",
 		"RatePageHooks": "includes/RatePageHooks.php",
+		"RatePageSmwHooks": "includes/RatePageSmwHooks.php",
 		"AddMissingContests": "maintenance/addMissingContests.php",
 		"SpecialRatePageContests": "includes/specials/SpecialRatePageContests.php",
 		"ContestsPager": "includes/pagers/ContestsPager.php",
@@ -129,7 +130,8 @@
 		"BeforePageDisplay": "RatePageHooks::onBeforePageDisplay",
 		"LoadExtensionSchemaUpdates": "RatePageHooks::onLoadExtensionSchemaUpdates",
 		"SkinBuildSidebar": "RatePageHooks::onSkinBuildSidebar",
-		"ParserFirstCallInit": "RatePageHooks::onParserFirstCallInit"
+		"ParserFirstCallInit": "RatePageHooks::onParserFirstCallInit",
+		"SMW::Property::initProperties": "RatePageSmwHooks::onInitProperties"
 	},
 	"SpecialPages": {
 		"RatePageContests": "SpecialRatePageContests"
