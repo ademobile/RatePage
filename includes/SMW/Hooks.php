@@ -3,7 +3,10 @@
 namespace RatePage\SMW;
 
 use MediaWiki\MediaWikiServices;
+use RatePage\SMW\PropertyAnnotator\RatingAnnotatorFactory;
 use SMW\PropertyRegistry;
+use SMW\SemanticData;
+use SMW\Store;
 
 class Hooks {
 	// property ids
@@ -74,5 +77,24 @@ class Hooks {
 				'annotable' => false
 			]
 		];
+	}
+
+	public static function onBeforeDataUpdateComplete( Store $store, SemanticData $semanticData ) {
+		$config = MediaWikiServices::getInstance()->getMainConfig();
+		$title = $semanticData->getSubject()->getTitle();
+		if ( $title === null ) {
+			return true;
+		}
+
+		$annotators = [];
+		if ( $config->get( 'RPEnableSMWRatings' ) ) {
+			$annotators += RatingAnnotatorFactory::newFromTitle( $title );
+		}
+
+		foreach ( $annotators as $annotator ) {
+			$annotator->addAnnotation( $semanticData );
+		}
+
+		return true;
 	}
 }

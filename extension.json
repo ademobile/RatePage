@@ -127,7 +127,8 @@
 		"LoadExtensionSchemaUpdates": "RatePage\\Hooks::onLoadExtensionSchemaUpdates",
 		"SkinBuildSidebar": "RatePage\\Hooks::onSkinBuildSidebar",
 		"ParserFirstCallInit": "RatePage\\Hooks::onParserFirstCallInit",
-		"SMW::Property::initProperties": "RatePage\\SMW\\Hooks::onInitProperties"
+		"SMW::Property::initProperties": "RatePage\\SMW\\Hooks::onInitProperties",
+		"SMW::Store::BeforeDataUpdateComplete": "RatePage\\SMW\\Hooks::onBeforeDataUpdateComplete"
 	},
 	"SpecialPages": {
 		"RatePageContests": "RatePage\\Special\\RatePageContests"
