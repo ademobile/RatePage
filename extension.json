@@ -21,7 +21,8 @@
 		"RPRatingMax": 5,
 		"RPFrontendEnabled": true,
 		"RPAddSidebarSection": true,
-		"RPUseMMVModule": true
+		"RPUseMMVModule": true,
+		"RPEnableSMWRatings": true
 	},
 	"GroupPermissions": {
 		"*": {
@@ -36,20 +37,15 @@
 		}
 	},
 	"AutoloadClasses": {
-		"RatePageRating": "includes/RatePageRating.php",
-		"RatePageHooks": "includes/RatePageHooks.php",
-		"RatePageSmwHooks": "includes/RatePageSmwHooks.php",
-		"AddMissingContests": "maintenance/addMissingContests.php",
-		"SpecialRatePageContests": "includes/specials/SpecialRatePageContests.php",
-		"ContestsPager": "includes/pagers/ContestsPager.php",
-		"ContestResultsPager": "includes/pagers/ContestResultsPager.php",
-		"RatePageContestDB": "includes/RatePageContestDB.php",
-		"RatePageRights": "includes/RatePageRights.php",
-		"RatePageContestLogFormatter": "includes/RatePageContestLogFormatter.php",
-
-		"RatePageApiTrait": "includes/api/RatePageApiTrait.php",
-		"ApiQueryPageRatingProp": "includes/api/ApiQueryPageRatingProp.php",
-		"ApiRatePage": "includes/api/ApiRatePage.php"
+		"AddMissingContests": "maintenance/addMissingContests.php"
+	},
+	"AutoloadNamespaces": {
+		"RatePage\\": "includes/",
+		"RatePage\\Api\\": "includes/Api/",
+		"RatePage\\MultimediaViewer\\": "includes/MultimediaViewer/",
+		"RatePage\\Pager\\": "includes/Pager/",
+		"RatePage\\SMW\\": "includes/SMW/",
+		"RatePage\\Special\\": "includes/Special/"
 	},
 	"ExtensionMessagesFiles": {
 		"RatePageMagic": "RatePage.magic.php",
@@ -127,20 +123,20 @@
 		}
 	},
 	"Hooks": {
-		"BeforePageDisplay": "RatePageHooks::onBeforePageDisplay",
-		"LoadExtensionSchemaUpdates": "RatePageHooks::onLoadExtensionSchemaUpdates",
-		"SkinBuildSidebar": "RatePageHooks::onSkinBuildSidebar",
-		"ParserFirstCallInit": "RatePageHooks::onParserFirstCallInit",
-		"SMW::Property::initProperties": "RatePageSmwHooks::onInitProperties"
+		"BeforePageDisplay": "RatePage\\Hooks::onBeforePageDisplay",
+		"LoadExtensionSchemaUpdates": "RatePage\\Hooks::onLoadExtensionSchemaUpdates",
+		"SkinBuildSidebar": "RatePage\\Hooks::onSkinBuildSidebar",
+		"ParserFirstCallInit": "RatePage\\Hooks::onParserFirstCallInit",
+		"SMW::Property::initProperties": "RatePage\\SMW\\Hooks::onInitProperties"
 	},
 	"SpecialPages": {
-		"RatePageContests": "SpecialRatePageContests"
+		"RatePageContests": "RatePage\\Special\\RatePageContests"
 	},
 	"APIModules": {
-		"ratepage": "ApiRatePage"
+		"ratepage": "RatePage\\Api\\RatePage"
 	},
 	"APIPropModules": {
-		"pagerating": "ApiQueryPageRatingProp"
+		"pagerating": "RatePage\\Api\\QueryPageRatingProp"
 	},
 	"LogTypes": [ "ratepage-contest" ],
 	"LogNames": {
@@ -150,8 +146,8 @@
 		"ratepage-contest": "ratePage-contest-log-header"
 	},
 	"LogActionsHandlers": {
-		"ratepage-contest/*": "RatePageContestLogFormatter"
+		"ratepage-contest/*": "RatePage\\ContestLogFormatter"
 	},
 	"type": "other",
-	"callback": "RatePageHooks::onRegistration"
+	"callback": "RatePage\\Hooks::onRegistration"
 }

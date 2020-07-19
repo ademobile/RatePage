@@ -1,6 +1,12 @@
 <?php
 
+namespace RatePage\Pager;
+
 use MediaWiki\Linker\LinkRenderer;
+use MWException;
+use RatePage\Special\RatePageContests;
+use SpecialPage;
+use TablePager;
 
 class ContestsPager extends TablePager {
 
@@ -8,11 +14,12 @@ class ContestsPager extends TablePager {
 
 	public $mPage;
 
-	public function __construct( SpecialRatePageContests $page, LinkRenderer $linkRenderer ) {
+	public function __construct( RatePageContests $page, LinkRenderer $linkRenderer ) {
 		$this->mPage = $page;
 		$this->linkRenderer = $linkRenderer;
 		parent::__construct( $this->mPage->getContext() );
 	}
+
 	/**
 	 * Provides all parameters needed for the main paged query. It returns
 	 * an associative array with the following elements:
@@ -25,14 +32,10 @@ class ContestsPager extends TablePager {
 	 * @return array
 	 */
 	function getQueryInfo() {
-		$query = [
-			'tables' => [ 'ratepage_contest' ],
-			'fields' => [
-				'rpc_id',
+		$query = [ 'tables' => [ 'ratepage_contest' ],
+			'fields' => [ 'rpc_id',
 				'rpc_description',
-				'rpc_enabled'
-			]
-		];
+				'rpc_enabled' ] ];
 
 		return $query;
 	}
@@ -42,6 +45,7 @@ class ContestsPager extends TablePager {
 	 * otherwise
 	 *
 	 * @param string $field
+	 *
 	 * @return bool
 	 */
 	function isFieldSortable( $field ) {
@@ -59,6 +63,7 @@ class ContestsPager extends TablePager {
 	 *
 	 * @param string $name The database field name
 	 * @param string $value The value retrieved from the database
+	 *
 	 * @return string
 	 * @throws MWException
 	 */
@@ -67,15 +72,13 @@ class ContestsPager extends TablePager {
 
 		switch ( $name ) {
 			case 'rpc_id':
-				return $this->linkRenderer->makeLink(
-					SpecialPage::getTitleFor( 'RatePageContests', $value ),
-					$value
-				);
+				return $this->linkRenderer->makeLink( SpecialPage::getTitleFor( 'RatePageContests',
+					$value ),
+					$value );
 			case 'rpc_description':
-				return $this->linkRenderer->makeLink(
-					SpecialPage::getTitleFor( 'RatePageContests', $row->rpc_id ),
-					$value
-				);
+				return $this->linkRenderer->makeLink( SpecialPage::getTitleFor( 'RatePageContests',
+					$row->rpc_id ),
+					$value );
 			case 'rpc_enabled':
 				if ( $value ) {
 					return $this->msg( 'ratePage-contest-enabled' )->parse();
@@ -116,11 +119,9 @@ class ContestsPager extends TablePager {
 			return $headers;
 		}
 
-		$headers = [
-			'rpc_id' => 'ratePage-contests-list-id',
+		$headers = [ 'rpc_id' => 'ratePage-contests-list-id',
 			'rpc_description' => 'ratePage-contests-list-description',
-			'rpc_enabled' => 'ratePage-contests-list-enabled',
-		];
+			'rpc_enabled' => 'ratePage-contests-list-enabled', ];
 
 		foreach ( $headers as &$msg ) {
 			$msg = $this->msg( $msg )->text();
