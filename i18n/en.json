@@ -80,5 +80,6 @@
   "ratePage-property-contest-id-alias": "Contest identifier",
   "ratePage-property-average-description": "Average rating of this page.",
   "ratePage-property-count-description": "The number of ratings of this page.",
-  "ratePage-property-contest-id-description": "Identifier of a RatePage contest."
+  "ratePage-property-contest-id-description": "Identifier of a RatePage contest.",
+  "group-*": "(everyone)"
 }
