@@ -80,5 +80,6 @@
   "ratePage-property-contest-id-alias": "Special SMW property alias",
   "ratePage-property-average-description": "Special SMW property description",
   "ratePage-property-count-description": "Special SMW property description",
-  "ratePage-property-contest-id-description": "Special SMW property description"
+  "ratePage-property-contest-id-description": "Special SMW property description",
+  "group-*": "\"Everyone\" group label"
 }

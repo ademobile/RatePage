@@ -80,5 +80,6 @@
   "ratePage-property-contest-id-alias": "Identyfikator konkursu",
   "ratePage-property-average-description": "Średnia wszystkich ocen na tej stronie.",
   "ratePage-property-count-description": "Liczba wszystkich ocen na tej stronie.",
-  "ratePage-property-contest-id-description": "Identyfikator konkursu RatePage."
+  "ratePage-property-contest-id-description": "Identyfikator konkursu RatePage.",
+  "group-*": "(wszyscy)"
 }
