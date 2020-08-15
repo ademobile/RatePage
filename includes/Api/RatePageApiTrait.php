@@ -30,9 +30,9 @@ trait RatePageApiTrait {
 	protected $permissions;
 
 	/**
-	 * @var int|null
+	 * @var int
 	 */
-	protected $seeBeforeVote = null;
+	protected $seeBeforeVote = 0;
 
 	/**
 	 * @var string
@@ -128,14 +128,11 @@ trait RatePageApiTrait {
 			);
 		}
 
-		if ( $this->seeBeforeVote !== null ) {
-			$result->addValue(
-				$path,
-				'showResultsBeforeVoting',
-				$this->seeBeforeVote
-			);
-		}
-
+		$result->addValue(
+			$path,
+			'showResultsBeforeVoting',
+			$this->seeBeforeVote
+		);
 		$result->addValue(
 			$path,
 			'userVote',

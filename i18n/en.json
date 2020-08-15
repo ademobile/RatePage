@@ -82,5 +82,6 @@
   "ratePage-property-count-description": "The number of ratings of this page.",
   "ratePage-property-contest-id-description": "Identifier of a RatePage contest.",
   "group-*": "(everyone)",
-  "ratePage-edit-see-before-vote": "Show ratings before voting"
+  "ratePage-edit-see-before-vote": "Show ratings before voting",
+  "ratePage-prompt-can-see": "You have not voted yet"
 }

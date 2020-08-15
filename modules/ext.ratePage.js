@@ -66,7 +66,9 @@ mw.RatePage = function () {
 						avg = avg / voteCount;
 					}
 
-					idToCallbackMap[pageid]( avg, voteCount, d.userVote, d.canVote, d.canSee );
+					idToCallbackMap[pageid](
+						avg, voteCount, d.userVote, d.canVote, d.canSee, d.showResultsBeforeVoting
+					);
 				} );
 			} );
 	};
@@ -78,10 +80,11 @@ mw.RatePage = function () {
 	 * @param userVote
 	 * @param canVote
 	 * @param canSee
+	 * @param showResultsBeforeVoting
 	 * @param isNew
 	 * @param parent
 	 */
-	self.updateStars = function ( average, vCount, userVote, canVote, canSee, isNew, parent ) {
+	self.updateStars = function ( average, vCount, userVote, canVote, canSee, showResultsBeforeVoting, isNew, parent ) {
 		function typeForLastStar( f2 ) {
 			if ( f2 < 0.05 ) {
 				return 'ratingstar-plain';
@@ -98,15 +101,24 @@ mw.RatePage = function () {
 			parent = parent.parent();
 		}
 
+		var yourVote = '';
+
 		if ( canVote ) {
-			parent.find( '.ratingsinfo-yourvote' ).text( mw.message( 'ratePage-prompt' ).text() );
+			if ( showResultsBeforeVoting ) {
+				yourVote = mw.message( 'ratePage-prompt-can-see' ).text();
+			} else {
+				yourVote = mw.message( 'ratePage-prompt' ).text();
+			}
 		} else {
-			parent.find( '.ratingsinfo-yourvote' ).text( mw.message( 'ratePage-vote-cannot-vote' ).text() );
+			yourVote = mw.message( 'ratePage-vote-cannot-vote' ).text();
 		}
 
-		if ( ( userVote && userVote !== -1 ) || ( !canVote && canSee ) ) {
+		if ( ( userVote && userVote !== -1 ) ||
+			( !canVote && canSee ) ||
+			( showResultsBeforeVoting && canSee )
+		) {
 			if ( userVote && userVote !== -1 ) {
-				parent.find( '.ratingsinfo-yourvote' ).text( mw.message( 'ratePage-vote-info', userVote.toString() ).text() );
+				yourVote = mw.message( 'ratePage-vote-info', userVote.toString() ).text();
 			}
 
 			if ( !average ) {
@@ -149,6 +161,8 @@ mw.RatePage = function () {
 			}
 		}
 
+		parent.find( '.ratingsinfo-yourvote' ).text( yourVote );
+
 		if ( isNew && canVote ) {
 			parent.find( '.ratingstar' ).addClass( 'canvote' );
 
@@ -161,14 +175,16 @@ mw.RatePage = function () {
 
 				if ( !pageId ) {
 					self.ratePage( mw.config.get( 'wgArticleId' ), '', answer,
-						function ( avg, voteCount, userVote, canVote, canSee ) {
-							self.updateStars( avg, voteCount, userVote, canVote, canSee, false, p );
+						function ( avg, voteCount, userVote, canVote, canSee, showResultsBeforeVoting ) {
+							self.updateStars( avg, voteCount, userVote, canVote, canSee,
+								showResultsBeforeVoting, false, p );
 						} );
 				} else {
 					var contest = p.attr( 'data-contest' );
 					self.ratePage( pageId, contest, answer,
-						function ( avg, voteCount, userVote, canVote, canSee ) {
-							self.updateStars( avg, voteCount, userVote, canVote, canSee, false, p );
+						function ( avg, voteCount, userVote, canVote, canSee, showResultsBeforeVoting ) {
+							self.updateStars( avg, voteCount, userVote, canVote, canSee,
+								showResultsBeforeVoting, false, p );
 						} );
 				}
 			} );
@@ -212,8 +228,9 @@ mw.RatePage = function () {
 		stars.append( '<div class="ratingsinfo-embed"><div class="ratingsinfo-yourvote"></div><div class="ratingsinfo-avg"></div></div>' );
 
 		if ( !starMap[contest] ) starMap[contest] = {};
-		starMap[contest][pageId] = function ( avg, voteCount, userVote, canVote, canSee ) {
-			self.updateStars( avg, voteCount, userVote, canVote, canSee, true, stars );
+		starMap[contest][pageId] = function ( avg, voteCount, userVote, canVote, canSee, showResultsBeforeVoting ) {
+			self.updateStars( avg, voteCount, userVote, canVote, canSee,
+				showResultsBeforeVoting, true, stars );
 		};
 	};
 
@@ -283,8 +300,11 @@ mw.RatePage = function () {
 			}
 
 			if ( !starMap[''] ) starMap[''] = {};
-			starMap[''][mw.config.get( 'wgArticleId' )] = function ( avg, voteCount, userVote, canVote, canSee ) {
-				self.updateStars( avg, voteCount, userVote, canVote, canSee, true, stars );
+			starMap[''][mw.config.get( 'wgArticleId' )] = function (
+				avg, voteCount, userVote, canVote, canSee, showResultsBeforeVoting
+			) {
+				self.updateStars( avg, voteCount, userVote, canVote, canSee,
+					showResultsBeforeVoting, true, stars );
 			};
 		}
 

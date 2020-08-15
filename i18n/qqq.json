@@ -82,5 +82,6 @@
   "ratePage-property-count-description": "Special SMW property description",
   "ratePage-property-contest-id-description": "Special SMW property description",
   "group-*": "\"Everyone\" group label",
-  "ratePage-edit-see-before-vote": "Checkbox label on Special:RatePageContests"
+  "ratePage-edit-see-before-vote": "Checkbox label on Special:RatePageContests",
+  "ratePage-prompt-can-see": "Prompt for voting"
 }

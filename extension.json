@@ -90,7 +90,8 @@
 				"ratePage-caption-5",
 				"ratePage-prompt",
 				"ratePage-vote-cannot-vote",
-				"ratePage-vote-cannot-see"
+				"ratePage-vote-cannot-see",
+				"ratePage-prompt-can-see"
 			],
 			"dependencies": [
 				"mediawiki.api"
