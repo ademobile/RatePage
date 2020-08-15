@@ -62,8 +62,10 @@ trait RatePageApiTrait {
 		}
 
 		$this->contest = '';
-		$this->permissions = [ 'vote' => true,
-			'see' => true ];
+		$this->permissions = [
+			'vote' => true,
+			'see' => true
+		];
 
 		if ( isset( $params['contest'] ) ) {
 			$this->contest = trim( $params['contest'] );
@@ -75,8 +77,10 @@ trait RatePageApiTrait {
 					$parent->dieWithError( 'Contest ID must be alphanumeric, no other characters are allowed' );
 				}
 
-				$this->permissions = Rights::checkUserPermissionsOnContest( $this->contest,
-					$this->user );
+				$this->permissions = Rights::checkUserPermissionsOnContest(
+					$this->contest,
+					$this->user
+				);
 			}
 		}
 	}

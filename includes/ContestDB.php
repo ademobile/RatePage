@@ -42,10 +42,13 @@ class ContestDB {
 	public static function saveContest( $newRow, IContextSource $context ) {
 		$dbw = wfGetDB( DB_MASTER );
 
-		$data = [ 'rpc_description' => $newRow->rpc_description ?? '',
+		$data = [
+			'rpc_description' => $newRow->rpc_description ?? '',
 			'rpc_enabled' => $newRow->rpc_enabled ?? 0,
 			'rpc_allowed_to_vote' => $newRow->rpc_allowed_to_vote ?? '',
-			'rpc_allowed_to_see' => $newRow->rpc_allowed_to_see ?? '', ];
+			'rpc_allowed_to_see' => $newRow->rpc_allowed_to_see ?? '',
+			'rpc_see_before_vote' => $newRow->rpc_see_before_vote ?? 0
+		];
 
 		$id = $newRow->rpc_id;
 		$dbw->startAtomic( __METHOD__ );
@@ -81,11 +84,14 @@ class ContestDB {
 			$subtype );
 		$logEntry->setPerformer( $context->getUser() );
 		$logEntry->setTarget( Title::newFromText( "Special:RatePageContests/$id" ) );
-		$logEntry->setParameters( [ 'id' => $id,
+		$logEntry->setParameters( [
+			'id' => $id,
 			'description' => $data['rpc_description'],
 			'enabled' => $data['rpc_enabled'],
 			'allowed_to_vote' => $data['rpc_allowed_to_vote'],
-			'allowed_to_see' => $data['rpc_allowed_to_see'], ] );
+			'allowed_to_see' => $data['rpc_allowed_to_see'],
+			'see_before_vote' => $data['rpc_see_before_vote'],
+		] );
 		$logid = $logEntry->insert();
 		$logEntry->publish( $logid );
 	}
