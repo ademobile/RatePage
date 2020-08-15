@@ -5,6 +5,7 @@ namespace RatePage;
 use AddMissingContests;
 use DatabaseUpdater;
 use ExtensionRegistry;
+use MediaWiki\MediaWikiServices;
 use MWException;
 use OutputPage;
 use Parser;
@@ -37,23 +38,27 @@ class Hooks {
 	 * @param Skin $skin
 	 */
 	public static function onBeforePageDisplay( OutputPage $out, Skin $skin ) {
-		global $wgRPRatingAllowedNamespaces;
-		global $wgRPRatingPageBlacklist;
-		global $wgRPFrontendEnabled;
-		global $wgRPUseMMVModule;
+		$config = MediaWikiServices::getInstance()->getMainConfig();
 
-		$out->addJsConfigVars( [ 'wgRPRatingAllowedNamespaces' => $wgRPRatingAllowedNamespaces,
-			'wgRPRatingPageBlacklist' => $wgRPRatingPageBlacklist,
-			// why the hell is this not passed on to frontend by MF?!
-			'wgRPTarget' => $out->getTarget() ] );
+		$jsVars = [
+			'RPRatingAllowedNamespaces',
+			'RPRatingPageBlacklist',
+			'RPShowResultsBeforeVoting',
+		];
+		foreach ( $jsVars as $var ) {
+			$out->addJsConfigVars( "wg$var", $config->get( $var ) );
+		}
 
-		if ( !$wgRPFrontendEnabled ) {
+		// why the hell is this not passed on to frontend by MF?!
+		$out->addJsConfigVars( 'wgRPTarget', $out->getTarget() );
+
+		if ( !$config->get( 'RPFrontendEnabled' ) ) {
 			return;
 		}
 
 		$out->addModules( 'ext.ratePage' );
 
-		if ( $wgRPUseMMVModule && class_exists( 'RatePage\MultimediaViewer\MmvHooks' ) ) {
+		if ( $config->get( 'RPUseMMVModule' ) && class_exists( 'RatePage\MultimediaViewer\MmvHooks' ) ) {
 			if ( MmvHooks::isMmvEnabled( $out->getUser() ) ) {
 				$out->addModules( 'ext.ratePage.mmv' );
 			}
