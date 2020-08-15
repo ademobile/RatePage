@@ -29,9 +29,14 @@ class Rights {
 		return (bool) sizeof( array_intersect( $groups, $user->getEffectiveGroups() ) );
 	}
 
-	public static function checkUserPermissionsOnContest( $contestId, User $user ) {
+	/**
+	 * @param $contest
+	 * @param User $user
+	 *
+	 * @return bool[]
+	 */
+	public static function checkUserPermissionsOnContest( $contest, User $user ) {
 		$eg = $user->getEffectiveGroups();
-		$contest = ContestDB::loadContest( $contestId );
 
 		if ( !$contest ) {
 			return [
@@ -39,7 +44,6 @@ class Rights {
 				'see' => false
 			];
 		}
-
 
 		return [
 			'vote' => (

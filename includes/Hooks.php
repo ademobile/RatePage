@@ -43,7 +43,6 @@ class Hooks {
 		$jsVars = [
 			'RPRatingAllowedNamespaces',
 			'RPRatingPageBlacklist',
-			'RPShowResultsBeforeVoting',
 		];
 		foreach ( $jsVars as $var ) {
 			$out->addJsConfigVars( "wg$var", $config->get( $var ) );
