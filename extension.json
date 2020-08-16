@@ -5,7 +5,7 @@
 		"Polskacafe"
 	],
 	"license-name": "GPL-2.0-or-later",
-	"version": "2.4.1",
+	"version": "2.5.0",
 	"namemsg": "ratePage",
 	"descriptionmsg": "ratePage-desc",
 	"url": "https://www.mediawiki.org/wiki/Extension:RatePage",
@@ -23,7 +23,8 @@
 		"RPAddSidebarSection": true,
 		"RPUseMMVModule": true,
 		"RPEnableSMWRatings": true,
-		"RPEnableSMWContests": true
+		"RPEnableSMWContests": true,
+		"RPShowResultsBeforeVoting": false
 	},
 	"GroupPermissions": {
 		"*": {
@@ -89,7 +90,8 @@
 				"ratePage-caption-5",
 				"ratePage-prompt",
 				"ratePage-vote-cannot-vote",
-				"ratePage-vote-cannot-see"
+				"ratePage-vote-cannot-see",
+				"ratePage-prompt-can-see"
 			],
 			"dependencies": [
 				"mediawiki.api"

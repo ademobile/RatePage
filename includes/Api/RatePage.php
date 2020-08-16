@@ -41,7 +41,7 @@ class RatePage extends ApiBase {
 			$this->getContext(),
 			$this );
 
-		if ( !$this->contest && !Rating::canPageBeRated( $title ) ) {
+		if ( !$this->contestId && !Rating::canPageBeRated( $title ) ) {
 			return;
 		}
 
@@ -66,7 +66,7 @@ class RatePage extends ApiBase {
 				$this->userName,
 				$this->ip,
 				$answer,
-				$this->contest );
+				$this->contestId );
 		}
 
 		$this->addTitleToResults( $title,

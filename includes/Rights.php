@@ -24,27 +24,33 @@ class Rights {
 	}
 
 	public static function checkUserCanExecute( $allowed, User $user ) {
-		$groups = explode( ',',
-			$allowed );
+		$groups = explode( ',', $allowed );
 
-		return (bool) sizeof( array_intersect( $groups,
-			$user->getEffectiveGroups() ) );
+		return (bool) sizeof( array_intersect( $groups, $user->getEffectiveGroups() ) );
 	}
 
-	public static function checkUserPermissionsOnContest( $contestId, User $user ) {
+	/**
+	 * @param $contest
+	 * @param User $user
+	 *
+	 * @return bool[]
+	 */
+	public static function checkUserPermissionsOnContest( $contest, User $user ) {
 		$eg = $user->getEffectiveGroups();
-		$contest = ContestDB::loadContest( $contestId );
 
 		if ( !$contest ) {
-			return [ 'vote' => false,
-				'see' => false ];
+			return [
+				'vote' => false,
+				'see' => false
+			];
 		}
 
-		return [ 'vote' => ( (bool) sizeof( array_intersect( explode( ',',
-				$contest->rpc_allowed_to_vote ),
-				$eg ) ) && ( (bool) $contest->rpc_enabled ) ),
-			'see' => (bool) sizeof( array_intersect( explode( ',',
-				$contest->rpc_allowed_to_see ),
-				$eg ) ) ];
+		return [
+			'vote' => (
+				(bool) sizeof( array_intersect( explode( ',', $contest->rpc_allowed_to_vote ), $eg ) ) &&
+				( (bool) $contest->rpc_enabled )
+			),
+			'see' => (bool) sizeof( array_intersect( explode( ',', $contest->rpc_allowed_to_see ), $eg ) )
+		];
 	}
 }

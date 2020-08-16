@@ -6,7 +6,9 @@ use ApiBase;
 use ApiResult;
 use ApiUsageException;
 use IContextSource;
+use MediaWiki\MediaWikiServices;
 use MWException;
+use RatePage\ContestDB;
 use RatePage\Rights;
 use RatePage\Rating;
 use Title;
@@ -20,12 +22,17 @@ trait RatePageApiTrait {
 	/**
 	 * @var string
 	 */
-	protected $contest;
+	protected $contestId;
 
 	/**
 	 * @var array
 	 */
 	protected $permissions;
+
+	/**
+	 * @var int
+	 */
+	protected $seeBeforeVote = 0;
 
 	/**
 	 * @var string
@@ -61,23 +68,37 @@ trait RatePageApiTrait {
 			$this->userName = $this->user->getName();
 		}
 
-		$this->contest = '';
-		$this->permissions = [ 'vote' => true,
-			'see' => true ];
+		$this->contestId = '';
+		$this->permissions = [
+			'vote' => true,
+			'see' => true
+		];
 
-		if ( isset( $params['contest'] ) ) {
-			$this->contest = trim( $params['contest'] );
-			if ( strlen( $this->contest ) > 255 ) {
-				$parent->dieWithError( 'Contest ID length exceeds the limit (255 characters)' );
-			}
-			if ( strlen( $this->contest ) > 0 ) {
-				if ( !ctype_alnum( $this->contest ) ) {
-					$parent->dieWithError( 'Contest ID must be alphanumeric, no other characters are allowed' );
-				}
+		$contestId = trim( $params['contest'] ?? '' );
+		if ( strlen( $contestId ) > 255 ) {
+			$parent->dieWithError( 'Contest ID length exceeds the limit (255 characters)' );
+		}
 
-				$this->permissions = Rights::checkUserPermissionsOnContest( $this->contest,
-					$this->user );
+		if ( $contestId ) {
+			if ( !ctype_alnum( $contestId ) ) {
+				$parent->dieWithError( 'Contest ID must be alphanumeric, no other characters are allowed' );
 			}
+
+			$this->contestId = $contestId;
+			$contest = ContestDB::loadContest( $this->contestId );
+
+			if ( !$contest ) {
+				$parent->dieWithError( "Contest '$this->contestId' does not exist." );
+			}
+
+			$this->permissions = Rights::checkUserPermissionsOnContest(
+				$contest,
+				$this->user
+			);
+			$this->seeBeforeVote = (int) $contest->rpc_see_before_vote;
+		} else {
+			$config = MediaWikiServices::getInstance()->getMainConfig();
+			$this->seeBeforeVote = $config->get( 'RPShowResultsBeforeVoting' ) ? 1 : 0;
 		}
 	}
 
@@ -89,26 +110,43 @@ trait RatePageApiTrait {
 	 * @param ApiResult $result
 	 */
 	protected function addTitleToResults( Title $title, ?array $path, ApiResult $result ) {
-		$userVote = Rating::getUserVote( $title,
+		$userVote = Rating::getUserVote(
+			$title,
 			$this->userName,
-			$this->contest );
+			$this->contestId
+		);
 
 		if ( $this->permissions['see'] ) {
-			$pageRating = Rating::getPageRating( $title,
-				$this->contest );
-			$result->addValue( $path,
-				"pageRating",
-				$pageRating );
+			$pageRating = Rating::getPageRating(
+				$title,
+				$this->contestId
+			);
+			$result->addValue(
+				$path,
+				'pageRating',
+				$pageRating
+			);
 		}
 
-		$result->addValue( $path,
-			"userVote",
-			$userVote );
-		$result->addValue( $path,
+		$result->addValue(
+			$path,
+			'showResultsBeforeVoting',
+			$this->seeBeforeVote
+		);
+		$result->addValue(
+			$path,
+			'userVote',
+			$userVote
+		);
+		$result->addValue(
+			$path,
 			'canVote',
-			(int) $this->permissions['vote'] );
-		$result->addValue( $path,
+			(int) $this->permissions['vote']
+		);
+		$result->addValue(
+			$path,
 			'canSee',
-			(int) $this->permissions['see'] );
+			(int) $this->permissions['see']
+		);
 	}
 }

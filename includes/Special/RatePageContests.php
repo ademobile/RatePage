@@ -201,26 +201,73 @@ class RatePageContests extends SpecialPage {
 
 		$fieldset = new OOUI\FieldsetLayout( [ 'label' => $this->msg( 'ratePage-contest-edit-main' )->escaped() ] );
 
-		$fieldset->addItems( [ new FieldLayout( //TODO: add some info for end user on allowed characters
-		//TODO: add edit filter
-			new OOUI\TextInputWidget( [ 'value' => $new ? '' : $row->rpc_id,
-					'disabled' => !$new ] + ( $new ? [ 'name' => 'wpContestId' ] : [] ) ),
-			[ 'label' => $this->msg( 'ratePage-edit-id' )->escaped(),
-				'align' => 'top' ] ),
-			new FieldLayout( new OOUI\TextInputWidget( [ 'name' => 'wpContestDescription',
-					'value' => isset( $row->rpc_description ) ? $row->rpc_description : '' ] + $readOnlyAttrib ),
-				[ 'label' => $this->msg( 'ratePage-edit-description' )->escaped(),
-					'align' => 'top' ] ),
-			new FieldLayout( new OOUI\CheckboxInputWidget( [ 'name' => 'wpContestEnabled',
-					'id' => 'wpContestEnabled',
-					'selected' => isset( $row->rpc_enabled ) ? $row->rpc_enabled : 1 ] + $readOnlyAttrib ),
-				[ 'label' => $this->msg( 'ratePage-edit-enabled' )->escaped(),
-					'align' => 'inline' ] ),
-			new FieldLayout( new CheckMatrixWidget( [ 'name' => 'wpContestPermissions',
-					'columns' => [ $this->msg( 'ratePage-edit-allowed-to-vote' )->escaped() => 'vote',
-						$this->msg( 'ratePage-edit-allowed-to-see' )->escaped() => 'see' ],
-					'rows' => Rights::getGroupsAsColumns( $this->getContext() ),
-					'values' => $selectedPermissions ] + $readOnlyAttrib ) ), ] );
+		$fieldset->addItems( [
+			//TODO: add some info for end user on allowed characters
+			//TODO: add edit filter
+			new FieldLayout(
+				new OOUI\TextInputWidget(
+					[
+						'value' => $new ? '' : $row->rpc_id,
+						'disabled' => !$new
+					] + ( $new ? [ 'name' => 'wpContestId' ] : [] )
+				),
+				[
+					'label' => $this->msg( 'ratePage-edit-id' )->escaped(),
+					'align' => 'top'
+				]
+			),
+			new FieldLayout(
+				new OOUI\TextInputWidget(
+					[
+						'name' => 'wpContestDescription',
+						'value' => isset( $row->rpc_description ) ? $row->rpc_description : ''
+					] + $readOnlyAttrib
+				),
+				[
+					'label' => $this->msg( 'ratePage-edit-description' )->escaped(),
+					'align' => 'top'
+				]
+			),
+			new FieldLayout(
+				new OOUI\CheckboxInputWidget(
+					[
+						'name' => 'wpContestEnabled',
+						'id' => 'wpContestEnabled',
+						'selected' => isset( $row->rpc_enabled ) ? $row->rpc_enabled : 1
+					] + $readOnlyAttrib
+				),
+				[
+					'label' => $this->msg( 'ratePage-edit-enabled' )->escaped(),
+					'align' => 'inline'
+				]
+			),
+			new FieldLayout(
+				new OOUI\CheckboxInputWidget(
+					[
+						'name' => 'wpSeeBeforeVote',
+						'id' => 'wpSeeBeforeVote',
+						'selected' => isset( $row->rpc_see_before_vote ) ? $row->rpc_see_before_vote : 0
+					] + $readOnlyAttrib
+				),
+				[
+					'label' => $this->msg( 'ratePage-edit-see-before-vote' )->escaped(),
+					'align' => 'inline'
+				]
+			),
+			new FieldLayout(
+				new CheckMatrixWidget(
+					[
+						'name' => 'wpContestPermissions',
+						'columns' => [
+							$this->msg( 'ratePage-edit-allowed-to-vote' )->escaped() => 'vote',
+							$this->msg( 'ratePage-edit-allowed-to-see' )->escaped() => 'see'
+						],
+						'rows' => Rights::getGroupsAsColumns( $this->getContext() ),
+						'values' => $selectedPermissions
+					] + $readOnlyAttrib
+				)
+			),
+		] );
 
 		$form .= $fieldset;
 
@@ -329,6 +376,7 @@ class RatePageContests extends SpecialPage {
 		}
 
 		$row->rpc_enabled = $request->getCheck( 'wpContestEnabled' );
+		$row->rpc_see_before_vote = $request->getCheck( 'wpSeeBeforeVote' );
 
 		$perm = $request->getArray( 'wpContestPermissions' ) ?? [];
 		$pVote = [];
@@ -346,10 +394,8 @@ class RatePageContests extends SpecialPage {
 			}
 		}
 
-		$row->rpc_allowed_to_vote = implode( ',',
-			$pVote );
-		$row->rpc_allowed_to_see = implode( ',',
-			$pSee );
+		$row->rpc_allowed_to_vote = implode( ',', $pVote );
+		$row->rpc_allowed_to_see = implode( ',', $pSee );
 
 		self::$mLoadedRow = $row;
 
@@ -365,8 +411,7 @@ class RatePageContests extends SpecialPage {
 			if ( $this->mContest == "!new" ) {
 				$elems[] = $this->msg( 'ratePage-new-contest-sub' )->parse();
 			} else {
-				$elems[] = $this->msg( 'ratePage-edit-contest-sub',
-					$this->mContest )->parse();
+				$elems[] = $this->msg( 'ratePage-edit-contest-sub', $this->mContest )->parse();
 			}
 		}
 

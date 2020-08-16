@@ -81,5 +81,7 @@
   "ratePage-property-average-description": "Średnia wszystkich ocen na tej stronie.",
   "ratePage-property-count-description": "Liczba wszystkich ocen na tej stronie.",
   "ratePage-property-contest-id-description": "Identyfikator konkursu RatePage.",
-  "group-*": "(wszyscy)"
+  "group-*": "(wszyscy)",
+  "ratePage-edit-see-before-vote": "Wyświetl oceny przed zagłosowaniem",
+  "ratePage-prompt-can-see": "Jeszcze nie głosował{{GENDER:|eś|aś}}"
 }

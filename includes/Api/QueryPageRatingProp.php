@@ -30,7 +30,7 @@ class QueryPageRatingProp extends ApiQueryBase {
 		$result = $this->getResult();
 
 		foreach ( $titles as $title ) {
-			if ( !$this->contest && !Rating::canPageBeRated( $title ) ) {
+			if ( !$this->contestId && !Rating::canPageBeRated( $title ) ) {
 				continue;
 			}
 
