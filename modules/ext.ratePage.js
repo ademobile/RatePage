@@ -5,6 +5,8 @@
 mw.RatePage = function () {
 	var self = {};
 
+	self.maxRating = 5;
+
 	/**
 	 * Rate a page.
 	 * @param pageId
@@ -30,9 +32,9 @@ mw.RatePage = function () {
 
 				if ( data.pageRating ) {
 					voteCount = 0;
-					for ( var i = 1; i <= 5; i++ ) voteCount += ( data.pageRating[i] );
+					for ( var i = 1; i <= self.maxRating; i++ ) voteCount += ( data.pageRating[i] );
 					avg = 0;
-					for ( i = 1; i <= 5; i++ ) avg += ( data.pageRating[i] * i );
+					for ( i = 1; i <= self.maxRating; i++ ) avg += ( data.pageRating[i] * i );
 					avg = avg / voteCount;
 				}
 
@@ -60,9 +62,9 @@ mw.RatePage = function () {
 
 					if ( d.pageRating ) {
 						voteCount = 0;
-						for ( var i = 1; i <= 5; i++ ) voteCount += ( d.pageRating[i] );
+						for ( var i = 1; i <= self.maxRating; i++ ) voteCount += ( d.pageRating[i] );
 						avg = 0;
-						for ( i = 1; i <= 5; i++ ) avg += ( d.pageRating[i] * i );
+						for ( i = 1; i <= self.maxRating; i++ ) avg += ( d.pageRating[i] * i );
 						avg = avg / voteCount;
 					}
 
@@ -128,7 +130,7 @@ mw.RatePage = function () {
 					parent.find( '.ratingsinfo-avg' ).text( mw.message( 'ratePage-vote-cannot-see' ) );
 				}
 
-				for ( var i = 1; i <= 5; i++ ) {
+				for ( var i = 1; i <= self.maxRating; i++ ) {
 					if ( i <= userVote ) {
 						parent.find( '.ratingstar[data-ratingstar-no="' + i.toString() + '"]' )
 							.removeClass( "ratingstar-plain ratingstar-1-4 ratingstar-2-4 ratingstar-3-4 ratingstar-full" )
@@ -143,7 +145,7 @@ mw.RatePage = function () {
 				parent.find( '.ratingsinfo-avg' ).text( mw.message( 'ratePage-vote-average-info', average.toFixed( 2 ), vCount.toString() ).text() );
 
 				var f1 = parseInt( average.toFixed( 1 ).slice( 0, -1 ).replace( '.', '' ) );
-				for ( i = 1; i <= 5; i++ ) {
+				for ( i = 1; i <= self.maxRating; i++ ) {
 					if ( i <= f1 ) {
 						parent.find( '.ratingstar[data-ratingstar-no="' + i.toString() + '"]' )
 							.removeClass( "ratingstar-plain ratingstar-1-4 ratingstar-2-4 ratingstar-3-4 ratingstar-full" )
@@ -218,12 +220,12 @@ mw.RatePage = function () {
 	self.initializeTag = function ( stars, starMap ) {
 		var pageId = stars.attr( 'data-page-id' );
 		var contest = stars.attr( 'data-contest' ) || '';
-		for ( var i = 1; i <= 5; i++ ) {
-			stars.append( '<div class="ratingstar ratingstar-embed ratingstar-plain" title="' +
-				mw.message( 'ratePage-caption-' + i.toString() ).text() +
-				'" data-ratingstar-no="' + i.toString() +
-				'"></div>'
-			);
+		for ( var i = 1; i <= self.maxRating; i++ ) {
+			var star = '<div class="ratingstar ratingstar-embed ratingstar-plain"';
+			if ( self.maxRating === 5 ) {
+				star += 'title="' + mw.message( 'ratePage-caption-' + i.toString() ).text() + '"';
+			}
+			star += 'data-ratingstar-no="' + i.toString() +	'"></div>'
 		}
 		stars.append( '<div class="ratingsinfo-embed"><div class="ratingsinfo-yourvote"></div><div class="ratingsinfo-avg"></div></div>' );
 
@@ -240,6 +242,9 @@ mw.RatePage = function () {
 	self.initialize = function () {
 		// a map for batch requesting
 		var starMap = {};
+
+		// read config
+		self.maxRating = mw.config.get( 'wgRPRatingMax' );
 
 		/* process all embedded widgets */
 		$( 'div.ratepage-embed' ).each( function () {
@@ -260,17 +265,21 @@ mw.RatePage = function () {
 
 			var skin = mw.config.get( 'skin' );
 			if ( skin === 'minerva' || mw.config.get( 'wgRPTarget' ) === 'mobile' ) {
-				stars = $( '<div class="post-content footer-element active footer-ratingstars" style="margin-top: 22px"> \
+				var starHtml = '<div class="post-content footer-element active footer-ratingstars" style="margin-top: 22px"> \
 					<h2>' + mw.message( "ratePage-vote-title" ).text() + '</h2> \
-					<div class="pageRatingStars"> \
-						<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="1"></div> \
-						<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="2"></div> \
-						<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="3"></div> \
-						<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="4"></div> \
-						<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="5"></div> \
-					</div> \
-					<span class="ratingsinfo-mobile"><span class="ratingsinfo-yourvote"></span> <span class="ratingsinfo-avg"></span></span></div>'
-				);
+					<div class="pageRatingStars">';
+
+				for ( var i = 1; i <= self.maxRating; i++ ) {
+					starHtml += '<div class="ratingstar ratingstar-mobile ratingstar-plain" data-ratingstar-no="' +
+					i + '"></div>';
+				}
+
+				starHtml += '</div> \
+					<span class="ratingsinfo-mobile"><span class="ratingsinfo-yourvote"></span>\
+					<span class="ratingsinfo-avg"></span></span></div>';
+
+				stars = $( starHtml );
+
 				if ( skin === 'minerva' ) {
 					$( '.last-modified-bar' ).after( stars );
 				} else if ( skin === 'timeless' ) {
@@ -289,12 +298,14 @@ mw.RatePage = function () {
 				stars = $( '<div id="ratingstars" />' );
 				$( '#p-ratePage-vote-title > div' ).append( stars );
 
-				for ( var i = 1; i <= 5; i++ ) {
-					stars.append( '<div class="ratingstar ratingstar-desktop ratingstar-plain" title="' +
-						mw.message( 'ratePage-caption-' + i.toString() ).text() +
-						'" data-ratingstar-no="' + i.toString() +
-						'"></div>'
-					);
+				for ( var i = 1; i <= self.maxRating; i++ ) {
+					var star = '<div class="ratingstar ratingstar-desktop ratingstar-plain"';
+					if ( self.maxRating === 5 ) {
+						star += 'title="' + mw.message( 'ratePage-caption-' + i.toString() ).text() + '"';
+					}
+					star += 'data-ratingstar-no="' + i.toString() +	'"></div>'
+
+					stars.append( star );
 				}
 				stars.after( '<div class="ratingsinfo-desktop"><div class="ratingsinfo-yourvote"></div><div class="ratingsinfo-avg"></div></div>' );
 			}
