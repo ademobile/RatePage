@@ -220,14 +220,16 @@ mw.RatePage = function () {
 	self.initializeTag = function ( stars, starMap ) {
 		var pageId = stars.attr( 'data-page-id' );
 		var contest = stars.attr( 'data-contest' ) || '';
+		var starsInner = '<div class="ratingstars-embed">';
+
 		for ( var i = 1; i <= self.maxRating; i++ ) {
-			var star = '<div class="ratingstar ratingstar-embed ratingstar-plain"';
+			starsInner += '<div class="ratingstar ratingstar-embed ratingstar-plain"';
 			if ( self.maxRating === 5 ) {
-				star += 'title="' + mw.message( 'ratePage-caption-' + i.toString() ).text() + '"';
+				starsInner += 'title="' + mw.message( 'ratePage-caption-' + i.toString() ).text() + '"';
 			}
-			star += 'data-ratingstar-no="' + i.toString() +	'"></div>'
-			stars.append( star );
+			starsInner += 'data-ratingstar-no="' + i.toString() + '"></div>'
 		}
+		stars.append( starsInner );
 		stars.append( '<div class="ratingsinfo-embed"><div class="ratingsinfo-yourvote"></div><div class="ratingsinfo-avg"></div></div>' );
 
 		if ( !starMap[contest] ) starMap[contest] = {};
