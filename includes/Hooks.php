@@ -119,7 +119,7 @@ class Hooks {
 		$pos = $wgRPSidebarPosition;
 
 		$bar = array_slice( $bar, 0, $pos, true ) +
-			[ "ratePage-vote-title" => "" ] +
+			[ "ratePage-vote-title" => [] ] +
 			array_slice( $bar, $pos, count( $bar ) - $pos, true );
 	}
 
