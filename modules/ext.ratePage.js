@@ -226,6 +226,7 @@ mw.RatePage = function () {
 				star += 'title="' + mw.message( 'ratePage-caption-' + i.toString() ).text() + '"';
 			}
 			star += 'data-ratingstar-no="' + i.toString() +	'"></div>'
+			stars.append( star );
 		}
 		stars.append( '<div class="ratingsinfo-embed"><div class="ratingsinfo-yourvote"></div><div class="ratingsinfo-avg"></div></div>' );
 
