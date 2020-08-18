@@ -106,7 +106,7 @@ mw.RatePage = function () {
 		var yourVote = '';
 
 		if ( canVote ) {
-			if ( showResultsBeforeVoting ) {
+			if ( showResultsBeforeVoting || !canSee ) {
 				yourVote = mw.message( 'ratePage-prompt-can-see' ).text();
 			} else {
 				yourVote = mw.message( 'ratePage-prompt' ).text();
@@ -173,6 +173,10 @@ mw.RatePage = function () {
 			stars.click( function () {
 				var answer = $( this ).attr( 'data-ratingstar-no' );
 				var p = $( this ).parent();
+				if ( !p.attr( 'data-page-id' ) ) {
+					p = p.parent();
+				}
+
 				var pageId = p.attr( 'data-page-id' );
 
 				if ( !pageId ) {
