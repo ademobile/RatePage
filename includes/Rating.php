@@ -2,8 +2,8 @@
 
 namespace RatePage;
 use MediaWiki\MediaWikiServices;
+use PageProps;
 use Title;
-use Traversable;
 
 /**
  * RatePage page rating code
@@ -39,6 +39,12 @@ class Rating {
 					"_",
 					$title->getFullText() ),
 					$wgRPRatingPageBlacklist ) ) ) {
+			return false;
+		}
+
+		if ( class_exists( 'DisambiguatorHooks' ) &&
+			PageProps::getInstance()->getProperties( $title, 'disambiguation' )
+		) {
 			return false;
 		}
 
