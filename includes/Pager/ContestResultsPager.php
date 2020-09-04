@@ -6,16 +6,17 @@ use IContextSource;
 use MediaWiki\Linker\LinkRenderer;
 use Message;
 use MWException;
+use RatePage\ContestDB;
 use TablePager;
 use Title;
 
 class ContestResultsPager extends TablePager {
 
-	public $mContest;
+	public $contestId;
 	private $ratingMin, $ratingMax, $linkRenderer;
 
 	public function __construct( $contestId, IContextSource $context, LinkRenderer $linkRenderer ) {
-		$this->mContest = $contestId;
+		$this->contestId = $contestId;
 		$this->linkRenderer = $linkRenderer;
 
 		$this->ratingMin = $this->getConfig()->get( 'RPRatingMin' );
@@ -37,18 +38,7 @@ class ContestResultsPager extends TablePager {
 	 * @return array
 	 */
 	function getQueryInfo() {
-		$res = [ 'tables' => [ 'ratepage_vote' ],
-			'fields' => [ 'rv_page_id',
-				'ans_avg' => 'AVG(rv_answer)',
-				'ans_count' => 'COUNT(rv_answer)' ],
-			'conds' => [ 'rv_contest' => $this->mContest ],
-			'options' => [ 'GROUP BY' => 'rv_page_id' ] ];
-
-		for ( $i = $this->ratingMin; $i <= $this->ratingMax; $i++ ) {
-			$res['fields']["ans_$i"] = "sum(case when rv_answer = $i then 1 else 0 end)";
-		}
-
-		return $res;
+		return ContestDB::getResultsQueryInfo( $this->contestId, $this->ratingMin, $this->ratingMax );
 	}
 
 	/**

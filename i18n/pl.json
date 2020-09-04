@@ -83,5 +83,7 @@
   "ratePage-property-contest-id-description": "Identyfikator konkursu RatePage.",
   "group-*": "(wszyscy)",
   "ratePage-edit-see-before-vote": "Wyświetl oceny przed zagłosowaniem",
-  "ratePage-prompt-can-see": "Jeszcze nie głosował{{GENDER:|eś|aś}}"
+  "ratePage-prompt-can-see": "Jeszcze nie głosował{{GENDER:|eś|aś}}",
+  "ratePage-edit-export": "Eksportuj wyniki",
+  "ratepage-contests-invalid-path": "Nieprawidłowe żądanie."
 }

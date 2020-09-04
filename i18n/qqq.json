@@ -83,5 +83,7 @@
   "ratePage-property-contest-id-description": "Special SMW property description",
   "group-*": "\"Everyone\" group label",
   "ratePage-edit-see-before-vote": "Checkbox label on Special:RatePageContests",
-  "ratePage-prompt-can-see": "Prompt for voting"
+  "ratePage-prompt-can-see": "Prompt for voting",
+  "ratePage-edit-export": "Export contest results button label",
+  "ratepage-contests-invalid-path": "Requested action is invalid error message."
 }
