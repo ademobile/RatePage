@@ -56,7 +56,7 @@ class ContestResultsExporter {
 
 		foreach ( $data as $row ) {
 			$title = Title::newFromRow( $row );
-			$res .= "\n|-\n! [[" . $title->getPrefixedText() . ']]';
+			$res .= "\n|-\n! [[:" . $title->getPrefixedText() . ']]';
 			$res .= "\n| " . $row->ans_avg;
 			$res .= "\n| " . $row->ans_count;
 
