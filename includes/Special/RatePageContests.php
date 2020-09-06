@@ -10,8 +10,10 @@
 
 namespace RatePage\Special;
 
+use BadRequestError;
 use Html;
 use HtmlArmor;
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Widget\CheckMatrixWidget;
 use OOUI;
@@ -31,7 +33,12 @@ use Xml;
 class RatePageContests extends SpecialPage {
 	public static $mLoadedRow = null;
 
-	public $mContest;
+	/** @var string */
+	private $contestId;
+
+	/** @var string */
+	private $action;
+
 	private $mPermManager;
 
 	public function __construct() {
@@ -67,7 +74,18 @@ class RatePageContests extends SpecialPage {
 		}
 
 		if ( strlen( $subpage ) ) {
-			$this->mContest = $subpage;
+			$action = '';
+			$exploded = explode( '/', $subpage );
+			if ( count( $exploded ) > 2 ) {
+				throw new BadRequestError( 'error', 'ratepage-contests-invalid-path' );
+			}
+			if ( count( $exploded ) === 2 ) {
+				$subpage = $exploded[0];
+				$action = $exploded[1];
+			}
+
+			$this->contestId = $subpage;
+			$this->action = $action;
 			$this->showEditView();
 		} else {
 			$this->showListView();
@@ -103,33 +121,70 @@ class RatePageContests extends SpecialPage {
 			throw new PermissionsError( 'ratepage-contests-view-details' );
 		}
 
-		$new = $this->mContest == "!new";
+		$new = $this->contestId === "!new";
 
 		if ( $new && !$this->userCanEdit() ) {
 			throw new PermissionsError( 'ratepage-contests-edit' );
+		}
+
+		if ( $this->action && $this->action !== 'export' ) {
+			throw new BadRequestError(
+				'error',
+				'ratepage-contests-invalid-path'
+			);
 		}
 
 		$out = $this->getOutput();
 		$request = $this->getRequest();
 		$out->setPageTitle( $this->msg( 'ratePage-contest-edit-title' ) );
 
-		if ( !$new && !ContestDB::checkContestExists( $this->mContest ) ) {
+		if ( !$new && !ContestDB::checkContestExists( $this->contestId ) ) {
 			$out->addHTML( Xml::tags( 'p',
 				null,
 				Html::errorBox( $this->msg( 'ratePage-no-such-contest',
-					$this->mContest )->parse() ) ) );
+					$this->contestId )->parse() ) ) );
 
 			return;
 		}
 
+		if ( $this->action === 'export' ) {
+			$exporter = new ContestResultsExporter(
+				new ServiceOptions(
+					ContestResultsExporter::CONSTRUCTOR_OPTIONS,
+					$this->getConfig()
+				),
+				wfGetDB( DB_REPLICA ),
+				$this,
+				$this->contestId
+			);
+			$result = $exporter->export( ContestResultsExporter::MODE_WIKITABLE );
+
+			$out->addHTML( new OOUI\FieldLayout(
+				new OOUI\MultilineTextInputWidget( [
+					'rows' => 20,
+					'readOnly' => true,
+					'value' => $result
+				] ),
+				[ 'align' => 'top' ]
+			) );
+			$out->addHTML( new OOUI\FieldLayout(
+				new OOUI\ButtonWidget( [
+					'label' => $this->msg( 'feedback-back' )->text(),
+					'href' => $this->getPageTitle( $this->contestId )->getFullURL(),
+					'flags' => [ 'progressive' ]
+				] )
+			) );
+			return;
+		}
+
 		// show details
-		$contest = $this->mContest;
+		$contest = $this->contestId;
 		$newRow = $this->loadRequest( $contest );
 
 		$editToken = $this->getRequest()->getVal( 'wpEditToken' );
 		$tokenMatches = $this->getUser()->matchEditToken( $editToken,
 			[ 'ratepagecontest',
-				$this->mContest ],
+				$this->contestId ],
 			$this->getRequest() );
 
 		if ( $tokenMatches && $this->userCanEdit() ) {
@@ -170,7 +225,7 @@ class RatePageContests extends SpecialPage {
 	}
 
 	protected function buildEditor( $row ) {
-		$new = $this->mContest == "!new";
+		$new = $this->contestId == "!new";
 
 		// Figure out which permissions were selected
 		$selectedPermissions = [];
@@ -273,7 +328,7 @@ class RatePageContests extends SpecialPage {
 
 		if ( !$new ) {
 			$form .= Html::hidden( 'wpContestId',
-				$this->mContest );
+				$this->contestId );
 		}
 
 		//TODO: add a button for clearing results
@@ -286,19 +341,33 @@ class RatePageContests extends SpecialPage {
 					'primary' ] ] ) );
 			$form .= Html::hidden( 'wpEditToken',
 				$this->getUser()->getEditToken( [ 'ratepagecontest',
-					$this->mContest ] ) );
+					$this->contestId ] ) );
 		}
 
-		$form = Xml::tags( 'form',
-			[ 'action' => $this->getPageTitle( $this->mContest )->getFullURL(),
-				'method' => 'post' ],
-			$form );
+		$form = Xml::tags(
+			'form',
+			[
+				'action' => $this->getPageTitle( $this->contestId )->getFullURL(),
+				'method' => 'post'
+			],
+			$form
+		);
 
 		if ( !$new ) {
-			$pager = new ContestResultsPager( $row->rpc_id,
+			$pager = new ContestResultsPager(
+				$row->rpc_id,
 				$this->getContext(),
-				$this->getLinkRenderer() );
+				$this->getLinkRenderer()
+			);
 			$form .= '<br><br>' . $pager->getFullOutput()->getText();
+			$form .= new OOUI\FieldLayout(
+				new OOUI\ButtonWidget( [
+					'label' => $this->msg( 'ratePage-edit-export' )->text(),
+					'href' => $this->getPageTitle( $this->contestId . '/export' )->getFullURL(),
+					'flags' => [ 'progressive' ]
+				] )
+			);
+
 			$this->getOutput()->addModules( $pager->getModuleStyles() );
 		}
 
@@ -407,11 +476,11 @@ class RatePageContests extends SpecialPage {
 		$lr = $this->getLinkRenderer();
 		$out = $this->getOutput();
 
-		if ( isset( $this->mContest ) ) {
-			if ( $this->mContest == "!new" ) {
+		if ( isset( $this->contestId ) ) {
+			if ( $this->contestId == "!new" ) {
 				$elems[] = $this->msg( 'ratePage-new-contest-sub' )->parse();
 			} else {
-				$elems[] = $this->msg( 'ratePage-edit-contest-sub', $this->mContest )->parse();
+				$elems[] = $this->msg( 'ratePage-edit-contest-sub', $this->contestId )->parse();
 			}
 		}
 

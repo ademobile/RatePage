@@ -119,4 +119,23 @@ class ContestDB {
 
 		return (bool) $res;
 	}
+
+	public static function getResultsQueryInfo( string $contestId, int $minRating, int $maxRating ) {
+		$res = [
+			'tables' => [ 'ratepage_vote' ],
+			'fields' => [
+				'rv_page_id',
+				'ans_avg' => 'AVG(rv_answer)',
+				'ans_count' => 'COUNT(rv_answer)'
+			],
+			'conds' => [ 'rv_contest' => $contestId ],
+			'options' => [ 'GROUP BY' => 'rv_page_id' ]
+		];
+
+		for ( $i = $minRating; $i <= $maxRating; $i++ ) {
+			$res['fields']["ans_$i"] = "sum(case when rv_answer = $i then 1 else 0 end)";
+		}
+
+		return $res;
+	}
 }
