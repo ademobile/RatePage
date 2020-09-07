@@ -332,4 +332,6 @@ mw.RatePage = function () {
 	return self;
 }();
 
-$( document ).ready( mw.RatePage.initialize() );
+mw.hook( 'wikipage.content' ).add( function () {
+	mw.RatePage.initialize();
+} );
