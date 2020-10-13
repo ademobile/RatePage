@@ -103,7 +103,7 @@ class Hooks {
 		$updater->addPostDatabaseUpdateMaintenance( AddMissingContests::class );
 	}
 
-	public static function onSkinBuildSidebar( Skin $skin, &$bar ) {
+	public static function onSidebarBeforeOutput( Skin $skin, &$bar ) {
 		global $wgRPAddSidebarSection, $wgRPSidebarPosition;
 
 		if ( !$wgRPAddSidebarSection || !Rating::canPageBeRated( $skin->getTitle() ) || $skin->getOutput()
