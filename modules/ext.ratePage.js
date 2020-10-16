@@ -320,13 +320,15 @@ mw.RatePage = function () {
 				stars.after( '<div class="ratingsinfo-desktop"><div class="ratingsinfo-yourvote"></div><div class="ratingsinfo-avg"></div></div>' );
 			}
 
-			if ( !starMap[''] ) starMap[''] = {};
-			starMap[''][mw.config.get( 'wgArticleId' )] = function (
-				avg, voteCount, userVote, canVote, canSee, showResultsBeforeVoting
-			) {
-				self.updateStars( avg, voteCount, userVote, canVote, canSee,
-					showResultsBeforeVoting, true, stars );
-			};
+			if ( stars ) {
+				if ( !starMap[''] ) starMap[''] = {};
+				starMap[''][mw.config.get( 'wgArticleId' )] = function (
+					avg, voteCount, userVote, canVote, canSee, showResultsBeforeVoting
+				) {
+					self.updateStars( avg, voteCount, userVote, canVote, canSee,
+						showResultsBeforeVoting, true, stars );
+				};
+			}
 		}
 
 		self.submitStarMap( starMap );
