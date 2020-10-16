@@ -271,7 +271,10 @@ mw.RatePage = function () {
 			var stars;
 
 			var skin = mw.config.get( 'skin' );
-			if ( skin === 'minerva' || mw.config.get( 'wgRPTarget' ) === 'mobile' ) {
+			if (
+				( skin === 'minerva' || mw.config.get( 'wgRPTarget' ) === 'mobile' ) &&
+				!$( '.footer-ratingstars' ).length
+			) {
 				var starHtml = '<div class="post-content footer-element active footer-ratingstars" style="margin-top: 22px"> \
 					<h2>' + mw.message( "ratePage-vote-title" ).text() + '</h2> \
 					<div class="pageRatingStars">';
@@ -299,8 +302,8 @@ mw.RatePage = function () {
 					}
 
 				}
-			} else {
-				/* for timeless */
+			} else if ( !$( '#ratingstars' ).length ) {
+				// for timeless
 				$( '#p-ratePage-vote-title' ).removeClass( "emptyPortlet" );
 				stars = $( '<div id="ratingstars" />' );
 				$( '#p-ratePage-vote-title > div' ).append( stars );
@@ -317,13 +320,15 @@ mw.RatePage = function () {
 				stars.after( '<div class="ratingsinfo-desktop"><div class="ratingsinfo-yourvote"></div><div class="ratingsinfo-avg"></div></div>' );
 			}
 
-			if ( !starMap[''] ) starMap[''] = {};
-			starMap[''][mw.config.get( 'wgArticleId' )] = function (
-				avg, voteCount, userVote, canVote, canSee, showResultsBeforeVoting
-			) {
-				self.updateStars( avg, voteCount, userVote, canVote, canSee,
-					showResultsBeforeVoting, true, stars );
-			};
+			if ( stars ) {
+				if ( !starMap[''] ) starMap[''] = {};
+				starMap[''][mw.config.get( 'wgArticleId' )] = function (
+					avg, voteCount, userVote, canVote, canSee, showResultsBeforeVoting
+				) {
+					self.updateStars( avg, voteCount, userVote, canVote, canSee,
+						showResultsBeforeVoting, true, stars );
+				};
+			}
 		}
 
 		self.submitStarMap( starMap );
