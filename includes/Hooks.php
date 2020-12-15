@@ -9,7 +9,6 @@ use MediaWiki\MediaWikiServices;
 use MWException;
 use OutputPage;
 use Parser;
-use RatePage\MultimediaViewer\MmvHooks;
 use Skin;
 use Title;
 
@@ -29,7 +28,7 @@ class Hooks {
 	public static function onRegistration() : void {
 		if ( ExtensionRegistry::getInstance()->isLoaded( 'MultimediaViewer' ) ) {
 			global $wgAutoloadClasses;
-			$wgAutoloadClasses['RatePage\MultimediaViewer\MmvHooks'] = __DIR__ . '/MultimediaViewer/MmvHooks.php';
+			$wgAutoloadClasses['RatePageMmvHooks'] = __DIR__ . '/RatePageMmvHooks.php';
 		}
 	}
 
@@ -59,8 +58,8 @@ class Hooks {
 
 		$out->addModules( 'ext.ratePage' );
 
-		if ( $config->get( 'RPUseMMVModule' ) && class_exists( 'RatePage\MultimediaViewer\MmvHooks' ) ) {
-			if ( MmvHooks::isMmvEnabled( $out->getUser() ) ) {
+		if ( $config->get( 'RPUseMMVModule' ) && class_exists( 'RatePageMmvHooks' ) ) {
+			if ( \RatePageMmvHooks::isMmvEnabled( $out->getUser() ) ) {
 				$out->addModules( 'ext.ratePage.mmv' );
 			}
 		}
