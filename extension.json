@@ -5,7 +5,7 @@
 		"Polskacafe"
 	],
 	"license-name": "GPL-2.0-or-later",
-	"version": "2.8.1",
+	"version": "2.8.2",
 	"namemsg": "ratePage",
 	"descriptionmsg": "ratePage-desc",
 	"url": "https://www.mediawiki.org/wiki/Extension:RatePage",
@@ -44,7 +44,6 @@
 	"AutoloadNamespaces": {
 		"RatePage\\": "includes/",
 		"RatePage\\Api\\": "includes/Api/",
-		"RatePage\\MultimediaViewer\\": "includes/MultimediaViewer/",
 		"RatePage\\Pager\\": "includes/Pager/",
 		"RatePage\\SMW\\": "includes/SMW/",
 		"RatePage\\Special\\": "includes/Special/"
