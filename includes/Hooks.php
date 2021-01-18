@@ -9,6 +9,7 @@ use MediaWiki\MediaWikiServices;
 use MWException;
 use OutputPage;
 use Parser;
+use RatePageMmvHooks;
 use Skin;
 use Title;
 
@@ -59,7 +60,7 @@ class Hooks {
 		$out->addModules( 'ext.ratePage' );
 
 		if ( $config->get( 'RPUseMMVModule' ) && class_exists( 'RatePageMmvHooks' ) ) {
-			if ( \RatePageMmvHooks::isMmvEnabled( $out->getUser() ) ) {
+			if ( RatePageMmvHooks::isMmvEnabled( $out->getUser() ) ) {
 				$out->addModules( 'ext.ratePage.mmv' );
 			}
 		}
@@ -141,7 +142,12 @@ class Hooks {
 	 *
 	 * @return string
 	 */
-	public static function renderTagRatePage( Parser $parser, $page = false, $contest = '', $width = '300px' ) {
+	public static function renderTagRatePage(
+		Parser $parser,
+		$page = false,
+		$contest = '',
+		$width = '300px'
+	) : string {
 
 		if ( !$page ) {
 			return self::renderError(
