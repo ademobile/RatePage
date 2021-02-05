@@ -6,8 +6,8 @@
 		]
 	},
 	"ratePage": "RatePage",
-	"ratePage-desc": "Enables users to rate pages and administrators to organize contests.",
-	"ratePage-vote-error": "The vote was unsuccessful.",
+	"ratePage-desc": "Enables users to rate pages and set up contests.",
+	"ratePage-vote-error": "Something went wrong and the vote could not be saved.",
 	"ratePage-vote-title": "Rate article",
 	"ratePage-vote-info": "Your vote: $1.",
 	"ratePage-vote-average-info": "Average: $1 ($2).",
