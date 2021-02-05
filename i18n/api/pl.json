@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"Ostrzyciel",
+			"Polskacafe"
+		]
+	},
+	"apihelp-ratepage-summary": "Pozwala ocenić stronę i pobiera oceny użytkowników dla danej strony. Należy podać jeden z dwóch argumentów: pageid lub pagetitle.",
+	"apihelp-ratepage-param-pageid": "ID strony",
+	"apihelp-ratepage-param-pagetitle": "Tytuł strony",
+	"apihelp-ratepage-param-answer": "Ocena strony (od 1 do 5 włącznie)",
+	"apihelp-ratepage-param-contest": "Identyfikator konkursu",
+	"apihelp-ratepage-example-1": "Pobierz aktualne oceny strony Example,",
+	"apihelp-ratepage-example-2": "Oceń stronę Example na 2.",
+	"apihelp-query+pagerating-summary": "Zwraca informacje o ocenach strony i uprawnieniach do głosowania tego użytkownika.",
+	"apihelp-query+pagerating-param-contest": "Identyfikator konkursu"
+}

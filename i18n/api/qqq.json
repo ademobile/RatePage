@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"Ostrzyciel",
+			"Polskacafe"
+		]
+	},
+	"apihelp-ratepage-summary": "RatePage API module description",
+	"apihelp-ratepage-param-pageid": "API parameter label",
+	"apihelp-ratepage-param-pagetitle": "API parameter label",
+	"apihelp-ratepage-param-answer": "API parameter label",
+	"apihelp-ratepage-param-contest": "API parameter label",
+	"apihelp-ratepage-example-1": "API usage example label",
+	"apihelp-ratepage-example-2": "API usage example label",
+	"apihelp-query+pagerating-summary": "Description of an API query module",
+	"apihelp-query+pagerating-param-contest": "API parameter label"
+}

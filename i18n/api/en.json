@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"Ostrzyciel",
+			"Polskacafe"
+		]
+	},
+	"apihelp-ratepage-summary": "Allows a user to vote on a page and gets the rating for a page. Requires specyfying one of two parameters: pageid or pagetitle.",
+	"apihelp-ratepage-param-pageid": "Page ID",
+	"apihelp-ratepage-param-pagetitle": "Page title",
+	"apihelp-ratepage-param-answer": "User's page rating (from 1 to 5 inclusive)",
+	"apihelp-ratepage-param-contest": "Contest identifier",
+	"apihelp-ratepage-example-1": "Get the current rating for page Example,",
+	"apihelp-ratepage-example-2": "Rate page Example with a 2.",
+	"apihelp-query+pagerating-summary": "Returns votes on this page and this user's voting permissions.",
+	"apihelp-query+pagerating-param-contest": "Contest identifier"
+}
