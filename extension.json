@@ -11,7 +11,10 @@
 	"url": "https://www.mediawiki.org/wiki/Extension:RatePage",
 	"manifest_version": 1,
 	"MessagesDirs": {
-		"RatePage": [ "i18n" ]
+		"RatePage": [
+			"i18n",
+			"i18n/api"
+		]
 	},
 	"config": {
 		"RPRatingAllowedNamespaces": null,
