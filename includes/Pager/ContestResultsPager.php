@@ -80,8 +80,7 @@ class ContestResultsPager extends TablePager {
 			if ( $title ) {
 				return $this->linkRenderer->makeLink( $title );
 			} else {
-				return $this->msg( 'ratePage-deleted-page',
-					$value );
+				return $this->msg( 'ratePage-deleted-page', $value )->parse();
 			}
 		}
 
@@ -126,8 +125,7 @@ class ContestResultsPager extends TablePager {
 		}
 
 		for ( $i = $this->ratingMin; $i <= $this->ratingMax; $i++ ) {
-			$headers["ans_$i"] = $this->msg( 'ratePage-results-list-ans',
-				$i )->text();
+			$headers["ans_$i"] = $this->msg( 'ratePage-results-list-ans', $i )->text();
 		}
 
 		return $headers;

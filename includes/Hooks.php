@@ -5,6 +5,7 @@ namespace RatePage;
 use AddMissingContests;
 use DatabaseUpdater;
 use ExtensionRegistry;
+use Html;
 use MediaWiki\MediaWikiServices;
 use MWException;
 use OutputPage;
@@ -21,7 +22,6 @@ use Title;
  */
 class Hooks {
 	// TODO: get rid of all the globals, ugh
-	const PROP_NAME = 'page_views';
 
 	/**
 	 * Load an additional class if MMV is present.
@@ -146,12 +146,11 @@ class Hooks {
 		Parser $parser,
 		$page = false,
 		$contest = '',
-		$width = '300px'
+		$width = '300'
 	) : string {
-
 		if ( !$page ) {
 			return self::renderError(
-				wfMessage( 'ratePage-missing-argument-page' )->escaped(),
+				wfMessage( 'ratePage-missing-argument-page' )->text(),
 				$parser
 			);
 		}
@@ -159,25 +158,47 @@ class Hooks {
 		$title = Title::newFromText( $page );
 		if ( !$title || $title->getArticleID() < 1 ) {
 			return self::renderError(
-				wfMessage( 'ratePage-page-does-not-exist' )->escaped(),
+				wfMessage( 'ratePage-page-does-not-exist' )->text(),
 				$parser
 			);
 		}
 
 		if ( $contest && !ContestDB::checkContestExists( $contest ) ) {
 			return self::renderError(
-				wfMessage( 'ratePage-no-such-contest', $contest )->escaped(),
+				wfMessage( 'ratePage-no-such-contest', $contest )->text(),
 				$parser
 			);
 		}
 
-		return '<div class="ratepage-embed" data-page-id="' . $title->getArticleID() . '" data-contest="' .
-			$contest . '" style="width: ' . $width . ';"></div>';
+		// Check if the specified width is in pixels, discard anything else
+		// Accept only simple integers, just to be sure
+		$width = trim( str_replace( 'px', '', $width ) );
+		if ( !preg_match( '/^\d+$/', $width ) ) {
+			$width = 300;
+		} else {
+			$width = intval( $width );
+		}
+
+		return Html::element(
+			'div',
+			[
+				'class' => 'ratepage-embed',
+				'data-page-id' => $title->getArticleID(),
+				'data-contest' => $contest,
+				'style' => 'width: ' . $width . 'px;'
+			]
+		);
 	}
 
-	private static function renderError( string $text, Parser &$parser ) {
+	/**
+	 * @param string $text Unescaped text
+	 * @param Parser $parser
+	 *
+	 * @return string
+	 */
+	private static function renderError( string $text, Parser $parser ) : string {
 		$parser->addTrackingCategory( 'ratePage-error-category' );
 
-		return '<strong class="error">' . $text . '</strong>';
+		return Html::element( 'strong', [ 'class' => 'error' ], $text );
 	}
 }

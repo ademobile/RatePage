@@ -12,7 +12,6 @@ namespace RatePage\Special;
 
 use BadRequestError;
 use Html;
-use HtmlArmor;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Widget\CheckMatrixWidget;
@@ -97,12 +96,14 @@ class RatePageContests extends SpecialPage {
 
 	protected function showListView() {
 		$out = $this->getOutput();
-		$out->setPageTitle( $this->msg( 'ratePage-contest-list-title' ) );
+		$out->setPageTitle( $this->msg( 'ratePage-contest-list-title' )->text() );
 
 		// New contest button
 		if ( $this->userCanEdit() ) {
-			$link = new OOUI\ButtonWidget( [ 'label' => $this->msg( 'ratePage-contests-new' )->text(),
-				'href' => $this->getPageTitle( '!new' )->getFullURL(), ] );
+			$link = new OOUI\ButtonWidget( [
+				'label' => $this->msg( 'ratePage-contests-new' )->text(),
+				'href' => $this->getPageTitle( '!new' )->getFullURL(),
+			] );
 			$out->addHTML( $link );
 		}
 
@@ -136,14 +137,12 @@ class RatePageContests extends SpecialPage {
 
 		$out = $this->getOutput();
 		$request = $this->getRequest();
-		$out->setPageTitle( $this->msg( 'ratePage-contest-edit-title' ) );
+		$out->setPageTitle( $this->msg( 'ratePage-contest-edit-title' )->text() );
 
 		if ( !$new && !ContestDB::checkContestExists( $this->contestId ) ) {
-			$out->addHTML( Xml::tags( 'p',
-				null,
-				Html::errorBox( $this->msg( 'ratePage-no-such-contest',
-					$this->contestId )->parse() ) ) );
-
+			$out->addHTML( Html::errorBox(
+				$this->msg( 'ratePage-no-such-contest', $this->contestId )->parse()
+			) );
 			return;
 		}
 
@@ -212,12 +211,10 @@ class RatePageContests extends SpecialPage {
 		} else {
 			if ( $tokenMatches ) {
 				// Lost rights meanwhile
-				$out->addHTML( Xml::tags( 'p',
-					null,
-					Html::errorBox( $this->msg( 'ratePage-edit-notallowed' )->parse() ) ) );
+				$out->addHTML( Html::errorBox( $this->msg( 'ratePage-edit-notallowed' )->text() ) );
 			} elseif ( $request->wasPosted() ) {
 				// Warn the user to re-attempt save
-				$out->addHTML( Html::warningBox( $this->msg( 'ratePage-edit-token-not-match' )->escaped() ) );
+				$out->addHTML( Html::warningBox( $this->msg( 'ratePage-edit-token-not-match' )->text() ) );
 			}
 
 			$out->addHTML( $this->buildEditor( $newRow ) );
@@ -254,7 +251,7 @@ class RatePageContests extends SpecialPage {
 
 		$form = '';
 
-		$fieldset = new OOUI\FieldsetLayout( [ 'label' => $this->msg( 'ratePage-contest-edit-main' )->escaped() ] );
+		$fieldset = new OOUI\FieldsetLayout( [ 'label' => $this->msg( 'ratePage-contest-edit-main' )->text() ] );
 
 		$fieldset->addItems( [
 			//TODO: add some info for end user on allowed characters
@@ -267,7 +264,7 @@ class RatePageContests extends SpecialPage {
 					] + ( $new ? [ 'name' => 'wpContestId' ] : [] )
 				),
 				[
-					'label' => $this->msg( 'ratePage-edit-id' )->escaped(),
+					'label' => $this->msg( 'ratePage-edit-id' )->text(),
 					'align' => 'top'
 				]
 			),
@@ -279,7 +276,7 @@ class RatePageContests extends SpecialPage {
 					] + $readOnlyAttrib
 				),
 				[
-					'label' => $this->msg( 'ratePage-edit-description' )->escaped(),
+					'label' => $this->msg( 'ratePage-edit-description' )->text(),
 					'align' => 'top'
 				]
 			),
@@ -292,7 +289,7 @@ class RatePageContests extends SpecialPage {
 					] + $readOnlyAttrib
 				),
 				[
-					'label' => $this->msg( 'ratePage-edit-enabled' )->escaped(),
+					'label' => $this->msg( 'ratePage-edit-enabled' )->text(),
 					'align' => 'inline'
 				]
 			),
@@ -305,7 +302,7 @@ class RatePageContests extends SpecialPage {
 					] + $readOnlyAttrib
 				),
 				[
-					'label' => $this->msg( 'ratePage-edit-see-before-vote' )->escaped(),
+					'label' => $this->msg( 'ratePage-edit-see-before-vote' )->text(),
 					'align' => 'inline'
 				]
 			),
@@ -314,8 +311,8 @@ class RatePageContests extends SpecialPage {
 					[
 						'name' => 'wpContestPermissions',
 						'columns' => [
-							$this->msg( 'ratePage-edit-allowed-to-vote' )->escaped() => 'vote',
-							$this->msg( 'ratePage-edit-allowed-to-see' )->escaped() => 'see'
+							$this->msg( 'ratePage-edit-allowed-to-vote' )->text() => 'vote',
+							$this->msg( 'ratePage-edit-allowed-to-see' )->text() => 'see'
 						],
 						'rows' => Rights::getGroupsAsColumns( $this->getContext() ),
 						'values' => $selectedPermissions
@@ -478,15 +475,14 @@ class RatePageContests extends SpecialPage {
 
 		if ( isset( $this->contestId ) ) {
 			if ( $this->contestId == "!new" ) {
-				$elems[] = $this->msg( 'ratePage-new-contest-sub' )->parse();
+				$elems[] = $this->msg( 'ratePage-new-contest-sub' )->escaped();
 			} else {
-				$elems[] = $this->msg( 'ratePage-edit-contest-sub', $this->contestId )->parse();
+				$elems[] = $this->msg( 'ratePage-edit-contest-sub', $this->contestId )->escaped();
 			}
 		}
 
 		$homePage = Title::newFromText( 'Special:RatePageContests' );
-		$elems[] = $lr->makeLink( $homePage,
-			new HtmlArmor( $this->msg( 'ratePage-contest-home' )->parse() ) );
+		$elems[] = $lr->makeLink( $homePage, $this->msg( 'ratePage-contest-home' )->text() );
 
 		$linkStr = $this->getLanguage()->pipeList( $elems );
 		$out->getOutput()->setSubtitle( $linkStr );

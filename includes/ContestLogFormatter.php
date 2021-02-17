@@ -34,10 +34,13 @@ class ContestLogFormatter extends LogFormatter {
 		}
 
 		$params = [];
-		$params[3] = Message::rawParam( $this->makePageLink( $this->entry->getTarget(),
-			[],
-			$this->msg( 'ratePage-log-contest-formatter',
-				$contestId )->escaped() ) );
+		$params[3] = Message::rawParam(
+			$this->makePageLink(
+				$this->entry->getTarget(),
+				[],
+				$this->msg( 'ratePage-log-contest-formatter', $contestId )->escaped()
+			)
+		);
 
 		return $params;
 	}

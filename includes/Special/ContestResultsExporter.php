@@ -94,16 +94,16 @@ class ContestResultsExporter {
 
 	private function getHeader() : string {
 		$res = '{| class="wikitable sortable"';
-		$res .= "\n! " . $this->msg->msg( 'ratePage-results-list-page' );
-		$res .= "\n! " . $this->msg->msg( 'ratePage-results-list-avg' );
-		$res .= "\n! " . $this->msg->msg( 'ratePage-results-list-count' );
+		$res .= "\n! " . $this->msg->msg( 'ratePage-results-list-page' )->plain();
+		$res .= "\n! " . $this->msg->msg( 'ratePage-results-list-avg' )->plain();
+		$res .= "\n! " . $this->msg->msg( 'ratePage-results-list-count' )->plain();
 
 		for (
 			$i = $this->options->get( 'RPRatingMin' );
 			$i <= $this->options->get( 'RPRatingMax' );
 			$i++
 		) {
-			$res .= "\n! " . $this->msg->msg( 'ratePage-results-list-ans', $i );
+			$res .= "\n! " . $this->msg->msg( 'ratePage-results-list-ans', $i )->plain();
 		}
 
 		return $res;
