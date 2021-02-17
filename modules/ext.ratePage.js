@@ -296,7 +296,7 @@ mw.RatePage = function () {
 					if ( afterContent.length === 1 ) {
 						afterContent.prepend( stars );
 					} else {
-						afterContent = $( '<div id="mw-data-after-content" />' ).append( stars );
+						afterContent = $( '<div id="mw-data-after-content"></div>' ).append( stars );
 						$( '#content-bottom-stuff' ).append( afterContent );
 					}
 
@@ -304,7 +304,7 @@ mw.RatePage = function () {
 			} else if ( !$( '#ratingstars' ).length ) {
 				// for timeless
 				$( '#p-ratePage-vote-title' ).removeClass( "emptyPortlet" );
-				stars = $( '<div id="ratingstars" />' );
+				stars = $( '<div id="ratingstars"></div>' );
 				$( '#p-ratePage-vote-title > div' ).append( stars );
 
 				for ( var i = 1; i <= self.maxRating; i++ ) {

@@ -6,13 +6,13 @@ use IContextSource;
 use User;
 
 class Rights {
-	public static function getAllGroups( IContextSource $context ) {
+	public static function getAllGroups( IContextSource $context ) : array {
 		$groups = $context->getConfig()->get( 'GroupPermissions' );
 
 		return array_keys( $groups );
 	}
 
-	public static function getGroupsAsColumns( IContextSource $context ) {
+	public static function getGroupsAsColumns( IContextSource $context ) : array {
 		$groups = self::getAllGroups( $context );
 		$res = [];
 
@@ -23,7 +23,7 @@ class Rights {
 		return $res;
 	}
 
-	public static function checkUserCanExecute( $allowed, User $user ) {
+	public static function checkUserCanExecute( $allowed, User $user ) : bool {
 		$groups = explode( ',', $allowed );
 
 		return (bool) sizeof( array_intersect( $groups, $user->getEffectiveGroups() ) );
@@ -35,7 +35,7 @@ class Rights {
 	 *
 	 * @return bool[]
 	 */
-	public static function checkUserPermissionsOnContest( $contest, User $user ) {
+	public static function checkUserPermissionsOnContest( $contest, User $user ) : array {
 		$eg = $user->getEffectiveGroups();
 
 		if ( !$contest ) {

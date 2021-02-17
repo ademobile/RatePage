@@ -37,7 +37,7 @@ class ContestResultsPager extends TablePager {
 	 *
 	 * @return array
 	 */
-	function getQueryInfo() {
+	function getQueryInfo() : array {
 		return ContestDB::getResultsQueryInfo( $this->contestId, $this->ratingMin, $this->ratingMax );
 	}
 
@@ -49,7 +49,7 @@ class ContestResultsPager extends TablePager {
 	 *
 	 * @return bool
 	 */
-	function isFieldSortable( $field ) {
+	function isFieldSortable( $field ) : bool {
 		return true;
 	}
 
@@ -98,7 +98,7 @@ class ContestResultsPager extends TablePager {
 	 *
 	 * @return string
 	 */
-	function getDefaultSort() {
+	function getDefaultSort() : string {
 		return 'rv_page_id';
 	}
 
@@ -109,7 +109,7 @@ class ContestResultsPager extends TablePager {
 	 *
 	 * @return array
 	 */
-	function getFieldNames() {
+	function getFieldNames() : array {
 		static $headers = null;
 
 		if ( !empty( $headers ) ) {

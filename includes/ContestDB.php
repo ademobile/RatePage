@@ -4,11 +4,17 @@ namespace RatePage;
 use Exception;
 use IContextSource;
 use ManualLogEntry;
+use stdClass;
 use Title;
 
 class ContestDB {
 
-	public static function loadContest( $contest ) {
+	/**
+	 * @param string $contest
+	 *
+	 * @return bool|stdClass
+	 */
+	public static function loadContest( string $contest ) {
 		$dbr = wfGetDB( DB_REPLICA );
 		$contest = $dbr->selectRow( [ 'ratepage_contest', ],
 			'*',
@@ -18,7 +24,12 @@ class ContestDB {
 		return $contest;
 	}
 
-	public static function loadVotes( $contest ) {
+	/**
+	 * @param string $contest
+	 *
+	 * @return array
+	 */
+	public static function loadVotes( string $contest ) : array {
 		$votes = [];
 		$dbr = wfGetDB( DB_REPLICA );
 
@@ -96,7 +107,7 @@ class ContestDB {
 		$logEntry->publish( $logid );
 	}
 
-	public static function validateId( $id ) {
+	public static function validateId( string $id ) : ?string {
 		if ( strlen( $id ) > 255 ) {
 			return 'ratePage-contest-id-too-long';
 		}
@@ -107,7 +118,7 @@ class ContestDB {
 		return null;
 	}
 
-	public static function checkContestExists( $id ) {
+	public static function checkContestExists( $id ) : bool {
 		if ( !$id ) {
 			return true;
 		}
@@ -120,7 +131,7 @@ class ContestDB {
 		return (bool) $res;
 	}
 
-	public static function getResultsQueryInfo( string $contestId, int $minRating, int $maxRating ) {
+	public static function getResultsQueryInfo( string $contestId, int $minRating, int $maxRating ) : array {
 		$res = [
 			'tables' => [ 'ratepage_vote' ],
 			'fields' => [

@@ -13,7 +13,6 @@ use Wikimedia\ParamValidator\ParamValidator;
  *
  * @file
  * @ingroup Extensions
- * @license MIT
  */
 class RatePage extends ApiBase {
 	use RatePageApiTrait;

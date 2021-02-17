@@ -20,7 +20,7 @@ class AddMissingContests extends LoggedUpdateMaintenance {
 	 * Return true to log the update as done or false (usually on failure).
 	 * @return bool
 	 */
-	protected function doDBUpdates() {
+	protected function doDBUpdates() : bool {
 		$dbw = $this->getDB( DB_MASTER );
 
 		$res = $dbw->select(
@@ -70,7 +70,7 @@ class AddMissingContests extends LoggedUpdateMaintenance {
 	 * Get the update key name to go in the update log table
 	 * @return string
 	 */
-	protected function getUpdateKey() {
+	protected function getUpdateKey() : string {
 		return __CLASS__;
 	}
 }

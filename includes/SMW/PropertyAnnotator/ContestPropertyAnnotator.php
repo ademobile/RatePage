@@ -3,7 +3,6 @@
 namespace RatePage\SMW\PropertyAnnotator;
 
 use RatePage\SMW\Hooks;
-use SMW\DataValueFactory;
 use SMW\SemanticData;
 use SMW\Subobject;
 use SMWDIBlob;

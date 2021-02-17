@@ -59,7 +59,7 @@ trait RatePageApiTrait {
 	 * @throws ApiUsageException
 	 * @throws MWException
 	 */
-	protected function processParams( array &$params, IContextSource $context, ApiBase $parent ) : void {
+	protected function processParams( array $params, IContextSource $context, ApiBase $parent ) : void {
 		$this->user = $context->getUser();
 		$this->ip = $context->getRequest()->getIP();
 		if ( $this->user->getName() == '' ) {
@@ -109,7 +109,7 @@ trait RatePageApiTrait {
 	 * @param array|null $path
 	 * @param ApiResult $result
 	 */
-	protected function addTitleToResults( Title $title, ?array $path, ApiResult $result ) {
+	protected function addTitleToResults( Title $title, ?array $path, ApiResult $result ) : void {
 		$userVote = Rating::getUserVote(
 			$title,
 			$this->userName,
