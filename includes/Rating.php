@@ -18,7 +18,7 @@ class Rating {
 	 *
 	 * @return bool
 	 */
-	public static function canPageBeRated( Title $title ) {
+	public static function canPageBeRated( Title $title ) : bool {
 		global $wgRPRatingAllowedNamespaces, $wgRPRatingPageBlacklist;
 
 		if ( $title->getArticleID() < 1 ) {
@@ -51,7 +51,7 @@ class Rating {
 		return true;
 	}
 
-	public static function getPageContestRatings( Title $title, bool $onlyPubliclyViewable ) {
+	public static function getPageContestRatings( Title $title, bool $onlyPubliclyViewable ) : array {
 		$pageId = $title->getArticleID();
 		if ( $pageId < 0 ) {
 			// no such page
@@ -128,7 +128,7 @@ class Rating {
 	 *
 	 * @return array
 	 */
-	public static function getPageRating( Title $title, string $contest = '' ) {
+	public static function getPageRating( Title $title, string $contest = '' ) : array {
 		$pageId = $title->getArticleID();
 		if ( $pageId < 0 ) {
 			// no such page
@@ -161,7 +161,7 @@ class Rating {
 	 *
 	 * @return array
 	 */
-	private static function buildRatingTableFromRows( iterable $rows ) {
+	private static function buildRatingTableFromRows( iterable $rows ) : array {
 		$config = MediaWikiServices::getInstance()->getMainConfig();
 		$ratingMin = $config->get( 'RPRatingMin' );
 		$ratingMax = $config->get( 'RPRatingMax' );
@@ -206,7 +206,7 @@ class Rating {
 			__METHOD__
 		);
 
-		if ( $res != false && !is_null( $res ) ) {
+		if ( $res !== false && !is_null( $res ) ) {
 			return (int) $res;
 		}
 
@@ -224,7 +224,7 @@ class Rating {
 	 *
 	 * @return bool
 	 */
-	public static function voteOnPage( Title $title, string $user, string $ip, int $answer, string $contest = '' ) {
+	public static function voteOnPage( Title $title, string $user, string $ip, int $answer, string $contest = '' ) : bool {
 		$pageId = $title->getArticleID();
 		if ( $pageId < 0 ) {
 			// no such page

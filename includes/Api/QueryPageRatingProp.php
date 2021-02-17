@@ -1,7 +1,6 @@
 <?php
 
 namespace RatePage\Api;
-use ApiBase;
 use ApiQuery;
 use ApiQueryBase;
 use RatePage\Rating;
@@ -14,9 +13,11 @@ class QueryPageRatingProp extends ApiQueryBase {
 	 * @inheritDoc
 	 */
 	public function __construct( ApiQuery $queryModule, $moduleName, $paramPrefix = 'pr' ) {
-		parent::__construct( $queryModule,
+		parent::__construct(
+			$queryModule,
 			$moduleName,
-			$paramPrefix );
+			$paramPrefix
+		);
 	}
 
 	/**
@@ -25,9 +26,11 @@ class QueryPageRatingProp extends ApiQueryBase {
 	public function execute() {
 		$params = $this->extractRequestParams();
 		$titles = $this->getPageSet()->getGoodTitles();
-		$this->processParams( $params,
+		$this->processParams(
+			$params,
 			$this->getContext(),
-			$this );
+			$this
+		);
 		$result = $this->getResult();
 
 		foreach ( $titles as $title ) {
@@ -35,13 +38,17 @@ class QueryPageRatingProp extends ApiQueryBase {
 				continue;
 			}
 
-			$path = [ 'query',
+			$path = [
+				'query',
 				'pages',
 				$title->getArticleID(),
-				$this->getModuleName() ];
-			$this->addTitleToResults( $title,
+				$this->getModuleName()
+			];
+			$this->addTitleToResults(
+				$title,
 				$path,
-				$result );
+				$result
+			);
 		}
 	}
 
@@ -52,7 +59,7 @@ class QueryPageRatingProp extends ApiQueryBase {
 	 *
 	 * @return string Always returns "private"
 	 */
-	public function getCacheMode( $params ) {
+	public function getCacheMode( $params ) : string {
 		return 'private';
 	}
 

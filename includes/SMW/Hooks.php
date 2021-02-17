@@ -64,7 +64,7 @@ class Hooks {
 		return true;
 	}
 
-	private static function getRatingPropDefinitions() {
+	private static function getRatingPropDefinitions() : array {
 		return [
 			self::PROP_RATING_AVERAGE => [
 				'label' => self::PROP_LABEL_RATING_AVERAGE,
@@ -85,7 +85,7 @@ class Hooks {
 		];
 	}
 
-	private static function getContestPropDefinitions() {
+	private static function getContestPropDefinitions() : array {
 		return [
 			self::PROP_CONTEST_ID => [
 				'label' => self::PROP_LABEL_CONTEST_ID,
@@ -98,7 +98,7 @@ class Hooks {
 		];
 	}
 
-	public static function onBeforeDataUpdateComplete( Store $store, SemanticData $semanticData ) {
+	public static function onBeforeDataUpdateComplete( Store $store, SemanticData $semanticData ) : bool {
 		$config = MediaWikiServices::getInstance()->getMainConfig();
 		$title = $semanticData->getSubject()->getTitle();
 		if ( $title === null || !Rating::canPageBeRated( $title ) ) {

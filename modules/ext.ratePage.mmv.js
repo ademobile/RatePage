@@ -11,10 +11,10 @@ $(document).ready( function () {
 			titles: title
 		} ).done( function ( response ) {
 			var id = Object.keys( response.query.pages )[0];
-			var text = '<div class="ratepage-embed" data-page-id="' + id + '" />';
+			var text = '<div class="ratepage-embed" data-page-id="' + id + '"></div>';
 
 			if ( id < 0 ) {
-				text = '<div />'
+				text = '<div></div>'
 			}
 
 			var w = $( text );

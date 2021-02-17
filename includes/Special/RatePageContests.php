@@ -27,6 +27,7 @@ use Status;
 use stdClass;
 use Title;
 use WebRequest;
+use Wikimedia\Rdbms\DBError;
 use Xml;
 
 class RatePageContests extends SpecialPage {
@@ -50,11 +51,11 @@ class RatePageContests extends SpecialPage {
 	/**
 	 * @return bool
 	 */
-	public function doesWrites() {
+	public function doesWrites() : bool {
 		return true;
 	}
 
-	function execute( $subpage ) {
+	function execute( $subPage ) {
 		$out = $this->getOutput();
 		$request = $this->getRequest();
 
@@ -72,18 +73,18 @@ class RatePageContests extends SpecialPage {
 					$changedFilter ] );
 		}
 
-		if ( strlen( $subpage ) ) {
+		if ( strlen( $subPage ) ) {
 			$action = '';
-			$exploded = explode( '/', $subpage );
+			$exploded = explode( '/', $subPage );
 			if ( count( $exploded ) > 2 ) {
 				throw new BadRequestError( 'error', 'ratepage-contests-invalid-path' );
 			}
 			if ( count( $exploded ) === 2 ) {
-				$subpage = $exploded[0];
+				$subPage = $exploded[0];
 				$action = $exploded[1];
 			}
 
-			$this->contestId = $subpage;
+			$this->contestId = $subPage;
 			$this->action = $action;
 			$this->showEditView();
 		} else {
@@ -221,7 +222,7 @@ class RatePageContests extends SpecialPage {
 		}
 	}
 
-	protected function buildEditor( $row ) {
+	protected function buildEditor( $row ) : string {
 		$new = $this->contestId == "!new";
 
 		// Figure out which permissions were selected
@@ -377,7 +378,7 @@ class RatePageContests extends SpecialPage {
 	 *
 	 * @return Status
 	 */
-	protected function saveContest( $row, WebRequest $request ) {
+	protected function saveContest( $row, WebRequest $request ) : Status {
 		$validationStatus = Status::newGood();
 
 		$id = $request->getVal( 'wpContestId' );
@@ -403,7 +404,7 @@ class RatePageContests extends SpecialPage {
 		try {
 			ContestDB::saveContest( $row,
 				$this->getContext() );
-		} catch ( \Wikimedia\Rdbms\DBError $dbe ) {
+		} catch ( DBError $dbe ) {
 			$validationStatus->error( 'ratePage-duplicate-id' );
 
 			return $validationStatus;
@@ -488,17 +489,17 @@ class RatePageContests extends SpecialPage {
 		$out->getOutput()->setSubtitle( $linkStr );
 	}
 
-	public function userCanViewDetails() {
+	public function userCanViewDetails() : bool {
 		return $this->mPermManager->userHasRight( $this->getUser(),
 			'ratepage-contests-view-details' );
 	}
 
-	public function userCanEdit() {
+	public function userCanEdit() : bool {
 		return $this->mPermManager->userHasRight( $this->getUser(),
 			'ratepage-contests-edit' );
 	}
 
-	public function userCanClearResults() {
+	public function userCanClearResults() : bool {
 		return $this->mPermManager->userHasRight( $this->getUser(),
 			'ratepage-contests-clear' );
 	}

@@ -31,13 +31,11 @@ class ContestsPager extends TablePager {
 	 *
 	 * @return array
 	 */
-	function getQueryInfo() {
-		$query = [ 'tables' => [ 'ratepage_contest' ],
+	function getQueryInfo() : array {
+		return [ 'tables' => [ 'ratepage_contest' ],
 			'fields' => [ 'rpc_id',
 				'rpc_description',
 				'rpc_enabled' ] ];
-
-		return $query;
 	}
 
 	/**
@@ -48,7 +46,7 @@ class ContestsPager extends TablePager {
 	 *
 	 * @return bool
 	 */
-	function isFieldSortable( $field ) {
+	function isFieldSortable( $field ) : bool {
 		return true;
 	}
 
@@ -67,7 +65,7 @@ class ContestsPager extends TablePager {
 	 * @return string
 	 * @throws MWException
 	 */
-	function formatValue( $name, $value ) {
+	function formatValue( $name, $value ) : string {
 		$row = $this->mCurrentRow;
 
 		switch ( $name ) {
@@ -101,7 +99,7 @@ class ContestsPager extends TablePager {
 	 *
 	 * @return string
 	 */
-	function getDefaultSort() {
+	function getDefaultSort() : string {
 		return 'rpc_id';
 	}
 
@@ -112,7 +110,7 @@ class ContestsPager extends TablePager {
 	 *
 	 * @return array
 	 */
-	function getFieldNames() {
+	function getFieldNames() : array {
 		static $headers = null;
 
 		if ( !empty( $headers ) ) {

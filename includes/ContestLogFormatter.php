@@ -16,7 +16,7 @@ class ContestLogFormatter extends LogFormatter {
 	/**
 	 * @return string
 	 */
-	protected function getMessageKey() {
+	protected function getMessageKey() : string {
 		$subtype = $this->entry->getSubtype();
 
 		return "logentry-ratepage-contest-$subtype";
@@ -25,7 +25,7 @@ class ContestLogFormatter extends LogFormatter {
 	/**
 	 * @return array
 	 */
-	protected function extractParameters() {
+	protected function extractParameters() : array {
 		$parameters = $this->entry->getParameters();
 		if ( $this->entry->isLegacy() ) {
 			list( $contestId ) = $parameters;
