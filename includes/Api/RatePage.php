@@ -81,7 +81,7 @@ class RatePage extends ApiBase {
 	 *
 	 * @return string Always returns "private"
 	 */
-	public function getCacheMode( $params ) {
+	public function getCacheMode( array $params ) : string {
 		return 'private';
 	}
 
@@ -90,22 +90,34 @@ class RatePage extends ApiBase {
 	 *
 	 * @return array
 	 */
-	public function getAllowedParams() {
-		return [ 'pageid' => [ ApiBase::PARAM_TYPE => 'integer' ],
+	public function getAllowedParams() : array {
+		return [
+			'pageid' => [ ApiBase::PARAM_TYPE => 'integer' ],
 			'pagetitle' => [ ApiBase::PARAM_TYPE => 'string' ],
 			'answer' => [ ApiBase::PARAM_TYPE => 'integer' ],
-			'contest' => [ ApiBase::PARAM_TYPE => 'string' ] ];
+			'contest' => [ ApiBase::PARAM_TYPE => 'string' ]
+		];
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	protected function getExamplesMessages() {
-		return [ 'action=ratepage&pagetitle=Example' => 'apihelp-ratepage-example-1',
-			'action=ratepage&pagetitle=Example&answer=2' => 'apihelp-ratepage-example-2' ];
+	protected function getExamplesMessages() : array {
+		return [
+			'action=ratepage&pagetitle=Example' => 'apihelp-ratepage-example-1',
+			'action=ratepage&pagetitle=Example&answer=2' => 'apihelp-ratepage-example-2'
+		];
 	}
 
-	public function isWriteMode() {
+	public function isWriteMode() : bool {
+		return true;
+	}
+
+	public function needsToken() : string {
+		return 'csrf';
+	}
+
+	public function mustBePosted() : bool {
 		return true;
 	}
 }

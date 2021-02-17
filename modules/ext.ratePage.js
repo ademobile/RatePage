@@ -15,14 +15,13 @@ mw.RatePage = function () {
 	 * @param callback
 	 */
 	self.ratePage = function ( pageId, contest, answer, callback ) {
-		( new mw.Api() ).post( {
+		( new mw.Api() ).postWithEditToken( {
 			action: 'ratepage',
 			format: 'json',
 			pageid: pageId,
 			contest: contest,
-			answer: answer
-		} )
-			.done( function ( data ) {
+			answer: answer,
+		} ).done( function ( data ) {
 				if ( !data.userVote || data.userVote === -1 ) {
 					mw.notify( mw.message( 'ratePage-vote-error' ).text(), {type: 'error'} );
 					return;
