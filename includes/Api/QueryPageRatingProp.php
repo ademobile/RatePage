@@ -5,6 +5,7 @@ use ApiBase;
 use ApiQuery;
 use ApiQueryBase;
 use RatePage\Rating;
+use Wikimedia\ParamValidator\ParamValidator;
 
 class QueryPageRatingProp extends ApiQueryBase {
 	use RatePageApiTrait;
@@ -60,7 +61,7 @@ class QueryPageRatingProp extends ApiQueryBase {
 	 *
 	 * @return array
 	 */
-	public function getAllowedParams() {
-		return [ 'contest' => [ ApiBase::PARAM_TYPE => 'string' ] ];
+	public function getAllowedParams() : array {
+		return [ 'contest' => [ ParamValidator::PARAM_TYPE => 'string' ] ];
 	}
 }
