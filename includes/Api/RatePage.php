@@ -6,6 +6,7 @@ use ApiBase;
 use MediaWiki\MediaWikiServices;
 use RatePage\Rating;
 use Title;
+use Wikimedia\ParamValidator\ParamValidator;
 
 /**
  * API for getting the page rating and voting for pages
@@ -92,10 +93,10 @@ class RatePage extends ApiBase {
 	 */
 	public function getAllowedParams() : array {
 		return [
-			'pageid' => [ ApiBase::PARAM_TYPE => 'integer' ],
-			'pagetitle' => [ ApiBase::PARAM_TYPE => 'string' ],
-			'answer' => [ ApiBase::PARAM_TYPE => 'integer' ],
-			'contest' => [ ApiBase::PARAM_TYPE => 'string' ]
+			'pageid' => [ ParamValidator::PARAM_TYPE => 'integer' ],
+			'pagetitle' => [ ParamValidator::PARAM_TYPE => 'string' ],
+			'answer' => [ ParamValidator::PARAM_TYPE => 'integer' ],
+			'contest' => [ ParamValidator::PARAM_TYPE => 'string' ]
 		];
 	}
 
