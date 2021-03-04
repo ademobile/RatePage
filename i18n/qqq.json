@@ -76,5 +76,6 @@
 	"ratePage-edit-see-before-vote": "Checkbox label on Special:RatePageContests",
 	"ratePage-prompt-can-see": "Prompt for voting",
 	"ratePage-edit-export": "Export contest results button label",
-	"ratepage-contests-invalid-path": "Requested action is invalid error message."
+	"ratepage-contests-invalid-path": "Requested action is invalid error message.",
+	"ratePage-page-cannot-be-rated": "Embeddable widget error message. $1 – full name of the target article"
 }
