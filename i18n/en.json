@@ -76,5 +76,6 @@
 	"ratePage-edit-see-before-vote": "Show ratings before voting",
 	"ratePage-prompt-can-see": "You have not voted yet",
 	"ratePage-edit-export": "Export results",
-	"ratepage-contests-invalid-path": "Requested action is invalid."
+	"ratepage-contests-invalid-path": "Requested action is invalid.",
+	"ratePage-page-cannot-be-rated": "Ratings for page $1 are disabled."
 }

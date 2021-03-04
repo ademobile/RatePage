@@ -163,6 +163,13 @@ class Hooks {
 			);
 		}
 
+		if ( !Rating::canPageBeRated( $title ) ) {
+			return self::renderError(
+				wfMessage( 'ratePage-page-cannot-be-rated', $title->getFullText() )->text(),
+				$parser
+			);
+		}
+
 		if ( $contest && !ContestDB::checkContestExists( $contest ) ) {
 			return self::renderError(
 				wfMessage( 'ratePage-no-such-contest', $contest )->text(),

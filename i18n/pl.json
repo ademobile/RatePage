@@ -76,5 +76,6 @@
 	"ratePage-edit-see-before-vote": "Wyświetl oceny przed zagłosowaniem",
 	"ratePage-prompt-can-see": "Jeszcze nie głosował{{GENDER:|eś|aś}}",
 	"ratePage-edit-export": "Eksportuj wyniki",
-	"ratepage-contests-invalid-path": "Nieprawidłowe żądanie."
+	"ratepage-contests-invalid-path": "Nieprawidłowe żądanie.",
+	"ratePage-page-cannot-be-rated": "Ocenianie strony $1 zostało wyłączone."
 }
