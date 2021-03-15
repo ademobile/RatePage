@@ -1,8 +1,9 @@
 <?php
 
 namespace RatePage;
+use DisambiguatorHooks;
+use ExtensionRegistry;
 use MediaWiki\MediaWikiServices;
-use PageProps;
 use Title;
 
 /**
@@ -42,8 +43,8 @@ class Rating {
 			return false;
 		}
 
-		if ( class_exists( 'DisambiguatorHooks' ) &&
-			PageProps::getInstance()->getProperties( $title, 'disambiguation' )
+		if ( ExtensionRegistry::getInstance()->isLoaded( 'Disambiguator' ) &&
+			DisambiguatorHooks::isDisambiguationPage( $title )
 		) {
 			return false;
 		}
