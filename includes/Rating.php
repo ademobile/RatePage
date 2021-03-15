@@ -23,23 +23,26 @@ class Rating {
 		global $wgRPRatingAllowedNamespaces, $wgRPRatingPageBlacklist;
 
 		if ( $title->getArticleID() < 1 ) {
+			// no such page
 			return false;
-		}   //no such page
+		}
 
 		if ( $title->isRedirect() ) {
 			return false;
 		}
 
-		if ( !is_null( $wgRPRatingAllowedNamespaces ) && !in_array( $title->getNamespace(),
-				$wgRPRatingAllowedNamespaces ) ) {
+		if ( !is_null( $wgRPRatingAllowedNamespaces ) &&
+			!in_array( $title->getNamespace(), $wgRPRatingAllowedNamespaces )
+		) {
 			return false;
 		}
 
-		if ( !is_null( $wgRPRatingPageBlacklist ) && ( in_array( $title->getFullText(),
-					$wgRPRatingPageBlacklist ) || in_array( str_replace( " ",
-					"_",
-					$title->getFullText() ),
-					$wgRPRatingPageBlacklist ) ) ) {
+		if ( !is_null( $wgRPRatingPageBlacklist ) &&
+			(
+				in_array( $title->getPrefixedText(), $wgRPRatingPageBlacklist ) ||
+				in_array( $title->getPrefixedDBkey(), $wgRPRatingPageBlacklist )
+			)
+		) {
 			return false;
 		}
 
@@ -142,7 +145,8 @@ class Rating {
 		];
 
 		$dbr = wfGetDB( DB_REPLICA );
-		$res = $dbr->select( 'ratepage_vote',
+		$res = $dbr->select(
+			'ratepage_vote',
 			[
 				'rv_answer as answer',
 				"count(rv_page_id) as 'count'"
@@ -232,23 +236,30 @@ class Rating {
 			return false;
 		}
 
-		$where = [ 'rv_page_id' => $pageId,
+		$where = [
+			'rv_page_id' => $pageId,
 			'rv_user' => $user,
-			'rv_contest' => $contest ];
+			'rv_contest' => $contest
+		];
 
 		//check whether the user has voted during a transaction to avoid a duplicate vote
 		$dbw = wfGetDB( DB_MASTER );
 		$dbw->startAtomic( __METHOD__ );
-		$res = $dbw->selectField( 'ratepage_vote',
+		$res = $dbw->selectField(
+			'ratepage_vote',
 			'count(rv_user)',
 			$where,
-			__METHOD__ );
+			__METHOD__
+		);
 
 		if ( $res > 0 ) {
 			//the user has already voted, change the vote
-			$dbw->update( 'ratepage_vote',
-				[ 'rv_answer' => $answer,
-					'rv_date' => date( 'Y-m-d H:i:s' ) ],
+			$dbw->update(
+				'ratepage_vote',
+				[
+					'rv_answer' => $answer,
+					'rv_date' => date( 'Y-m-d H:i:s' )
+				],
 				$where,
 				__METHOD__ );
 
@@ -258,14 +269,16 @@ class Rating {
 		}
 
 		//insert the vote
-		$dbw->insert( 'ratepage_vote',
+		$dbw->insert(
+			'ratepage_vote',
 			[ 'rv_page_id' => $title->getArticleID(),
 				'rv_user' => $user,
 				'rv_ip' => $ip,
 				'rv_answer' => $answer,
 				'rv_date' => date( 'Y-m-d H:i:s' ),
 				'rv_contest' => $contest ],
-			__METHOD__ );
+			__METHOD__
+		);
 
 		$dbw->endAtomic( __METHOD__ );
 
