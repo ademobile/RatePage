@@ -5,7 +5,7 @@
 		"Polskacafe"
 	],
 	"license-name": "GPL-2.0-or-later",
-	"version": "2.9.3",
+	"version": "2.9.4",
 	"namemsg": "ratePage",
 	"descriptionmsg": "ratePage-desc",
 	"url": "https://www.mediawiki.org/wiki/Extension:RatePage",
@@ -45,11 +45,7 @@
 		"AddMissingContests": "maintenance/addMissingContests.php"
 	},
 	"AutoloadNamespaces": {
-		"RatePage\\": "includes/",
-		"RatePage\\Api\\": "includes/Api/",
-		"RatePage\\Pager\\": "includes/Pager/",
-		"RatePage\\SMW\\": "includes/SMW/",
-		"RatePage\\Special\\": "includes/Special/"
+		"RatePage\\": "includes/"
 	},
 	"ExtensionMessagesFiles": {
 		"RatePageMagic": "RatePage.magic.php",
