@@ -19,9 +19,11 @@ class RatePage extends ApiBase {
 
 	public function execute() {
 		$params = $this->extractRequestParams();
-		$this->requireOnlyOneParameter( $params,
+		$this->requireOnlyOneParameter(
+			$params,
 			'pageid',
-			'pagetitle' );
+			'pagetitle'
+		);
 
 		if ( isset( $params['pageid'] ) ) {
 			$title = Title::newFromID( $params['pageid'] );
@@ -30,16 +32,23 @@ class RatePage extends ApiBase {
 		}
 
 		if ( is_null( $title ) || $title->getArticleID() < 1 ) {
-			$this->dieWithError( 'Specified page does not exist' );
+			$this->dieWithError(
+				'apierror-ratepage-page-not-exists',
+				'pagenotexists'
+			);
 		}
 
-		$this->getResult()->addValue( null,
+		$this->getResult()->addValue(
+			null,
 			"pageId",
-			$title->getArticleID() );
+			$title->getArticleID()
+		);
 
-		$this->processParams( $params,
+		$this->processParams(
+			$params,
 			$this->getContext(),
-			$this );
+			$this
+		);
 
 		if ( !$this->contestId && !Rating::canPageBeRated( $title ) ) {
 			return;
@@ -51,27 +60,37 @@ class RatePage extends ApiBase {
 
 		if ( isset( $params['answer'] ) ) {
 			if ( !$this->permissions['vote'] ) {
-				$this->dieWithError( 'You do not have permissions to vote in this contest' );
+				$this->dieWithError(
+					'apierror-ratepage-cannot-vote-in-contest',
+					'cannotvoteincontest'
+				);
 			}
 
 			if ( $this->user->pingLimiter( 'ratepage' ) ) {
-				$this->dieWithError( 'Rate limit for voting exceeded, please try again later' );
+				$this->dieWithError( 'apierror-ratelimited' );
 			}
 
 			$answer = $params['answer'];
 			if ( $answer < $ratingMin || $answer > $ratingMax ) {
-				$this->dieWithError( 'Incorrect answer specified' );
+				$this->dieWithError(
+					[ 'apierror-ratepage-invalid-answer', $ratingMin, $ratingMax ],
+					'invalidanswer'
+				);
 			}
-			Rating::voteOnPage( $title,
+			Rating::voteOnPage(
+				$title,
 				$this->userName,
 				$this->ip,
 				$answer,
-				$this->contestId );
+				$this->contestId
+			);
 		}
 
-		$this->addTitleToResults( $title,
+		$this->addTitleToResults(
+			$title,
 			null,
-			$this->getResult() );
+			$this->getResult()
+		);
 	}
 
 	/**
