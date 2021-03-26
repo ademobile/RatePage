@@ -5,13 +5,19 @@
 			"Polskacafe"
 		]
 	},
-	"apihelp-ratepage-summary": "RatePage API module description",
-	"apihelp-ratepage-param-pageid": "API parameter label",
-	"apihelp-ratepage-param-pagetitle": "API parameter label",
-	"apihelp-ratepage-param-answer": "API parameter label",
-	"apihelp-ratepage-param-contest": "API parameter label",
-	"apihelp-ratepage-example-1": "API usage example label",
-	"apihelp-ratepage-example-2": "API usage example label",
-	"apihelp-query+pagerating-summary": "Description of an API query module",
-	"apihelp-query+pagerating-param-contest": "API parameter label"
+	"apihelp-ratepage-summary": "{{doc-apihelp-summary|ratepage}}",
+	"apihelp-ratepage-param-pageid": "{{doc-apihelp-param|ratepage|pageid}}",
+	"apihelp-ratepage-param-pagetitle": "{{doc-apihelp-param|ratepage|pagetitle}}",
+	"apihelp-ratepage-param-answer": "{{doc-apihelp-param|ratepage|answer}}",
+	"apihelp-ratepage-param-contest": "{{doc-apihelp-param|ratepage|contest}}",
+	"apihelp-ratepage-example-1": "{{doc-apihelp-example|ratepage}}",
+	"apihelp-ratepage-example-2": "{{doc-apihelp-example|ratepage}}",
+	"apihelp-query+pagerating-summary": "{{doc-apihelp-summary|query+pagerating}}",
+	"apihelp-query+pagerating-param-contest": "{{doc-apihelp-param|query+pagerating|contest}}",
+	"apierror-ratepage-contest-id-too-long": "{{doc-apierror}}",
+	"apierror-ratepage-contest-id-allowed-chars": "{{doc-apierror}}",
+	"apierror-ratepage-contest-not-exists": "{{doc-apierror}}\n$1 – contest ID",
+	"apierror-ratepage-page-not-exists": "{{doc-apierror}}",
+	"apierror-ratepage-cannot-vote-in-contest": "{{doc-apierror}}",
+	"apierror-ratepage-invalid-answer": "{{doc-apierror}}\n* $1 – minimum allowed rating\n* $2 – maximum allowed rating",
 }

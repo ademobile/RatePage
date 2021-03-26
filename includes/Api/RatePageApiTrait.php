@@ -76,19 +76,28 @@ trait RatePageApiTrait {
 
 		$contestId = trim( $params['contest'] ?? '' );
 		if ( strlen( $contestId ) > 255 ) {
-			$parent->dieWithError( 'Contest ID length exceeds the limit (255 characters)' );
+			$parent->dieWithError(
+				'apierror-ratepage-contest-id-too-long',
+				'contestidtoolong'
+			);
 		}
 
 		if ( $contestId ) {
 			if ( !ctype_alnum( $contestId ) ) {
-				$parent->dieWithError( 'Contest ID must be alphanumeric, no other characters are allowed' );
+				$parent->dieWithError(
+					'apierror-ratepage-contest-id-allowed-chars',
+					'contestidinvalidchars'
+				);
 			}
 
 			$this->contestId = $contestId;
 			$contest = ContestDB::loadContest( $this->contestId );
 
 			if ( !$contest ) {
-				$parent->dieWithError( "Contest '$this->contestId' does not exist." );
+				$parent->dieWithError(
+					[ 'apierror-ratepage-contest-not-exists', $this->contestId ],
+					'contestnotexists'
+				);
 			}
 
 			$this->permissions = Rights::checkUserPermissionsOnContest(
