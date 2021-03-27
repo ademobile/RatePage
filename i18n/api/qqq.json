@@ -19,5 +19,5 @@
 	"apierror-ratepage-contest-not-exists": "{{doc-apierror}}\n$1 – contest ID",
 	"apierror-ratepage-page-not-exists": "{{doc-apierror}}",
 	"apierror-ratepage-cannot-vote-in-contest": "{{doc-apierror}}",
-	"apierror-ratepage-invalid-answer": "{{doc-apierror}}\n* $1 – minimum allowed rating\n* $2 – maximum allowed rating",
+	"apierror-ratepage-invalid-answer": "{{doc-apierror}}\n* $1 – minimum allowed rating\n* $2 – maximum allowed rating"
 }
