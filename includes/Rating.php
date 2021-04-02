@@ -2,8 +2,10 @@
 
 namespace RatePage;
 use DisambiguatorHooks;
+use Exception;
 use ExtensionRegistry;
 use MediaWiki\MediaWikiServices;
+use RatePage\SMW\DataRebuilder;
 use Title;
 
 /**
@@ -281,6 +283,16 @@ class Rating {
 		);
 
 		$dbw->endAtomic( __METHOD__ );
+
+		// Rebuild SMW data if needed
+		$dataRebuilder = new DataRebuilder();
+
+		try {
+			$dataRebuilder->rebuildSemanticData( $title );
+		} catch ( Exception $e ) {
+			// If the SMW update failed for some reason, we can safely ignore the error.
+			// The data will be updated on the next page update.
+		}
 
 		return true;
 	}

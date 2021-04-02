@@ -5,7 +5,7 @@
 		"Polskacafe"
 	],
 	"license-name": "GPL-2.0-or-later",
-	"version": "2.9.5",
+	"version": "2.10.0",
 	"namemsg": "ratePage",
 	"descriptionmsg": "ratePage-desc",
 	"url": "https://www.mediawiki.org/wiki/Extension:RatePage",
@@ -27,7 +27,8 @@
 		"RPUseMMVModule": true,
 		"RPEnableSMWRatings": true,
 		"RPEnableSMWContests": true,
-		"RPShowResultsBeforeVoting": false
+		"RPShowResultsBeforeVoting": false,
+		"RPImmediateSMWUpdate": false
 	},
 	"GroupPermissions": {
 		"*": {
