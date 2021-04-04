@@ -163,7 +163,7 @@ class Hooks {
 			);
 		}
 
-		if ( !Rating::canPageBeRated( $title ) ) {
+		if ( !$contest && !Rating::canPageBeRated( $title ) ) {
 			return self::renderError(
 				wfMessage( 'ratePage-page-cannot-be-rated', $title->getFullText() )->text(),
 				$parser
