@@ -101,12 +101,12 @@ class Hooks {
 	public static function onBeforeDataUpdateComplete( Store $store, SemanticData $semanticData ) : bool {
 		$config = MediaWikiServices::getInstance()->getMainConfig();
 		$title = $semanticData->getSubject()->getTitle();
-		if ( $title === null || !Rating::canPageBeRated( $title ) ) {
+		if ( $title === null ) {
 			return true;
 		}
 
 		$annotators = [];
-		if ( $config->get( 'RPEnableSMWRatings' ) ) {
+		if ( $config->get( 'RPEnableSMWRatings' ) && Rating::canPageBeRated( $title ) ) {
 			$annotators = array_merge(
 				$annotators,
 				RatingAnnotatorFactory::newGeneralPropAnnotators( $title )
