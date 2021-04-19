@@ -1,0 +1,37 @@
+{
+	"@metadata": {
+		"authors": [
+			"Eduardoaddad"
+		]
+	},
+	"ratePage-vote-title": "Classifique o artigo",
+	"ratePage-caption-1": "Terrível",
+	"ratePage-caption-3": "OK",
+	"ratePage-caption-4": "Boa",
+	"ratePage-caption-5": "Impressionante!",
+	"ratePage-contest-id-too-long": "Erro: o comprimento do ID do concurso especificado excede o limite (255 caracteres).",
+	"action-ratepage-contests-view-list": "ver lista de concursos",
+	"right-ratepage-contests-view-list": "Ver lista de concursos",
+	"right-ratepage-contests-view-details": "Ver detalhes de um concurso",
+	"right-ratepage-contests-edit": "Editar um concurso",
+	"right-ratepage-contests-clear": "Limpar os resultados de um concurso",
+	"ratePage-contests-list-enabled": "Status",
+	"ratePage-contest-edit-title": "Editando concurso",
+	"ratePage-edit-contest-sub": "ID do concurso: $1",
+	"ratePage-edit-allowed-to-vote": "Pode votar",
+	"ratePage-edit-save": "Salvar",
+	"ratePage-duplicate-id": "Este identificador de concurso já está em uso.",
+	"ratePage-results-list-page": "Página",
+	"ratePage-results-list-count": "Contagem de votos",
+	"ratePage-edit-done": "Concurso $1 editado com sucesso.",
+	"logentry-ratepage-contest-change": "$1 {{GENDER:$2|modificou}} $4",
+	"ratePage-vote-cannot-vote": "Você não pode votar neste concurso",
+	"ratePage-vote-cannot-see": "Você não pode ver os resultados deste concurso",
+	"ratePage-deleted-page": "(página excluída)",
+	"ratePage-property-count-alias": "Contagem de classificação",
+	"ratePage-property-average-description": "Avaliação média desta página.",
+	"ratePage-property-count-description": "O número de avaliações desta página.",
+	"ratePage-prompt-can-see": "Você ainda não votou",
+	"ratepage-contests-invalid-path": "A ação solicitada é inválida.",
+	"ratePage-page-cannot-be-rated": "As avaliações da página $1 estão desativadas."
+}
