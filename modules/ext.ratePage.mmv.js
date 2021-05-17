@@ -11,7 +11,7 @@ $(document).ready( function () {
 			titles: title
 		} ).done( function ( response ) {
 			var id = Object.keys( response.query.pages )[0];
-			var text = '<div class="ratepage-embed" data-page-id="' + id + '"></div>';
+			var text = '<div class="ratepage-embed" data-page-id="' + id + '" data-contest></div>';
 
 			if ( id < 0 ) {
 				text = '<div></div>'
@@ -25,14 +25,15 @@ $(document).ready( function () {
 				pBox.before( w );
 			}
 
+			var starMap = {};
 			if ( id >= 0 ) {
-				var starMap = {};
 				mw.RatePage.initializeTag( w, starMap );
 				mw.RatePage.submitStarMap( starMap );
 			}
 
 			mw.RatePage.mmvCurrentTitle = title;
 			mw.RatePage.mmvCurrentWidget = w;
+			mw.RatePage.mmvCurrentStarMap = starMap;
 		} );
 	}
 

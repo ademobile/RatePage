@@ -14,8 +14,9 @@ mw.RatePage = function () {
 	 * @param pageId
 	 * @param contest
 	 * @param answer
+	 * @param starMap
 	 */
-	self.ratePage = function ( pageId, contest, answer ) {
+	self.ratePage = function ( pageId, contest, answer, starMap ) {
 		( new mw.Api() ).postWithEditToken( {
 			action: 'ratepage',
 			format: 'json',
@@ -38,7 +39,7 @@ mw.RatePage = function () {
 					avg = avg / voteCount;
 				}
 
-				self.starMap[contest][pageId].forEach( function ( widget ) {
+				starMap[contest][pageId].forEach( function ( widget ) {
 					self.updateStars(
 						avg,
 						voteCount,
@@ -47,7 +48,8 @@ mw.RatePage = function () {
 						data.canSee,
 						data.showResultsBeforeVoting,
 						false,
-						widget
+						widget,
+						starMap
 					);
 				} );
 			} );
@@ -57,8 +59,9 @@ mw.RatePage = function () {
 	 * Get ratings for a bunch of pages at once.
 	 * @param idToWidgetMap
 	 * @param contest
+	 * @param starMap
 	 */
-	self.getRating = function ( idToWidgetMap, contest ) {
+	self.getRating = function ( idToWidgetMap, contest, starMap ) {
 		( new mw.Api() ).post( {
 			action: 'query',
 			prop: 'pagerating',
@@ -67,6 +70,7 @@ mw.RatePage = function () {
 			pageids: Object.keys( idToWidgetMap )
 		} )
 			.done( function ( data ) {
+				console.debug(starMap);
 				Object.keys( data.query.pages ).forEach( function ( pageid ) {
 					var voteCount = null, avg = null;
 					var d = data.query.pages[pageid].pagerating;
@@ -91,7 +95,8 @@ mw.RatePage = function () {
 							d.canSee,
 							d.showResultsBeforeVoting,
 							true,
-							widget
+							widget,
+							starMap
 						);
 					} );
 				} );
@@ -108,8 +113,9 @@ mw.RatePage = function () {
 	 * @param showResultsBeforeVoting
 	 * @param isNew
 	 * @param parent
+	 * @param starMap
 	 */
-	self.updateStars = function ( average, vCount, userVote, canVote, canSee, showResultsBeforeVoting, isNew, parent ) {
+	self.updateStars = function ( average, vCount, userVote, canVote, canSee, showResultsBeforeVoting, isNew, parent, starMap ) {
 		function typeForLastStar( f2 ) {
 			if ( f2 < 0.05 ) {
 				return 'ratingstar-plain';
@@ -204,9 +210,9 @@ mw.RatePage = function () {
 
 				if ( !pageId ) {
 					// It's the main rating widget
-					self.ratePage( mw.config.get( 'wgArticleId' ), '', answer );
+					self.ratePage( mw.config.get( 'wgArticleId' ), '', answer, starMap );
 				} else {
-					self.ratePage( pageId, p.attr( 'data-contest' ), answer );
+					self.ratePage( pageId, p.attr( 'data-contest' ), answer, starMap );
 				}
 			} );
 
@@ -229,19 +235,34 @@ mw.RatePage = function () {
 	 * @param contest
 	 * @param pageId
 	 * @param stars
+	 * @param starMap The starMap to append to. Defaults to the main map.
 	 */
-	self.addToStarMap = function ( contest, pageId, stars ) {
-		if ( !self.starMap[contest] ) self.starMap[contest] = {};
-		if ( !self.starMap[contest][pageId] ) self.starMap[contest][pageId] = [];
+	self.addToStarMap = function ( contest, pageId, stars, starMap ) {
+		starMap = starMap || self.starMap;
 
-		self.starMap[contest][pageId].push( stars );
+		if ( !starMap[contest] ) starMap[contest] = {};
+		if ( !starMap[contest][pageId] ) starMap[contest][pageId] = [];
+
+		starMap[contest][pageId].push( stars );
+	}
+
+	/**
+	 * Retrieves rating information about all widgets, in batches.
+	 * @param starMap Optional, the starMap to submit, if not the main one.
+	 */
+	self.submitStarMap = function ( starMap ) {
+		starMap = starMap || self.starMap;
+		Object.keys( starMap ).forEach( function ( contest ) {
+			self.getRating( starMap[contest], contest, starMap );
+		} );
 	}
 
 	/**
 	 * Initialize an embedded widget.
 	 * @param stars
+	 * @param starMap Optional, the starMap to add the widget to, if not the main one.
 	 */
-	self.initializeTag = function ( stars ) {
+	self.initializeTag = function ( stars, starMap ) {
 		var pageId = stars.attr( 'data-page-id' );
 		var contest = stars.attr( 'data-contest' ) || '';
 		var starsInner = '<div class="ratingstars-embed">';
@@ -256,22 +277,19 @@ mw.RatePage = function () {
 		stars.append( starsInner );
 		stars.append( '<div class="ratingsinfo-embed"><div class="ratingsinfo-yourvote"></div><div class="ratingsinfo-avg"></div></div>' );
 
-		self.addToStarMap( contest, pageId, stars );
+		self.addToStarMap( contest, pageId, stars, starMap );
 	};
 
 	/**
 	 * Initialize the sidebar widget and embedded rating widgets.
 	 */
 	self.initialize = function () {
-		// a map for batch requesting
-		var starMap = {};
-
 		// read config
 		self.maxRating = mw.config.get( 'wgRPRatingMax' );
 
 		/* process all embedded widgets */
 		$( 'div.ratepage-embed' ).each( function () {
-			self.initializeTag( $( this ), starMap );
+			self.initializeTag( $( this ) );
 		} );
 
 		/* and now the main rating widget in the sidebar or footer */
@@ -341,10 +359,7 @@ mw.RatePage = function () {
 			}
 		}
 
-		// get data in batches
-		Object.keys( self.starMap ).forEach( function ( contest ) {
-			self.getRating( self.starMap[contest], contest );
-		} );
+		self.submitStarMap();
 	};
 
 	return self;
