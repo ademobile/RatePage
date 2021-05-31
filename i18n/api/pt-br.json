@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"Eduardoaddad"
+		]
+	},
+	"apihelp-ratepage-summary": "Permite que um usuário vote em uma página e obtenha a classificação de uma página. Requer a especificação de um de dois parâmetros: pageid ou título da página.",
+	"apihelp-ratepage-param-pageid": "ID da página",
+	"apihelp-ratepage-param-pagetitle": "Título da página",
+	"apihelp-ratepage-param-contest": "Identificador do concurso",
+	"apihelp-ratepage-example-1": "Obtenha a classificação atual para a página Exemplo,",
+	"apierror-ratepage-contest-id-too-long": "O comprimento do ID do concurso excede o limite (255 caracteres).",
+	"apierror-ratepage-contest-not-exists": "O concurso $1 não existe.",
+	"apierror-ratepage-page-not-exists": "A página especificada não existe.",
+	"apierror-ratepage-cannot-vote-in-contest": "Você não tem permissão para votar neste concurso."
+}
