@@ -2,6 +2,10 @@
 MediaWiki extension that enables users to rate pages on a wiki and set up contests.
 More information and documentation: https://www.mediawiki.org/wiki/Extension:RatePage
 
+This version deals with a need where in my setup my wiki is behind NAT. This means I lose the IP address of the client and anonymous users could not vote as we do not allow most user an account.
+
+The 'fix' was to allocate an anonymous users an ID via a cookie (dont event point out the issues, as I am aware!)
+
 The maintainer of the original project is [Ostrzyciel](https://gitlab.com/Ostrzyciel).
 
 ## Contributing
