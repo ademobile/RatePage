@@ -73,7 +73,7 @@ trait RatePageApiTrait {
 				setcookie("anon_user", uniqid("", true), time() + (86400 * 90), "/"); //create a sort of unique ID for anon_user, valid for 90 days
 			}
 			
-			$this->userName = $_COOKIE["anon_user"); //get anon_user ID
+			$this->userName = $_COOKIE["anon_user"]; //get anon_user ID
 		}
 
 		$this->contestId = '';
